@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct NaviGayApp: App {
+    
+    
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            EntryView(vm: EntryViewModel(userDataManager: UserDataManager(manager: CoreDataManager())))
         }
     }
 }
