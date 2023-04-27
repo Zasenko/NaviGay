@@ -7,110 +7,243 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0F21CCA429F833AC0008D4EB /* NaviGayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F21CCA329F833AC0008D4EB /* NaviGayApp.swift */; };
-		0F21CCA629F833AC0008D4EB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F21CCA529F833AC0008D4EB /* ContentView.swift */; };
-		0F21CCA829F833AE0008D4EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F21CCA729F833AE0008D4EB /* Assets.xcassets */; };
-		0F21CCAB29F833AE0008D4EB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F21CCAA29F833AE0008D4EB /* Preview Assets.xcassets */; };
-		0F21CCB329F8345E0008D4EB /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 0F21CCB229F8345E0008D4EB /* Realm */; };
-		0F21CCB529F8345E0008D4EB /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0F21CCB429F8345E0008D4EB /* RealmSwift */; };
+		0F5B8BE829F83CD90083B81B /* NaviGayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5B8BE729F83CD90083B81B /* NaviGayApp.swift */; };
+		0F5B8BEA29F83CD90083B81B /* EntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5B8BE929F83CD90083B81B /* EntryView.swift */; };
+		0F5B8BEC29F83CDA0083B81B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F5B8BEB29F83CDA0083B81B /* Assets.xcassets */; };
+		0F5B8BEF29F83CDA0083B81B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F5B8BEE29F83CDA0083B81B /* Preview Assets.xcassets */; };
+		0F5B8BFB29F857750083B81B /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5B8BFA29F857750083B81B /* CoreDataManager.swift */; };
+		0F5B8C2F29F977CE0083B81B /* NaviGay.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0F5B8C2D29F977CE0083B81B /* NaviGay.xcdatamodeld */; };
+		0FD8A75629FA859A004EA3F0 /* EntryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A75529FA859A004EA3F0 /* EntryViewModel.swift */; };
+		0FD8A75829FA8929004EA3F0 /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A75729FA8929004EA3F0 /* TabView.swift */; };
+		0FD8A75B29FA898F004EA3F0 /* TabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A75A29FA898F004EA3F0 /* TabViewModel.swift */; };
+		0FD8A75D29FA8DEE004EA3F0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FD8A75C29FA8DEE004EA3F0 /* LaunchScreen.storyboard */; };
+		0FD8A75F29FA9018004EA3F0 /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A75E29FA9018004EA3F0 /* UserDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0F21CCA029F833AC0008D4EB /* NaviGay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaviGay.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0F21CCA329F833AC0008D4EB /* NaviGayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaviGayApp.swift; sourceTree = "<group>"; };
-		0F21CCA529F833AC0008D4EB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		0F21CCA729F833AE0008D4EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		0F21CCAA29F833AE0008D4EB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		0F5B8BE429F83CD90083B81B /* NaviGay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaviGay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F5B8BE729F83CD90083B81B /* NaviGayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaviGayApp.swift; sourceTree = "<group>"; };
+		0F5B8BE929F83CD90083B81B /* EntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryView.swift; sourceTree = "<group>"; };
+		0F5B8BEB29F83CDA0083B81B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0F5B8BEE29F83CDA0083B81B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		0F5B8BFA29F857750083B81B /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		0F5B8C2E29F977CE0083B81B /* NaviGay.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NaviGay.xcdatamodel; sourceTree = "<group>"; };
+		0FD8A75529FA859A004EA3F0 /* EntryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryViewModel.swift; sourceTree = "<group>"; };
+		0FD8A75729FA8929004EA3F0 /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
+		0FD8A75A29FA898F004EA3F0 /* TabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewModel.swift; sourceTree = "<group>"; };
+		0FD8A75C29FA8DEE004EA3F0 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		0FD8A75E29FA9018004EA3F0 /* UserDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		0F21CC9D29F833AC0008D4EB /* Frameworks */ = {
+		0F5B8BE129F83CD90083B81B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F21CCB529F8345E0008D4EB /* RealmSwift in Frameworks */,
-				0F21CCB329F8345E0008D4EB /* Realm in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0F21CC9729F833AC0008D4EB = {
+		0F5B8BDB29F83CD90083B81B = {
 			isa = PBXGroup;
 			children = (
-				0F21CCA229F833AC0008D4EB /* NaviGay */,
-				0F21CCA129F833AC0008D4EB /* Products */,
+				0F5B8BE629F83CD90083B81B /* NaviGay */,
+				0F5B8BE529F83CD90083B81B /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		0F21CCA129F833AC0008D4EB /* Products */ = {
+		0F5B8BE529F83CD90083B81B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0F21CCA029F833AC0008D4EB /* NaviGay.app */,
+				0F5B8BE429F83CD90083B81B /* NaviGay.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		0F21CCA229F833AC0008D4EB /* NaviGay */ = {
+		0F5B8BE629F83CD90083B81B /* NaviGay */ = {
 			isa = PBXGroup;
 			children = (
-				0F21CCA329F833AC0008D4EB /* NaviGayApp.swift */,
-				0F21CCA529F833AC0008D4EB /* ContentView.swift */,
-				0F21CCA729F833AE0008D4EB /* Assets.xcassets */,
-				0F21CCA929F833AE0008D4EB /* Preview Content */,
+				0F5B8BE729F83CD90083B81B /* NaviGayApp.swift */,
+				0F5B8C2C29F9770E0083B81B /* CoreData */,
+				0F5B8C3029F97A800083B81B /* Flows */,
+				0F5B8BEB29F83CDA0083B81B /* Assets.xcassets */,
+				0F5B8BED29F83CDA0083B81B /* Preview Content */,
+				0FD8A75C29FA8DEE004EA3F0 /* LaunchScreen.storyboard */,
 			);
 			path = NaviGay;
 			sourceTree = "<group>";
 		};
-		0F21CCA929F833AE0008D4EB /* Preview Content */ = {
+		0F5B8BED29F83CDA0083B81B /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				0F21CCAA29F833AE0008D4EB /* Preview Assets.xcassets */,
+				0F5B8BEE29F83CDA0083B81B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		0F5B8C2C29F9770E0083B81B /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				0F5B8BFA29F857750083B81B /* CoreDataManager.swift */,
+				0FD8A75E29FA9018004EA3F0 /* UserDataManager.swift */,
+				0F5B8C2D29F977CE0083B81B /* NaviGay.xcdatamodeld */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		0F5B8C3029F97A800083B81B /* Flows */ = {
+			isa = PBXGroup;
+			children = (
+				0F5B8C3129F97A9E0083B81B /* Entry */,
+				0F5B8C3B29F97B540083B81B /* Auth */,
+				0F5B8C3A29F97B390083B81B /* TabView */,
+				0F5B8C3D29F97BCC0083B81B /* Home */,
+				0F5B8C3C29F97BC20083B81B /* Map */,
+				0F5B8C3429F97AB80083B81B /* Catalog */,
+				0F5B8C3729F97ADB0083B81B /* Place */,
+				0F5B8C3829F97ADF0083B81B /* Event */,
+				0F5B8C3929F97AE70083B81B /* User */,
+			);
+			path = Flows;
+			sourceTree = "<group>";
+		};
+		0F5B8C3129F97A9E0083B81B /* Entry */ = {
+			isa = PBXGroup;
+			children = (
+				0FD8A75529FA859A004EA3F0 /* EntryViewModel.swift */,
+				0F5B8BE929F83CD90083B81B /* EntryView.swift */,
+			);
+			path = Entry;
+			sourceTree = "<group>";
+		};
+		0F5B8C3229F97AA60083B81B /* Login */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		0F5B8C3329F97AAE0083B81B /* Registration */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Registration;
+			sourceTree = "<group>";
+		};
+		0F5B8C3429F97AB80083B81B /* Catalog */ = {
+			isa = PBXGroup;
+			children = (
+				0F5B8C3529F97AC90083B81B /* Country */,
+				0F5B8C3629F97AD40083B81B /* City */,
+			);
+			path = Catalog;
+			sourceTree = "<group>";
+		};
+		0F5B8C3529F97AC90083B81B /* Country */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Country;
+			sourceTree = "<group>";
+		};
+		0F5B8C3629F97AD40083B81B /* City */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = City;
+			sourceTree = "<group>";
+		};
+		0F5B8C3729F97ADB0083B81B /* Place */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Place;
+			sourceTree = "<group>";
+		};
+		0F5B8C3829F97ADF0083B81B /* Event */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Event;
+			sourceTree = "<group>";
+		};
+		0F5B8C3929F97AE70083B81B /* User */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		0F5B8C3A29F97B390083B81B /* TabView */ = {
+			isa = PBXGroup;
+			children = (
+				0FD8A75A29FA898F004EA3F0 /* TabViewModel.swift */,
+				0FD8A75729FA8929004EA3F0 /* TabView.swift */,
+			);
+			path = TabView;
+			sourceTree = "<group>";
+		};
+		0F5B8C3B29F97B540083B81B /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				0F5B8C3329F97AAE0083B81B /* Registration */,
+				0F5B8C3229F97AA60083B81B /* Login */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		0F5B8C3C29F97BC20083B81B /* Map */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		0F5B8C3D29F97BCC0083B81B /* Home */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0F21CC9F29F833AC0008D4EB /* NaviGay */ = {
+		0F5B8BE329F83CD90083B81B /* NaviGay */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0F21CCAE29F833AE0008D4EB /* Build configuration list for PBXNativeTarget "NaviGay" */;
+			buildConfigurationList = 0F5B8BF729F83CDA0083B81B /* Build configuration list for PBXNativeTarget "NaviGay" */;
 			buildPhases = (
-				0F21CC9C29F833AC0008D4EB /* Sources */,
-				0F21CC9D29F833AC0008D4EB /* Frameworks */,
-				0F21CC9E29F833AC0008D4EB /* Resources */,
+				0F5B8BE029F83CD90083B81B /* Sources */,
+				0F5B8BE129F83CD90083B81B /* Frameworks */,
+				0F5B8BE229F83CD90083B81B /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = NaviGay;
-			packageProductDependencies = (
-				0F21CCB229F8345E0008D4EB /* Realm */,
-				0F21CCB429F8345E0008D4EB /* RealmSwift */,
-			);
 			productName = NaviGay;
-			productReference = 0F21CCA029F833AC0008D4EB /* NaviGay.app */;
+			productReference = 0F5B8BE429F83CD90083B81B /* NaviGay.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		0F21CC9829F833AC0008D4EB /* Project object */ = {
+		0F5B8BDC29F83CD90083B81B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
-					0F21CC9F29F833AC0008D4EB = {
+					0F5B8BE329F83CD90083B81B = {
 						CreatedOnToolsVersion = 14.3;
 					};
 				};
 			};
-			buildConfigurationList = 0F21CC9B29F833AC0008D4EB /* Build configuration list for PBXProject "NaviGay" */;
+			buildConfigurationList = 0F5B8BDF29F83CD90083B81B /* Build configuration list for PBXProject "NaviGay" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -118,45 +251,49 @@
 				en,
 				Base,
 			);
-			mainGroup = 0F21CC9729F833AC0008D4EB;
-			packageReferences = (
-				0F21CCB129F8345E0008D4EB /* XCRemoteSwiftPackageReference "realm-swift" */,
-			);
-			productRefGroup = 0F21CCA129F833AC0008D4EB /* Products */;
+			mainGroup = 0F5B8BDB29F83CD90083B81B;
+			productRefGroup = 0F5B8BE529F83CD90083B81B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0F21CC9F29F833AC0008D4EB /* NaviGay */,
+				0F5B8BE329F83CD90083B81B /* NaviGay */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		0F21CC9E29F833AC0008D4EB /* Resources */ = {
+		0F5B8BE229F83CD90083B81B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F21CCAB29F833AE0008D4EB /* Preview Assets.xcassets in Resources */,
-				0F21CCA829F833AE0008D4EB /* Assets.xcassets in Resources */,
+				0FD8A75D29FA8DEE004EA3F0 /* LaunchScreen.storyboard in Resources */,
+				0F5B8BEF29F83CDA0083B81B /* Preview Assets.xcassets in Resources */,
+				0F5B8BEC29F83CDA0083B81B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		0F21CC9C29F833AC0008D4EB /* Sources */ = {
+		0F5B8BE029F83CD90083B81B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F21CCA629F833AC0008D4EB /* ContentView.swift in Sources */,
-				0F21CCA429F833AC0008D4EB /* NaviGayApp.swift in Sources */,
+				0F5B8BEA29F83CD90083B81B /* EntryView.swift in Sources */,
+				0FD8A75629FA859A004EA3F0 /* EntryViewModel.swift in Sources */,
+				0F5B8BE829F83CD90083B81B /* NaviGayApp.swift in Sources */,
+				0F5B8BFB29F857750083B81B /* CoreDataManager.swift in Sources */,
+				0FD8A75F29FA9018004EA3F0 /* UserDataManager.swift in Sources */,
+				0FD8A75829FA8929004EA3F0 /* TabView.swift in Sources */,
+				0FD8A75B29FA898F004EA3F0 /* TabViewModel.swift in Sources */,
+				0F5B8C2F29F977CE0083B81B /* NaviGay.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		0F21CCAC29F833AE0008D4EB /* Debug */ = {
+		0F5B8BF529F83CDA0083B81B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -216,7 +353,7 @@
 			};
 			name = Debug;
 		};
-		0F21CCAD29F833AE0008D4EB /* Release */ = {
+		0F5B8BF629F83CDA0083B81B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -270,7 +407,7 @@
 			};
 			name = Release;
 		};
-		0F21CCAF29F833AE0008D4EB /* Debug */ = {
+		0F5B8BF829F83CDA0083B81B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -284,6 +421,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -299,7 +437,7 @@
 			};
 			name = Debug;
 		};
-		0F21CCB029F833AE0008D4EB /* Release */ = {
+		0F5B8BF929F83CDA0083B81B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -313,6 +451,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -331,49 +470,38 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0F21CC9B29F833AC0008D4EB /* Build configuration list for PBXProject "NaviGay" */ = {
+		0F5B8BDF29F83CD90083B81B /* Build configuration list for PBXProject "NaviGay" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0F21CCAC29F833AE0008D4EB /* Debug */,
-				0F21CCAD29F833AE0008D4EB /* Release */,
+				0F5B8BF529F83CDA0083B81B /* Debug */,
+				0F5B8BF629F83CDA0083B81B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0F21CCAE29F833AE0008D4EB /* Build configuration list for PBXNativeTarget "NaviGay" */ = {
+		0F5B8BF729F83CDA0083B81B /* Build configuration list for PBXNativeTarget "NaviGay" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0F21CCAF29F833AE0008D4EB /* Debug */,
-				0F21CCB029F833AE0008D4EB /* Release */,
+				0F5B8BF829F83CDA0083B81B /* Debug */,
+				0F5B8BF929F83CDA0083B81B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		0F21CCB129F8345E0008D4EB /* XCRemoteSwiftPackageReference "realm-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/realm/realm-swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 10.38.0;
-			};
+/* Begin XCVersionGroup section */
+		0F5B8C2D29F977CE0083B81B /* NaviGay.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				0F5B8C2E29F977CE0083B81B /* NaviGay.xcdatamodel */,
+			);
+			currentVersion = 0F5B8C2E29F977CE0083B81B /* NaviGay.xcdatamodel */;
+			path = NaviGay.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
 		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		0F21CCB229F8345E0008D4EB /* Realm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0F21CCB129F8345E0008D4EB /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = Realm;
-		};
-		0F21CCB429F8345E0008D4EB /* RealmSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0F21CCB129F8345E0008D4EB /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = RealmSwift;
-		};
-/* End XCSwiftPackageProductDependency section */
+/* End XCVersionGroup section */
 	};
-	rootObject = 0F21CC9829F833AC0008D4EB /* Project object */;
+	rootObject = 0F5B8BDC29F83CD90083B81B /* Project object */;
 }
