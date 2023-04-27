@@ -18,6 +18,14 @@
 		0FD8A75B29FA898F004EA3F0 /* TabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A75A29FA898F004EA3F0 /* TabViewModel.swift */; };
 		0FD8A75D29FA8DEE004EA3F0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FD8A75C29FA8DEE004EA3F0 /* LaunchScreen.storyboard */; };
 		0FD8A75F29FA9018004EA3F0 /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A75E29FA9018004EA3F0 /* UserDataManager.swift */; };
+		0FD8A76129FAA755004EA3F0 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A76029FAA755004EA3F0 /* LoginView.swift */; };
+		0FD8A76329FAA772004EA3F0 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A76229FAA772004EA3F0 /* LoginViewModel.swift */; };
+		0FD8A76629FAB2A0004EA3F0 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A76529FAB2A0004EA3F0 /* AppColors.swift */; };
+		0FD8A76A29FAB439004EA3F0 /* LoginTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A76929FAB439004EA3F0 /* LoginTextField.swift */; };
+		0FD8A76C29FAB45D004EA3F0 /* AppImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A76B29FAB45D004EA3F0 /* AppImages.swift */; };
+		0FD8A76E29FAB70A004EA3F0 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A76D29FAB70A004EA3F0 /* PasswordTextField.swift */; };
+		0FD8A77229FAC2A8004EA3F0 /* AsyncButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A77129FAC2A8004EA3F0 /* AsyncButton.swift */; };
+		0FD8A77529FAC3BB004EA3F0 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A77429FAC3BB004EA3F0 /* ShakeEffect.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +41,14 @@
 		0FD8A75A29FA898F004EA3F0 /* TabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewModel.swift; sourceTree = "<group>"; };
 		0FD8A75C29FA8DEE004EA3F0 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0FD8A75E29FA9018004EA3F0 /* UserDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataManager.swift; sourceTree = "<group>"; };
+		0FD8A76029FAA755004EA3F0 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		0FD8A76229FAA772004EA3F0 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		0FD8A76529FAB2A0004EA3F0 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
+		0FD8A76929FAB439004EA3F0 /* LoginTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextField.swift; sourceTree = "<group>"; };
+		0FD8A76B29FAB45D004EA3F0 /* AppImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImages.swift; sourceTree = "<group>"; };
+		0FD8A76D29FAB70A004EA3F0 /* PasswordTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
+		0FD8A77129FAC2A8004EA3F0 /* AsyncButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncButton.swift; sourceTree = "<group>"; };
+		0FD8A77429FAC3BB004EA3F0 /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,11 +82,11 @@
 			isa = PBXGroup;
 			children = (
 				0F5B8BE729F83CD90083B81B /* NaviGayApp.swift */,
-				0F5B8C2C29F9770E0083B81B /* CoreData */,
+				0FD8A76829FAB390004EA3F0 /* BussinessLogic */,
 				0F5B8C3029F97A800083B81B /* Flows */,
-				0F5B8BEB29F83CDA0083B81B /* Assets.xcassets */,
+				0FD8A76429FAB225004EA3F0 /* Core */,
+				0FD8A76729FAB342004EA3F0 /* Environments */,
 				0F5B8BED29F83CDA0083B81B /* Preview Content */,
-				0FD8A75C29FA8DEE004EA3F0 /* LaunchScreen.storyboard */,
 			);
 			path = NaviGay;
 			sourceTree = "<group>";
@@ -121,6 +137,8 @@
 		0F5B8C3229F97AA60083B81B /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				0FD8A76229FAA772004EA3F0 /* LoginViewModel.swift */,
+				0FD8A76029FAA755004EA3F0 /* LoginView.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -188,8 +206,9 @@
 		0F5B8C3B29F97B540083B81B /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				0F5B8C3329F97AAE0083B81B /* Registration */,
 				0F5B8C3229F97AA60083B81B /* Login */,
+				0F5B8C3329F97AAE0083B81B /* Registration */,
+				0FD8A76F29FABF53004EA3F0 /* ChildViews */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -206,6 +225,59 @@
 			children = (
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		0FD8A76429FAB225004EA3F0 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				0FD8A77329FAC39C004EA3F0 /* GeometryEffects */,
+				0FD8A77029FAC292004EA3F0 /* Buttons */,
+				0FD8A76529FAB2A0004EA3F0 /* AppColors.swift */,
+				0FD8A76B29FAB45D004EA3F0 /* AppImages.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		0FD8A76729FAB342004EA3F0 /* Environments */ = {
+			isa = PBXGroup;
+			children = (
+				0F5B8BEB29F83CDA0083B81B /* Assets.xcassets */,
+				0FD8A75C29FA8DEE004EA3F0 /* LaunchScreen.storyboard */,
+			);
+			path = Environments;
+			sourceTree = "<group>";
+		};
+		0FD8A76829FAB390004EA3F0 /* BussinessLogic */ = {
+			isa = PBXGroup;
+			children = (
+				0F5B8C2C29F9770E0083B81B /* CoreData */,
+			);
+			path = BussinessLogic;
+			sourceTree = "<group>";
+		};
+		0FD8A76F29FABF53004EA3F0 /* ChildViews */ = {
+			isa = PBXGroup;
+			children = (
+				0FD8A76929FAB439004EA3F0 /* LoginTextField.swift */,
+				0FD8A76D29FAB70A004EA3F0 /* PasswordTextField.swift */,
+			);
+			path = ChildViews;
+			sourceTree = "<group>";
+		};
+		0FD8A77029FAC292004EA3F0 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				0FD8A77129FAC2A8004EA3F0 /* AsyncButton.swift */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
+		0FD8A77329FAC39C004EA3F0 /* GeometryEffects */ = {
+			isa = PBXGroup;
+			children = (
+				0FD8A77429FAC3BB004EA3F0 /* ShakeEffect.swift */,
+			);
+			path = GeometryEffects;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -281,11 +353,19 @@
 			files = (
 				0F5B8BEA29F83CD90083B81B /* EntryView.swift in Sources */,
 				0FD8A75629FA859A004EA3F0 /* EntryViewModel.swift in Sources */,
+				0FD8A76E29FAB70A004EA3F0 /* PasswordTextField.swift in Sources */,
 				0F5B8BE829F83CD90083B81B /* NaviGayApp.swift in Sources */,
+				0FD8A76129FAA755004EA3F0 /* LoginView.swift in Sources */,
+				0FD8A77529FAC3BB004EA3F0 /* ShakeEffect.swift in Sources */,
+				0FD8A76629FAB2A0004EA3F0 /* AppColors.swift in Sources */,
 				0F5B8BFB29F857750083B81B /* CoreDataManager.swift in Sources */,
+				0FD8A76C29FAB45D004EA3F0 /* AppImages.swift in Sources */,
 				0FD8A75F29FA9018004EA3F0 /* UserDataManager.swift in Sources */,
 				0FD8A75829FA8929004EA3F0 /* TabView.swift in Sources */,
 				0FD8A75B29FA898F004EA3F0 /* TabViewModel.swift in Sources */,
+				0FD8A77229FAC2A8004EA3F0 /* AsyncButton.swift in Sources */,
+				0FD8A76A29FAB439004EA3F0 /* LoginTextField.swift in Sources */,
+				0FD8A76329FAA772004EA3F0 /* LoginViewModel.swift in Sources */,
 				0F5B8C2F29F977CE0083B81B /* NaviGay.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

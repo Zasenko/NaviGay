@@ -10,10 +10,13 @@ import CoreData
 
 struct EntryView: View {
     
+    // MARK: - Properties
+    
     @StateObject var vm: EntryViewModel
     
+    // MARK: - Body
+    
     var body: some View {
-        
         VStack {
             switch vm.router {
             case .logoView:
@@ -21,13 +24,11 @@ struct EntryView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(height: 50)
-                
             case .loginView:
-                Color.blue
+                LoginView()
             case .tabView:
-                Color.red
+                TabView()
             }
-            
         }
         .onAppear() {
             vm.checkUser()

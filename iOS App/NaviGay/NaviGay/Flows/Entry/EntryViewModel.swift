@@ -15,7 +15,7 @@ final class EntryViewModel: ObservableObject {
         case loginView
     }
     
-    //MARK: - Properties
+    // MARK: - Properties
     
     @Published var router: EntryViewRouter = .logoView
     
@@ -33,7 +33,7 @@ final class EntryViewModel: ObservableObject {
 
 extension EntryViewModel {
     
-    //MARK: - Functions
+    // MARK: - Functions
     
     @MainActor
     func checkUser() {
