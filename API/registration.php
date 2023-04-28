@@ -1,26 +1,8 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    function getPost()
-    {
-        if (!empty($_POST)) {
-            return $_POST;
-        }
-        $post = json_decode(file_get_contents('php://input'), true);
-        if (json_last_error() == JSON_ERROR_NONE) {
-            return $post;
-        }
-        return [];
-    }
+    require_once("getPOST.php");
     $data = getPost();
-
-    // date_default_timezone_set('Europe/London');
-    // $a = date('d.m.Y H:i:s');
-    // echo $a;
-    // date_default_timezone_set('Australia/Melbourne');
-    // $a = date('d.m.Y H:i:s');
-    // echo $a;
-    // exit;
 
     $user_email = trim($data["email"]);
     $user_password = trim($data["password"]);
@@ -34,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode($json, JSON_NUMERIC_CHECK);
         exit;
     }
-
     if (strlen($user_password) < 8) {
         $json = array('error' => 11, 'errorDescription' => 'Password must be at least 8 characters');
         echo json_encode($json, JSON_NUMERIC_CHECK);
@@ -50,9 +31,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode($json, JSON_NUMERIC_CHECK);
         exit;
     }
+
     $hashed_password = password_hash($user_password, PASSWORD_DEFAULT);
+
     require_once("dbconfig.php");
+
     $sql = "SELECT id FROM User WHERE email = ? LIMIT 1";
+
     $stmt = $conn->stmt_init();
     if (!$stmt->prepare($sql)) {
         $conn->close();
@@ -69,6 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo json_encode($json, JSON_NUMERIC_CHECK);
             exit;
         }
+        $stmt->free_result();
+
         $sql = "INSERT INTO User (email, password, name) VALUES (?, ?, ?)";
         $stmt = $conn->stmt_init();
         if (!$stmt->prepare($sql)) {
@@ -102,11 +89,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         'status' => $row['status'],
                         'lastUpdate' => $row['updated_at'],
                     );
-                    $conn->close();
-                    $json = array('user' => $user);
-                    echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
-                    exit;
                 }
+                $conn->close();
+                $json = array('user' => $user);
+                echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+                exit;
             } else {
                 $conn->close();
                 $json = array('error' => 4, 'errorDescription' => '3 Execute error');

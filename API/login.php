@@ -1,26 +1,8 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    function getPost()
-    {
-        if (!empty($_POST)) {
-            return $_POST;
-        }
-        $post = json_decode(file_get_contents('php://input'), true);
-        if (json_last_error() == JSON_ERROR_NONE) {
-            return $post;
-        }
-        return [];
-    }
+    require_once("getPOST.php");
     $data = getPost();
-
-    // date_default_timezone_set('Europe/London');
-    // $a = date('d.m.Y H:i:s');
-    // echo $a;
-    // date_default_timezone_set('Australia/Melbourne');
-    // $a = date('d.m.Y H:i:s');
-    // echo $a;
-    // exit;
 
     $user_email = trim($data["email"]);
     $user_password = trim($data["password"]);
@@ -34,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode($json, JSON_NUMERIC_CHECK);
         exit;
     }
-
     if (strlen($user_password) < 8) {
         $json = array('error' => 11, 'errorDescription' => 'Password must be at least 8 characters');
         echo json_encode($json, JSON_NUMERIC_CHECK);
@@ -52,9 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     require_once("dbconfig.php");
-
-    $sql = "SELECT id FROM User WHERE email = ? LIMIT 1";
-
+    $sql = "SELECT * FROM User WHERE email = ? LIMIT 1";
     $stmt = $conn->stmt_init();
     if (!$stmt->prepare($sql)) {
         $conn->close();
@@ -64,27 +43,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $stmt->bind_param("s", $user_email);
     if ($stmt->execute()) {
-        $stmt->store_result();
-        if (!($stmt->num_rows() > 0)) {
+        $result = $stmt->get_result();
+        if (!($result->num_rows > 0)) {
             $conn->close();
             $json = array('error' => 14, 'errorDescription' => '6 No user.');
             echo json_encode($json, JSON_NUMERIC_CHECK);
             exit;
         }
+        while ($row = $result->fetch_assoc()) {
 
-
-        $sql = "SELECT * FROM User WHERE email = ? LIMIT 1";
-        $stmt = $conn->stmt_init();
-        if (!$stmt->prepare($sql)) {
-            $conn->close();
-            $json = array('error' => 3, 'errorDescription' => '5 Prepare Error');
-            echo json_encode($json, JSON_NUMERIC_CHECK);
-            exit;
-        }
-        $stmt->bind_param("s", $user_email);
-        if ($stmt->execute()) {
-            $result = $stmt->get_result();
-            while ($row = $result->fetch_assoc()) {
+            if (password_verify($user_password, $row['password'])) {
                 $user = array(
                     'id' => $row['id'],
                     'name' => $row["name"],
@@ -92,19 +60,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'photo' => $row['photo'],
                     'instagram' => $row['instagram'],
                     'status' => $row['status'],
-                    'lastUpdate' => $row['updated_at'],
+                    'lastUpdate' => $row['updated_at']
                 );
+            } else {
                 $conn->close();
-                $json = array('user' => $user);
-                echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+                $json = array('error' => 100, 'errorDescription' => 'Wrong password');
+                echo json_encode($json, JSON_NUMERIC_CHECK);
                 exit;
             }
-        } else {
-            $conn->close();
-            $json = array('error' => 4, 'errorDescription' => '2 Execute error');
-            echo json_encode($json, JSON_NUMERIC_CHECK);
-            exit;
         }
+        $conn->close();
+        $json = array('user' => $user);
+        echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+        exit;
     } else {
         $conn->close();
         $json = array('error' => 4, 'errorDescription' => '1 Execute error');
