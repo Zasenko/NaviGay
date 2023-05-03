@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum NetworkManagerErrors: Error {
+enum NetworkErrors: Error {
     case noConnection
     case decoderError
     case bedUrl

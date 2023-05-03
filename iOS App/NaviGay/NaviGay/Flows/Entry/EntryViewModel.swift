@@ -7,22 +7,25 @@
 
 import SwiftUI
 
+enum EntryViewRouter {
+    case logoView
+    case tabView
+    case loginView
+}
+
 final class EntryViewModel: ObservableObject {
-    
-    enum EntryViewRouter {
-        case logoView
-        case tabView
-        case loginView
-    }
     
     // MARK: - Properties
     
     @Published var router: EntryViewRouter = .logoView
-    //@Published var isUserLogin: Bool = false
+    @Published var isUserLogin: Bool = false
+    @Published var userStatus: UserStatus = .anonim
     
     // MARK: - Private Properties
     
-    private let userDataManager: UserDataManagerProtocol
+    let userDataManager: UserDataManagerProtocol
+    let networkManager = AuthNetworkManager(networkMonitor: NetworkMonitor(), api: ApiProperties())
+    
     private let routerAnimation = Animation.spring()
     
     // MARK: - Inits
@@ -43,6 +46,7 @@ extension EntryViewModel {
             switch result {
             case .success(let bool):
                 if bool {
+                    isUserLogin = true
                     withAnimation(routerAnimation) {
                         self.router = .tabView
                     }
@@ -52,6 +56,7 @@ extension EntryViewModel {
                     }
                 }
             case .failure(let error):
+                //TODO!!!!
                 debugPrint(error)
                 withAnimation(routerAnimation) {
                     self.router = .logoView

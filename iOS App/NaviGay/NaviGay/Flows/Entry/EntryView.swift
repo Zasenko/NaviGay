@@ -28,10 +28,10 @@ struct EntryView: View {
                 
                 // TODO networkMonitor api
                 
-                LoginView(viewModel: LoginViewModel(networkManager: AuthNetworkManager(networkMonitor: NetworkMonitor(), api: ApiProperties()), authManager: AuthManager()))
+                LoginView(viewModel: LoginViewModel(networkManager: AuthNetworkManager(networkMonitor: NetworkMonitor(), api: ApiProperties()), authManager: AuthManager(), userDataManager: vm.userDataManager, entryRouter: $vm.router, isUserLogin: $vm.isUserLogin))
                 
             case .tabView:
-                TabView()
+                TabBarView(viewModel: TabBarViewModel(isUserLogin: $vm.isUserLogin))
             }
         }
         .onAppear() {

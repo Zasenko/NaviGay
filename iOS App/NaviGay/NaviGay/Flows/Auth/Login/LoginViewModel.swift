@@ -14,21 +14,29 @@ final class LoginViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var error = ""
-    
     @Published var loginButtonState: AsyncButtonState = .normal
-    
     @Published var invalidLoginAttempts = 0
     @Published var invalidPasswordAttempts = 0
-    
     @Published var allViewsDisabled = false
     @Published var isSignUpViewOpen = false
     
+    @Binding var entryRouter: EntryViewRouter
+    @Binding var isUserLogin: Bool
+    
+    // MARK: - Private Properties
+    
     private let networkManager: AuthNetworkManagerProtocol
     private let authManager: AuthManagerProtocol
+    private let userDataManager: UserDataManagerProtocol
     
-    init(networkManager: AuthNetworkManagerProtocol, authManager: AuthManagerProtocol) {
+    // MARK: - Inits
+    
+    init(networkManager: AuthNetworkManagerProtocol,authManager: AuthManagerProtocol, userDataManager: UserDataManagerProtocol, entryRouter: Binding<EntryViewRouter>, isUserLogin: Binding<Bool>) {
         self.networkManager = networkManager
         self.authManager = authManager
+        self.userDataManager = userDataManager
+        self._entryRouter = entryRouter
+        self._isUserLogin = isUserLogin
     }
     
 }
@@ -71,6 +79,12 @@ extension LoginViewModel {
         }
     }
     
+    func skipButtonTapped() {
+        withAnimation(.spring()) {
+            self.entryRouter = .tabView
+        }
+    }
+    
     // MARK: - Private Functions
     
     @MainActor
@@ -78,14 +92,21 @@ extension LoginViewModel {
         Task {
             do {
                 let result = try await self.networkManager.login(email: email, password: password)
-                if let error = result.error {
+     
+                if let error = result.errorDescription {
                     self.error = error
-                    self.loginButtonState = .failure
-                    self.returnToNormalState()
-                } else {
-                    self.loginButtonState = .success
+                    loginButtonState = .failure
+                    returnToNormalState()
                 }
-                returnToNormalState()
+                if let user = result.user {
+                    loginButtonState = .success
+                    await userDataManager.saveNewUser(decodedUser: user)
+                    isUserLogin = true
+                    toTabView()
+                } else {
+                    self.loginButtonState = .failure
+                    returnToNormalState()
+                }
             } catch {
                 self.loginButtonState = .failure
                 self.returnToNormalState()
@@ -110,6 +131,14 @@ extension LoginViewModel {
             withAnimation(.easeInOut(duration: 0.5)) {
                 self.loginButtonState = .normal
                 self.allViewsDisabled = false
+            }
+        }
+    }
+    
+    private func toTabView() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            withAnimation(.spring()) {
+                self.entryRouter = .tabView
             }
         }
     }
