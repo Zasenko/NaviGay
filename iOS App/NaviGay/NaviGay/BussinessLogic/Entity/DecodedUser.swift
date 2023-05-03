@@ -13,7 +13,7 @@ struct LoginResult: Codable {
 }
 
 enum UserStatus: String, Codable {
-    case user, admin, moderator, partner
+    case user, admin, moderator, partner, anonim
 }
 
 struct DecodedUser: Codable, Identifiable {

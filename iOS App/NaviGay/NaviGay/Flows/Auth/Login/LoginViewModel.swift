@@ -14,16 +14,14 @@ final class LoginViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var error = ""
-    
     @Published var loginButtonState: AsyncButtonState = .normal
-    
     @Published var invalidLoginAttempts = 0
     @Published var invalidPasswordAttempts = 0
-    
     @Published var allViewsDisabled = false
     @Published var isSignUpViewOpen = false
     
     @Binding var entryRouter: EntryViewRouter
+    @Binding var isUserLogin: Bool
     
     // MARK: - Private Properties
     
@@ -33,11 +31,12 @@ final class LoginViewModel: ObservableObject {
     
     // MARK: - Inits
     
-    init(networkManager: AuthNetworkManagerProtocol, authManager: AuthManagerProtocol, userDataManager: UserDataManagerProtocol,entryRouter: Binding<EntryViewRouter>) {
+    init(networkManager: AuthNetworkManagerProtocol,authManager: AuthManagerProtocol, userDataManager: UserDataManagerProtocol, entryRouter: Binding<EntryViewRouter>, isUserLogin: Binding<Bool>) {
         self.networkManager = networkManager
         self.authManager = authManager
         self.userDataManager = userDataManager
         self._entryRouter = entryRouter
+        self._isUserLogin = isUserLogin
     }
     
 }
@@ -102,6 +101,7 @@ extension LoginViewModel {
                 if let user = result.user {
                     loginButtonState = .success
                     await userDataManager.saveNewUser(decodedUser: user)
+                    isUserLogin = true
                     toTabView()
                 } else {
                     self.loginButtonState = .failure

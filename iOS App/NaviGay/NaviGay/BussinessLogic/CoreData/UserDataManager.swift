@@ -50,6 +50,7 @@ extension UserDataManager: UserDataManagerProtocol {
         newUser.name = decodedUser.name
         newUser.photo = decodedUser.photo
         newUser.bio = decodedUser.bio
+        newUser.status = decodedUser.status.rawValue
         user = newUser
         manager.saveData()
     }

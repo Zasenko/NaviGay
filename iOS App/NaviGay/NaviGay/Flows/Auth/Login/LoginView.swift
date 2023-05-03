@@ -35,8 +35,7 @@ struct LoginView: View {
                 Spacer()
                 signUpView
             }
-            .padding(.horizontal)
-            .padding(.bottom)
+            .padding()
             .frame(maxWidth: 400)
             .disabled(viewModel.allViewsDisabled)
         }
@@ -47,9 +46,7 @@ struct LoginView: View {
             }
         }
         .fullScreenCover(isPresented: $viewModel.isSignUpViewOpen) {
-        //    viewModel.signUpViewDismissed()
-        } content: {
-       //     viewModel.makeSignUpView()
+            SignUpView()
         }
     }
     
@@ -111,6 +108,6 @@ struct LoginView: View {
 
 //struct LoginView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        LoginView(viewModel: LoginViewModel(networkManager: AuthNetworkManager(networkMonitor: NetworkMonitor(), api: ApiProperties()), authManager: AuthManager(), userDataManager: UserDataManager(manager: CoreDataManagerProtocol)))
+//        LoginView(viewModel: LoginViewModel(networkManager: AuthNetworkManager(networkMonitor: NetworkMonitor(), api: ApiProperties()), authManager: AuthManager(), userDataManager: UserDataManager(manager: CoreDataManager()), entryRouter: .constant(.loginView)))
 //    }
 //}
