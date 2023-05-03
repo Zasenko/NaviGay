@@ -1,0 +1,117 @@
+//
+//  LoginViewModel.swift
+//  NaviGay
+//
+//  Created by Dmitry Zasenko on 27.04.23.
+//
+
+import SwiftUI
+
+final class LoginViewModel: ObservableObject {
+    
+    // MARK: - Properties
+    
+    @Published var email = ""
+    @Published var password = ""
+    @Published var error = ""
+    
+    @Published var loginButtonState: AsyncButtonState = .normal
+    
+    @Published var invalidLoginAttempts = 0
+    @Published var invalidPasswordAttempts = 0
+    
+    @Published var allViewsDisabled = false
+    @Published var isSignUpViewOpen = false
+    
+    private let networkManager: AuthNetworkManagerProtocol
+    private let authManager: AuthManagerProtocol
+    
+    init(networkManager: AuthNetworkManagerProtocol, authManager: AuthManagerProtocol) {
+        self.networkManager = networkManager
+        self.authManager = authManager
+    }
+    
+}
+
+extension LoginViewModel {
+    
+    // MARK: - Functions
+    
+    @MainActor
+    func loginButtonTapped() async {
+        error = ""
+        invalidLoginAttempts = 0
+        invalidPasswordAttempts = 0
+        allViewsDisabled = true
+        authManager.check(email: email, password: password) { [weak self] result in
+            switch result {
+            case .success(_):
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    self?.loginButtonState = .loading
+                }
+                self?.login()
+            case .failure(let error):
+                self?.loginButtonState = .failure
+                self?.returnToNormalState()
+                switch error {
+                case .wrongEmail, .emptyEmail:
+                    self?.error = "Incorrect email"
+                    self?.shakeLogin()
+                    return
+                case .emptyPassword, .noDigit, .noLowercase, .noMinCharacters:
+                    self?.error = "Wrong password"
+                    self?.shakePassword()
+                    return
+                default:
+                    self?.error = "Wrong email or password"
+                    self?.shakePassword()
+                    return
+                }
+            }
+        }
+    }
+    
+    // MARK: - Private Functions
+    
+    @MainActor
+    private func login() {
+        Task {
+            do {
+                let result = try await self.networkManager.login(email: email, password: password)
+                if let error = result.error {
+                    self.error = error
+                    self.loginButtonState = .failure
+                    self.returnToNormalState()
+                } else {
+                    self.loginButtonState = .success
+                }
+                returnToNormalState()
+            } catch {
+                self.loginButtonState = .failure
+                self.returnToNormalState()
+            }
+        }
+    }
+    
+    private func shakeLogin() {
+        withAnimation(.default) {
+            invalidLoginAttempts += 1
+        }
+    }
+    
+    private func shakePassword() {
+        withAnimation(.default) {
+            invalidPasswordAttempts += 1
+        }
+    }
+    
+    private func returnToNormalState() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            withAnimation(.easeInOut(duration: 0.5)) {
+                self.loginButtonState = .normal
+                self.allViewsDisabled = false
+            }
+        }
+    }
+}
+
