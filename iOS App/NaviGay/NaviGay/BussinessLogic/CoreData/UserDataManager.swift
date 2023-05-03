@@ -10,13 +10,14 @@ import CoreData
 
 protocol UserDataManagerProtocol {
     func checkIsUserLogin() async -> Result<Bool, Error>
+    func saveNewUser(decodedUser: DecodedUser) async
 }
 
 final class UserDataManager {
-    
     // MARK: - Private Properties
-    
+
     private let manager: CoreDataManagerProtocol
+    private var user: User? = nil
     
     // MARK: - Inits
     
@@ -33,6 +34,7 @@ extension UserDataManager: UserDataManagerProtocol {
         do {
             let users = try self.manager.context.fetch(request)
             if !users.isEmpty {
+                user = users.first
                 return .success(true)
             } else {
                 return .success(false)
@@ -40,5 +42,15 @@ extension UserDataManager: UserDataManagerProtocol {
         } catch let error {
             return.failure(error)
         }
+    }
+    
+    func saveNewUser(decodedUser: DecodedUser) async {
+        let newUser = User(context: manager.context)
+        newUser.id = Int32(decodedUser.id)
+        newUser.name = decodedUser.name
+        newUser.photo = decodedUser.photo
+        newUser.bio = decodedUser.bio
+        user = newUser
+        manager.saveData()
     }
 }

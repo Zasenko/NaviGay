@@ -27,9 +27,7 @@ struct LoginView: View {
                 Spacer()
                 Text("Login")
                     .font(.largeTitle.bold())
-                
                 LoginTextField(text: $viewModel.email, invalidAttempts: $viewModel.invalidLoginAttempts)
-                
                 PasswordTextField(text: $viewModel.password, invalidAttempts: $viewModel.invalidPasswordAttempts)
                 forgetPasswordButton
                 loginButtonView
@@ -38,6 +36,7 @@ struct LoginView: View {
                 signUpView
             }
             .padding(.horizontal)
+            .padding(.bottom)
             .frame(maxWidth: 400)
             .disabled(viewModel.allViewsDisabled)
         }
@@ -55,61 +54,6 @@ struct LoginView: View {
     }
     
     // MARK: - Private properties / Views
-    
-//    private var loginField: some View {
-//        HStack {
-//            Image(systemName: "envelope")
-//                .resizable()
-//                .scaledToFit()
-//                .foregroundColor(.secondary)
-//                .frame(width: 20, height: 20)
-//            TextField("Email", text: $viewModel.email)
-//                .keyboardType(.emailAddress)
-//                .autocorrectionDisabled(true)
-//                .textInputAutocapitalization(.never)
-//                .lineLimit(1)
-//                .focused($focusedField, equals: .email)
-//                .onSubmit {
-//                    focusedField = .password
-//                }
-//        }
-//        .padding()
-//        .background(AppColors.lightGray)
-//        .cornerRadius(8)
-//        .overlay {
-//            RoundedRectangle(cornerRadius: 8)
-//                .stroke(lineWidth: 1)
-//                .foregroundColor(viewModel.invalidLoginAttempts == 0 ? .clear : .red)
-//        }
-//      //  .modifier(ShakeEffect(animatableData: CGFloat(viewModel.invalidLoginAttempts)))
-//        .padding(.bottom, 10)
-//    }
-    
-//    private var passwordField: some View {
-//        HStack {
-//            Image(systemName: "lock")
-//                .resizable()
-//                .scaledToFit()
-//                .foregroundColor(.secondary)
-//                .frame(width: 20, height: 20)
-//            SecureField("Password", text: $viewModel.password)
-//                .focused($focusedField, equals: .password)
-//                .lineLimit(1)
-//                .autocorrectionDisabled(true)
-//                .onSubmit {
-//                    focusedField = nil
-//                }
-//        }
-//        .padding()
-//        .background(AppColors.lightGray)
-//        .cornerRadius(8)
-//        .overlay {
-//            RoundedRectangle(cornerRadius: 8)
-//                .stroke(lineWidth: 1)
-//                .foregroundColor(viewModel.invalidPasswordAttempts == 0 ? .clear : .red)
-//        }
-//      //  .modifier(ShakeEffect(animatableData: CGFloat(viewModel.invalidPasswordAttempts)))
-//    }
     
     private var forgetPasswordButton: some View {
         Button {
@@ -136,7 +80,7 @@ struct LoginView: View {
             
             Button {
             //    focusedField = nil
-            //    viewModel.skipButtonTapped()
+                viewModel.skipButtonTapped()
             } label: {
                 Text("Skip")
                     .padding()
@@ -165,8 +109,8 @@ struct LoginView: View {
     }
 }
 
-struct LoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginView(viewModel: LoginViewModel(networkManager: AuthNetworkManager(networkMonitor: NetworkMonitor(), api: ApiProperties()), authManager: AuthManager()))
-    }
-}
+//struct LoginView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        LoginView(viewModel: LoginViewModel(networkManager: AuthNetworkManager(networkMonitor: NetworkMonitor(), api: ApiProperties()), authManager: AuthManager(), userDataManager: UserDataManager(manager: CoreDataManagerProtocol)))
+//    }
+//}

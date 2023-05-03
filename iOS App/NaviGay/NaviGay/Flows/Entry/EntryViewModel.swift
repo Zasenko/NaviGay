@@ -7,13 +7,13 @@
 
 import SwiftUI
 
+enum EntryViewRouter {
+    case logoView
+    case tabView
+    case loginView
+}
+
 final class EntryViewModel: ObservableObject {
-    
-    enum EntryViewRouter {
-        case logoView
-        case tabView
-        case loginView
-    }
     
     // MARK: - Properties
     
@@ -22,7 +22,7 @@ final class EntryViewModel: ObservableObject {
     
     // MARK: - Private Properties
     
-    private let userDataManager: UserDataManagerProtocol
+    let userDataManager: UserDataManagerProtocol
     private let routerAnimation = Animation.spring()
     
     // MARK: - Inits
@@ -52,7 +52,9 @@ extension EntryViewModel {
                     }
                 }
             case .failure(let error):
+                //TODO!!!!
                 debugPrint(error)
+                
                 withAnimation(routerAnimation) {
                     self.router = .logoView
                 }
