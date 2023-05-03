@@ -10,7 +10,7 @@ import SwiftUI
 struct PasswordTextField: View {
     
     @Binding var text: String
-    @Binding var invalidPasswordAttempts: Int
+    @Binding var invalidAttempts: Int
     
     var body: some View {
         HStack {
@@ -33,13 +33,15 @@ struct PasswordTextField: View {
         .overlay {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(lineWidth: 1)
-                .foregroundColor(invalidPasswordAttempts == 0 ? .clear : .red)
+                .foregroundColor(invalidAttempts == 0 ? .clear : .red)
         }
+        .modifier(ShakeEffect(animatableData: CGFloat(invalidAttempts)))
+        
     }
 }
 
 struct PasswordTextField_Previews: PreviewProvider {
     static var previews: some View {
-        PasswordTextField(text: .constant(""), invalidPasswordAttempts: .constant(0))
+        PasswordTextField(text: .constant(""), invalidAttempts: .constant(0))
     }
 }

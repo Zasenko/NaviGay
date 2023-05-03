@@ -13,16 +13,20 @@ enum AsyncButtonState {
 
 struct AsyncButton<Content>: View where Content: View {
 
+    // MARK: - Properties
+    
     @Binding var state: AsyncButtonState
     let backgroundColor: Color
-    let action: () -> Void
+    let action: () async -> Void
     let content: () -> Content
 
     // MARK: - View
     
     var body: some View {
             Button {
-                action()
+                Task {
+                    await action()
+                }
             } label: {
                 switch state {
                 case .normal:

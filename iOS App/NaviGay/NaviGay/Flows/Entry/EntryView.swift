@@ -25,7 +25,11 @@ struct EntryView: View {
                     .scaledToFit()
                     .frame(height: 50)
             case .loginView:
-                LoginView()
+                
+                // TODO networkMonitor api
+                
+                LoginView(viewModel: LoginViewModel(networkManager: AuthNetworkManager(networkMonitor: NetworkMonitor(), api: ApiProperties()), authManager: AuthManager()))
+                
             case .tabView:
                 TabView()
             }

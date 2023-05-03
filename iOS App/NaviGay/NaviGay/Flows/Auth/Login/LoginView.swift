@@ -16,7 +16,7 @@ struct LoginView: View {
     
     // MARK: - Properties
     
-    @StateObject var viewModel = LoginViewModel()
+    @StateObject var viewModel: LoginViewModel
     //@FocusState private var focusedField: Field?
     
     // MARK: - Body
@@ -28,9 +28,9 @@ struct LoginView: View {
                 Text("Login")
                     .font(.largeTitle.bold())
                 
-                LoginTextField(text: $viewModel.email, invalidLoginAttempts: $viewModel.invalidLoginAttempts)
+                LoginTextField(text: $viewModel.email, invalidAttempts: $viewModel.invalidLoginAttempts)
                 
-                PasswordTextField(text: $viewModel.password, invalidPasswordAttempts: $viewModel.invalidPasswordAttempts)
+                PasswordTextField(text: $viewModel.password, invalidAttempts: $viewModel.invalidPasswordAttempts)
                 forgetPasswordButton
                 loginButtonView
                 errorView
@@ -127,7 +127,7 @@ struct LoginView: View {
             
             AsyncButton(state: $viewModel.loginButtonState, backgroundColor: AppColors.red) {
              //   focusedField = nil
-             //   viewModel.loginButtonTapped()
+                await viewModel.loginButtonTapped()
             } content: {
                 Text("Login")
                     .bold()
@@ -167,6 +167,6 @@ struct LoginView: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        LoginView(viewModel: LoginViewModel(networkManager: AuthNetworkManager(networkMonitor: NetworkMonitor(), api: ApiProperties()), authManager: AuthManager()))
     }
 }

@@ -18,6 +18,7 @@ final class EntryViewModel: ObservableObject {
     // MARK: - Properties
     
     @Published var router: EntryViewRouter = .logoView
+    //@Published var isUserLogin: Bool = false
     
     // MARK: - Private Properties
     

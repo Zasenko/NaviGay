@@ -10,7 +10,7 @@ import SwiftUI
 struct LoginTextField: View {
     
     @Binding var text: String
-    @Binding var invalidLoginAttempts: Int
+    @Binding var invalidAttempts: Int
     
     var body: some View {
         HStack {
@@ -34,13 +34,14 @@ struct LoginTextField: View {
         .overlay {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(lineWidth: 1)
-                .foregroundColor(invalidLoginAttempts == 0 ? .clear : .red)
+                .foregroundColor(invalidAttempts == 0 ? .clear : .red)
         }
+        .modifier(ShakeEffect(animatableData: CGFloat(invalidAttempts)))
     }
 }
 
 struct AuthTextField_Previews: PreviewProvider {
     static var previews: some View {
-        LoginTextField(text: .constant(""), invalidLoginAttempts: .constant(0))
+        LoginTextField(text: .constant(""), invalidAttempts: .constant(0))
     }
 }

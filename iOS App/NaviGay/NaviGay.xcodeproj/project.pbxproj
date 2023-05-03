@@ -15,6 +15,9 @@
 		0F5B8C2F29F977CE0083B81B /* NaviGay.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0F5B8C2D29F977CE0083B81B /* NaviGay.xcdatamodeld */; };
 		0F6C167C29FC083900F6D104 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6C167B29FC083900F6D104 /* NetworkMonitor.swift */; };
 		0F6C167E29FC087800F6D104 /* ApiProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6C167D29FC087800F6D104 /* ApiProperties.swift */; };
+		0F6C168029FC0D2400F6D104 /* AuthNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6C167F29FC0D2400F6D104 /* AuthNetworkManager.swift */; };
+		0F6C168229FC0D4B00F6D104 /* NetworkManagerErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6C168129FC0D4B00F6D104 /* NetworkManagerErrors.swift */; };
+		0FB281012A0154DE00E79982 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB281002A0154DE00E79982 /* AuthManager.swift */; };
 		0FD8A75629FA859A004EA3F0 /* EntryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A75529FA859A004EA3F0 /* EntryViewModel.swift */; };
 		0FD8A75829FA8929004EA3F0 /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A75729FA8929004EA3F0 /* TabView.swift */; };
 		0FD8A75B29FA898F004EA3F0 /* TabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A75A29FA898F004EA3F0 /* TabViewModel.swift */; };
@@ -40,6 +43,9 @@
 		0F5B8C2E29F977CE0083B81B /* NaviGay.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NaviGay.xcdatamodel; sourceTree = "<group>"; };
 		0F6C167B29FC083900F6D104 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		0F6C167D29FC087800F6D104 /* ApiProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiProperties.swift; sourceTree = "<group>"; };
+		0F6C167F29FC0D2400F6D104 /* AuthNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthNetworkManager.swift; sourceTree = "<group>"; };
+		0F6C168129FC0D4B00F6D104 /* NetworkManagerErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerErrors.swift; sourceTree = "<group>"; };
+		0FB281002A0154DE00E79982 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		0FD8A75529FA859A004EA3F0 /* EntryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryViewModel.swift; sourceTree = "<group>"; };
 		0FD8A75729FA8929004EA3F0 /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
 		0FD8A75A29FA898F004EA3F0 /* TabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewModel.swift; sourceTree = "<group>"; };
@@ -235,9 +241,27 @@
 			isa = PBXGroup;
 			children = (
 				0F6C167B29FC083900F6D104 /* NetworkMonitor.swift */,
+				0F6C168129FC0D4B00F6D104 /* NetworkManagerErrors.swift */,
 				0F6C167D29FC087800F6D104 /* ApiProperties.swift */,
+				0FB280FE2A0149C000E79982 /* NetworkManagers */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		0FB280FE2A0149C000E79982 /* NetworkManagers */ = {
+			isa = PBXGroup;
+			children = (
+				0F6C167F29FC0D2400F6D104 /* AuthNetworkManager.swift */,
+			);
+			path = NetworkManagers;
+			sourceTree = "<group>";
+		};
+		0FB280FF2A0154D100E79982 /* AuthManager */ = {
+			isa = PBXGroup;
+			children = (
+				0FB281002A0154DE00E79982 /* AuthManager.swift */,
+			);
+			path = AuthManager;
 			sourceTree = "<group>";
 		};
 		0FD8A76429FAB225004EA3F0 /* Core */ = {
@@ -263,6 +287,7 @@
 		0FD8A76829FAB390004EA3F0 /* BussinessLogic */ = {
 			isa = PBXGroup;
 			children = (
+				0FB280FF2A0154D100E79982 /* AuthManager */,
 				0F6C167A29FC07F900F6D104 /* Network */,
 				0F5B8C2C29F9770E0083B81B /* CoreData */,
 			);
@@ -366,8 +391,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F5B8BEA29F83CD90083B81B /* EntryView.swift in Sources */,
+				0FB281012A0154DE00E79982 /* AuthManager.swift in Sources */,
 				0FD8A75629FA859A004EA3F0 /* EntryViewModel.swift in Sources */,
 				0FD8A76E29FAB70A004EA3F0 /* PasswordTextField.swift in Sources */,
+				0F6C168229FC0D4B00F6D104 /* NetworkManagerErrors.swift in Sources */,
 				0F6C167E29FC087800F6D104 /* ApiProperties.swift in Sources */,
 				0F5B8BE829F83CD90083B81B /* NaviGayApp.swift in Sources */,
 				0FD8A76129FAA755004EA3F0 /* LoginView.swift in Sources */,
@@ -376,6 +403,7 @@
 				0F5B8BFB29F857750083B81B /* CoreDataManager.swift in Sources */,
 				0F6C167C29FC083900F6D104 /* NetworkMonitor.swift in Sources */,
 				0FD8A76C29FAB45D004EA3F0 /* AppImages.swift in Sources */,
+				0F6C168029FC0D2400F6D104 /* AuthNetworkManager.swift in Sources */,
 				0FD8A75F29FA9018004EA3F0 /* UserDataManager.swift in Sources */,
 				0FD8A75829FA8929004EA3F0 /* TabView.swift in Sources */,
 				0FD8A75B29FA898F004EA3F0 /* TabViewModel.swift in Sources */,
