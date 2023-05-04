@@ -18,13 +18,13 @@ enum AuthManagerErrors: Error {
 }
 
 protocol AuthManagerProtocol {
-    func check(email: String, password: String, complition: @escaping((Result<Bool, AuthManagerErrors>) -> Void))
+    func checkEmailPassword(email: String, password: String, complition: @escaping((Result<Bool, AuthManagerErrors>) -> Void))
 }
 
 final class AuthManager {}
 
 extension AuthManager: AuthManagerProtocol {
-    func check(email: String, password: String, complition: @escaping((Result<Bool, AuthManagerErrors>) -> Void)) {
+    func checkEmailPassword(email: String, password: String, complition: @escaping((Result<Bool, AuthManagerErrors>) -> Void)) {
         DispatchQueue.global().async {
             if email.isEmpty {
                 DispatchQueue.main.async {

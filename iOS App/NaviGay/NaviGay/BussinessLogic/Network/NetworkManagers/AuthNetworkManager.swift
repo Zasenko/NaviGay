@@ -9,6 +9,7 @@ import Foundation
 
 protocol AuthNetworkManagerProtocol {
     func login(email: String, password: String) async throws -> LoginResult
+    func registration(email: String, password: String) async throws -> LoginResult
 }
 
 final class AuthNetworkManager {
@@ -28,11 +29,42 @@ final class AuthNetworkManager {
 
 // MARK: - AuthNetworkManagerProtocol
 extension AuthNetworkManager: AuthNetworkManagerProtocol {
+    
     func login(email: String, password: String) async throws -> LoginResult {
-        guard let url = await api.getLoginUrl(email: email, password: password) else {
+        guard let url = await api.getLoginUrl() else {
             throw NetworkErrors.bedUrl
         }
-        let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+      //  request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+      //  request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.httpMethod = "POST"
+        let parameters: [String: Any] = [
+            "email": email,
+            "password": password
+        ]
+        request.httpBody = parameters.percentEncoded()
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            throw NetworkErrors.invalidData
+        }
+        guard let decodedResult = try? JSONDecoder().decode(LoginResult.self, from: data) else {
+            throw NetworkErrors.decoderError
+        }
+        return decodedResult
+    }
+    
+    func registration(email: String, password: String) async throws -> LoginResult {
+        guard let url = await api.getrRegistrationUrl() else {
+            throw NetworkErrors.bedUrl
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        let parameters: [String: Any] = [
+            "email": email,
+            "password": password
+        ]
+        request.httpBody = parameters.percentEncoded()
+        let (data, response) = try await URLSession.shared.data(for: request)
         guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
             throw NetworkErrors.invalidData
         }

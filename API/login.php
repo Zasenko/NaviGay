@@ -1,8 +1,7 @@
 <?php
 
-
-$user_email = trim($_GET["email"]);
-$user_password = trim($_GET["password"]);
+$user_email = trim($_POST["email"]);
+$user_password = trim($_POST["password"]);
 
 $user_email = filter_var($user_email, FILTER_SANITIZE_EMAIL);
 
@@ -39,42 +38,39 @@ if (!$stmt->prepare($sql)) {
     exit;
 }
 $stmt->bind_param("s", $user_email);
-if ($stmt->execute()) {
-    $result = $stmt->get_result();
-    if (!($result->num_rows > 0)) {
-        $conn->close();
-        $json = array('error' => 14, 'errorDescription' => '6 No user.');
-        echo json_encode($json, JSON_NUMERIC_CHECK);
-        exit;
-    }
-    while ($row = $result->fetch_assoc()) {
-
-        if (password_verify($user_password, $row['password'])) {
-            $user = array(
-                'id' => $row['id'],
-                'name' => $row["name"],
-                'bio' => $row["bio"],
-                'photo' => $row['photo'],
-                'instagram' => $row['instagram'],
-                'status' => $row['status'],
-                'lastUpdate' => $row['updated_at']
-            );
-        } else {
-            $conn->close();
-            $json = array('error' => 100, 'errorDescription' => 'Wrong password');
-            echo json_encode($json, JSON_NUMERIC_CHECK);
-            exit;
-        }
-    }
-    $conn->close();
-    $json = array('user' => $user);
-    echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
-    exit;
-} else {
+if (!$stmt->execute()) {
     $conn->close();
     $json = array('error' => 4, 'errorDescription' => '1 Execute error');
     echo json_encode($json, JSON_NUMERIC_CHECK);
     exit;
 }
+$result = $stmt->get_result();
+if (!($result->num_rows > 0)) {
+    $conn->close();
+    $json = array('error' => 14, 'errorDescription' => '6 No user.');
+    echo json_encode($json, JSON_NUMERIC_CHECK);
+    exit;
+}
+while ($row = $result->fetch_assoc()) {
 
+    if (password_verify($user_password, $row['password'])) {
+        $user = array(
+            'id' => $row['id'],
+            'name' => $row["name"],
+            'bio' => $row["bio"],
+            'photo' => $row['photo'],
+            'instagram' => $row['instagram'],
+            'status' => $row['status'],
+            'lastUpdate' => $row['updated_at']
+        );
+    } else {
+        $conn->close();
+        $json = array('error' => 100, 'errorDescription' => 'Wrong password');
+        echo json_encode($json, JSON_NUMERIC_CHECK);
+        exit;
+    }
+}
 $conn->close();
+$json = array('user' => $user);
+echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+exit;
