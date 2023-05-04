@@ -25,9 +25,9 @@ final class LoginViewModel: ObservableObject {
     
     // MARK: - Private Properties
     
-    private let networkManager: AuthNetworkManagerProtocol
-    private let authManager: AuthManagerProtocol
-    private let userDataManager: UserDataManagerProtocol
+    let networkManager: AuthNetworkManagerProtocol
+    let authManager: AuthManagerProtocol
+    let userDataManager: UserDataManagerProtocol
     
     // MARK: - Inits
     
@@ -38,7 +38,6 @@ final class LoginViewModel: ObservableObject {
         self._entryRouter = entryRouter
         self._isUserLogin = isUserLogin
     }
-    
 }
 
 extension LoginViewModel {
@@ -51,7 +50,7 @@ extension LoginViewModel {
         invalidLoginAttempts = 0
         invalidPasswordAttempts = 0
         allViewsDisabled = true
-        authManager.check(email: email, password: password) { [weak self] result in
+        authManager.checkEmailPassword(email: email, password: password) { [weak self] result in
             switch result {
             case .success(_):
                 withAnimation(.easeInOut(duration: 0.5)) {
@@ -82,6 +81,12 @@ extension LoginViewModel {
     func skipButtonTapped() {
         withAnimation(.spring()) {
             self.entryRouter = .tabView
+        }
+    }
+    
+    func signUpButtonTapped() {
+        withAnimation(.spring()) {
+            self.isSignUpViewOpen = true
         }
     }
     
@@ -143,4 +148,3 @@ extension LoginViewModel {
         }
     }
 }
-

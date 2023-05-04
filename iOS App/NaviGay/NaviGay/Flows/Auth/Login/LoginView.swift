@@ -46,7 +46,7 @@ struct LoginView: View {
             }
         }
         .fullScreenCover(isPresented: $viewModel.isSignUpViewOpen) {
-            SignUpView()
+            SignUpView(viewModel: SignUpViewModel(networkManager: viewModel.networkManager, authManager: viewModel.authManager, userDataManager: viewModel.userDataManager, entryRouter: $viewModel.entryRouter, isUserLogin: $viewModel.isUserLogin, isSignUpViewOpen: $viewModel.isSignUpViewOpen))
         }
     }
     
@@ -90,7 +90,7 @@ struct LoginView: View {
             Text("Don't have an account?")
             Button {
              //   focusedField = nil
-              //  viewModel.signUpButtonTapped()
+                viewModel.signUpButtonTapped()
             } label: {
                 Text("Sign Up")
                     .bold()
