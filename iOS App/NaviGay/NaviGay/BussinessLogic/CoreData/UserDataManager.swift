@@ -5,7 +5,6 @@
 //  Created by Dmitry Zasenko on 27.04.23.
 //
 
-import SwiftUI
 import CoreData
 
 protocol UserDataManagerProtocol {
@@ -14,6 +13,7 @@ protocol UserDataManagerProtocol {
 }
 
 final class UserDataManager {
+    
     // MARK: - Private Properties
 
     private let manager: CoreDataManagerProtocol
@@ -25,8 +25,8 @@ final class UserDataManager {
         self.manager = manager
     }
 }
-// MARK: - UserDataManagerProtocol
 
+// MARK: - UserDataManagerProtocol
 extension UserDataManager: UserDataManagerProtocol {
     
     func checkIsUserLogin() async -> Result<Bool, Error> {

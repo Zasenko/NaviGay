@@ -23,7 +23,7 @@ struct TabBarView: View {
                     case 0 :
                         viewModel.items[index].view
                             .tag(index)
-                            .ignoresSafeArea()
+                          //  .ignoresSafeArea()
                     default:
                         viewModel.items[index].view
                             .tag(index)
@@ -55,8 +55,8 @@ struct TabBarView: View {
         }
 }
 
-struct TabView_Previews: PreviewProvider {
-    static var previews: some View {
-        TabBarView(viewModel: TabBarViewModel(isUserLogin: .constant(true)))
-    }
-}
+//struct TabView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TabBarView(viewModel: TabBarViewModel(isUserLogin: .constant(true)))
+//    }
+//}

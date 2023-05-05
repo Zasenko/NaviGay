@@ -25,13 +25,9 @@ struct EntryView: View {
                     .scaledToFit()
                     .frame(height: 50)
             case .loginView:
-                
-                // TODO networkMonitor api
-                
-                LoginView(viewModel: LoginViewModel(networkManager: AuthNetworkManager(networkMonitor: NetworkMonitor(), api: ApiProperties()), authManager: AuthManager(), userDataManager: vm.userDataManager, entryRouter: $vm.router, isUserLogin: $vm.isUserLogin))
-                
+                LoginView(viewModel: LoginViewModel(entryRouter: $vm.router, isUserLogin: $vm.isUserLogin, networkMonitor: vm.networkMonitor, api: vm.api, userDataManager: vm.userDataManager))
             case .tabView:
-                TabBarView(viewModel: TabBarViewModel(isUserLogin: $vm.isUserLogin))
+                TabBarView(viewModel: TabBarViewModel(isUserLogin: $vm.isUserLogin, networkMonitor: vm.networkMonitor, api: vm.api, dataManager: vm.dataManager))
             }
         }
         .onAppear() {
@@ -40,8 +36,8 @@ struct EntryView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        EntryView(vm: EntryViewModel(userDataManager: UserDataManager(manager: CoreDataManager())))
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EntryView(vm: EntryViewModel(userDataManager: UserDataManager(manager: CoreDataManager())))
+//    }
+//}
