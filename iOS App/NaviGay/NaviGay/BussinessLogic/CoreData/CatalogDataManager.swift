@@ -11,6 +11,7 @@ protocol CatalogDataManagerProtocol {
     func getCountries() async -> Result<[Country], Error>
     func createCountry(decodedCountry: DecodedCountry) async -> Country
     func save() async
+    func createSmallDescriprion(decription: String) async -> String?
 }
 
 final class CatalogDataManager {
@@ -49,10 +50,19 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
         newCountry.name = decodedCountry.name
         newCountry.photo = decodedCountry.photo
         newCountry.isActive = decodedCountry.isActive == 1 ? true : false
+        newCountry.smallDescriprion = await createSmallDescriprion(decription: decodedCountry.about)
         return newCountry
     }
     
     func save() async {
         manager.saveData()
+    }
+    
+    func createSmallDescriprion(decription: String) async -> String? {
+        if let description = decription.split(separator: ".").first {
+            return "\(description)."
+        } else {
+            return nil
+        }
     }
 }

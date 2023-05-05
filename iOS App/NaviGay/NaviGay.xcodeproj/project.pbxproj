@@ -44,6 +44,7 @@
 		0FD8A76E29FAB70A004EA3F0 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A76D29FAB70A004EA3F0 /* PasswordTextField.swift */; };
 		0FD8A77229FAC2A8004EA3F0 /* AsyncButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A77129FAC2A8004EA3F0 /* AsyncButton.swift */; };
 		0FD8A77529FAC3BB004EA3F0 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A77429FAC3BB004EA3F0 /* ShakeEffect.swift */; };
+		0FF389722A0541F600830A96 /* AuthManagerErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF389712A0541F600830A96 /* AuthManagerErrors.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,6 +86,7 @@
 		0FD8A76D29FAB70A004EA3F0 /* PasswordTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		0FD8A77129FAC2A8004EA3F0 /* AsyncButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncButton.swift; sourceTree = "<group>"; };
 		0FD8A77429FAC3BB004EA3F0 /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
+		0FF389712A0541F600830A96 /* AuthManagerErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManagerErrors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -304,6 +306,7 @@
 		0FB280FF2A0154D100E79982 /* AuthManager */ = {
 			isa = PBXGroup;
 			children = (
+				0FF389712A0541F600830A96 /* AuthManagerErrors.swift */,
 				0FB281002A0154DE00E79982 /* AuthManager.swift */,
 			);
 			path = AuthManager;
@@ -475,6 +478,7 @@
 				0FD8A75829FA8929004EA3F0 /* TabBarView.swift in Sources */,
 				0FD8A75B29FA898F004EA3F0 /* TabBarViewModel.swift in Sources */,
 				0FD8A77229FAC2A8004EA3F0 /* AsyncButton.swift in Sources */,
+				0FF389722A0541F600830A96 /* AuthManagerErrors.swift in Sources */,
 				0F37F0362A03F53D00679932 /* CatalogDataManager.swift in Sources */,
 				0FD8A76A29FAB439004EA3F0 /* LoginTextField.swift in Sources */,
 				0FD8A76329FAA772004EA3F0 /* LoginViewModel.swift in Sources */,

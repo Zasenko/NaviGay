@@ -74,6 +74,7 @@ extension CatalogViewModel {
                                 country.flag = decodedCountry.flag
                                 country.name = decodedCountry.name
                                 country.photo = decodedCountry.photo
+                                country.smallDescriprion = await dataManager.createSmallDescriprion(decription: decodedCountry.about)
                                 country.isActive = decodedCountry.isActive == 1 ? true : false
                             } else {
                                 let newCountry = await dataManager.createCountry(decodedCountry: decodedCountry)

@@ -43,6 +43,10 @@ extension CatalogNetworkManager: CatalogNetworkManagerProtocol {
             throw NetworkErrors.decoderError
         }
         if let resultError = decodedResult.error {
+            
+            //TODO
+            
+            print(resultError)
             throw NetworkErrors.apiError
         }
         return decodedResult
