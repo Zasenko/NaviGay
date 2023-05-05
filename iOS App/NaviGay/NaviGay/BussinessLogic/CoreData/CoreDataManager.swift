@@ -6,7 +6,6 @@
 //
 
 import CoreData
-import Foundation
 
 protocol CoreDataManagerProtocol {
     var context: NSManagedObjectContext { get }
@@ -46,7 +45,7 @@ extension CoreDataManager {
             try context.save()
         } catch let error {
             //TODO
-            debugPrint("Error Saving. \(error.localizedDescription)")
+            debugPrint("CoreDataManager Error Saving ->>>>>>>>>> \(error.localizedDescription)")
         }
     }
 }
