@@ -10,7 +10,7 @@ import SwiftUI
 struct CountryCell: View {
     
     //MARK: - Properties
-    @Binding var country: Country
+    let country: Country
     
     //MARK: - Body
     var body: some View {

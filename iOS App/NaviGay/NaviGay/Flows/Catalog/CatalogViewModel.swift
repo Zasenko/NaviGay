@@ -14,6 +14,8 @@ final class CatalogViewModel: ObservableObject {
     @Published var countries: [Country] = []
     @Published var activeCountries: [Country] = []
     
+    @Published var loadState: LoadState = .normal
+    
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
     
@@ -32,9 +34,14 @@ extension CatalogViewModel {
     //MARK: - Functions
     func getCountries() {
         Task {
-            await getCountriesFromDB()
-            await fetchCountries()
+            await self.getCountriesFromDB()
         }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            Task {
+                await self.fetchCountries()
+            }
+        }
+        
     }
     
     @MainActor
@@ -43,10 +50,13 @@ extension CatalogViewModel {
         switch result {
         case .success(let countries):
             withAnimation(.spring()) {
-                self.countries = countries
-                self.activeCountries = countries.filter(( { $0.isActive == true} ))
+                if countries.isEmpty {
+                        loadState = .loading
+                } else {
+                    self.countries = countries
+                    self.activeCountries = countries.filter(( { $0.isActive == true} ))
+                }
             }
-            
         case .failure(let error):
             
             // TODO
@@ -83,6 +93,9 @@ extension CatalogViewModel {
                         }
                         await dataManager.save()
                         await getCountriesFromDB()
+                    }
+                    withAnimation(.spring()) {
+                        loadState = .normal
                     }
                 } catch {
                     

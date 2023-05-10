@@ -18,21 +18,31 @@ struct CatalogView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section {
-                    Color.clear
-                        .frame(height: 20)
-                        .listRowSeparator(.hidden)
-                }
-                Section {
-                    ForEach($viewModel.activeCountries) { country in
-                        NavigationLink {
-                            Color.yellow
-                        } label: {
-                            CountryCell(country: country)
-                        }
+                
+                switch viewModel.loadState {
+                case .normal, .success:
+                    Section {
+                        Color.clear
+                            .frame(height: 20)
+                            .listRowSeparator(.hidden)
                     }
-                    .listRowBackground(AppColors.background)
+                    Section {
+                        ForEach(viewModel.activeCountries) { country in
+                            NavigationLink {
+                                CountryView(viewModel: CountryViewModel(country: country, networkManager: viewModel.networkManager, dataManager: viewModel.dataManager))
+                            } label: {
+                                CountryCell(country: country)
+                            }
+                        }
+                        .listRowBackground(AppColors.background)
+                    }
+                case .loading:
+                    ProgressView()
+                case .failure:
+                    Text("что-то пошло не так")
                 }
+                
+                
             }
             .listStyle(.plain)
             .navigationBarTitleDisplayMode(.inline)

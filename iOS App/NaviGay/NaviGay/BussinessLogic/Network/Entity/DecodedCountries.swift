@@ -12,13 +12,36 @@ struct CountriesResult: Codable {
     let countries: [DecodedCountry]?
 }
 
+struct CountryResult: Codable {
+    let error: String?
+    let country: DecodedCountry?
+}
+
 struct DecodedCountry: Identifiable, Codable {
     let id: Int
     let name: String
     let about: String
     let flag: String
     let photo: String
-  //  let cities: [CityApi]
+    let regions: [DecodedRegion]?
     let isActive: Int
    // let lastUpdate: String
+}
+
+struct RegionsResult: Codable {
+    let error: String?
+    let country: [DecodedRegion]?
+}
+
+struct DecodedRegion: Identifiable, Codable {
+    let id: Int
+    let name: String
+    let cities: [DecodedCity]?
+    let isActive: Int
+}
+
+struct DecodedCity: Identifiable, Codable {
+    let id: Int
+    let name: String
+    let isActive: Int
 }

@@ -14,7 +14,7 @@ final class LoginViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var error = ""
-    @Published var loginButtonState: AsyncButtonState = .normal
+    @Published var loginButtonState: LoadState = .normal
     @Published var invalidLoginAttempts = 0
     @Published var invalidPasswordAttempts = 0
     @Published var allViewsDisabled = false

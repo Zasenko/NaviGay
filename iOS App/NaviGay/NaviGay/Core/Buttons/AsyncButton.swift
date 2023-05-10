@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum AsyncButtonState {
+enum LoadState {
     case normal, loading, success, failure
 }
 
@@ -15,7 +15,7 @@ struct AsyncButton<Content>: View where Content: View {
 
     // MARK: - Properties
     
-    @Binding var state: AsyncButtonState
+    @Binding var state: LoadState
     let backgroundColor: Color
     let action: () async -> Void
     let content: () -> Content

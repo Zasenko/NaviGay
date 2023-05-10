@@ -44,6 +44,10 @@
 		0FD8A76E29FAB70A004EA3F0 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A76D29FAB70A004EA3F0 /* PasswordTextField.swift */; };
 		0FD8A77229FAC2A8004EA3F0 /* AsyncButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A77129FAC2A8004EA3F0 /* AsyncButton.swift */; };
 		0FD8A77529FAC3BB004EA3F0 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A77429FAC3BB004EA3F0 /* ShakeEffect.swift */; };
+		0FDA20232A092B13008D40D2 /* CountryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDA20222A092B13008D40D2 /* CountryView.swift */; };
+		0FDA20252A092B32008D40D2 /* CountryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDA20242A092B32008D40D2 /* CountryViewModel.swift */; };
+		0FDA202C2A095008008D40D2 /* RegionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDA202B2A095008008D40D2 /* RegionsView.swift */; };
+		0FDA202F2A097B7D008D40D2 /* RegionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDA202E2A097B7D008D40D2 /* RegionsViewModel.swift */; };
 		0FF389722A0541F600830A96 /* AuthManagerErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF389712A0541F600830A96 /* AuthManagerErrors.swift */; };
 /* End PBXBuildFile section */
 
@@ -86,6 +90,10 @@
 		0FD8A76D29FAB70A004EA3F0 /* PasswordTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 		0FD8A77129FAC2A8004EA3F0 /* AsyncButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncButton.swift; sourceTree = "<group>"; };
 		0FD8A77429FAC3BB004EA3F0 /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
+		0FDA20222A092B13008D40D2 /* CountryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryView.swift; sourceTree = "<group>"; };
+		0FDA20242A092B32008D40D2 /* CountryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryViewModel.swift; sourceTree = "<group>"; };
+		0FDA202B2A095008008D40D2 /* RegionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionsView.swift; sourceTree = "<group>"; };
+		0FDA202E2A097B7D008D40D2 /* RegionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionsViewModel.swift; sourceTree = "<group>"; };
 		0FF389712A0541F600830A96 /* AuthManagerErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManagerErrors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -214,6 +222,9 @@
 		0F5B8C3529F97AC90083B81B /* Country */ = {
 			isa = PBXGroup;
 			children = (
+				0FDA20242A092B32008D40D2 /* CountryViewModel.swift */,
+				0FDA20222A092B13008D40D2 /* CountryView.swift */,
+				0FF061742A0BC31E004579AA /* Regions */,
 			);
 			path = Country;
 			sourceTree = "<group>";
@@ -377,6 +388,15 @@
 			path = GeometryEffects;
 			sourceTree = "<group>";
 		};
+		0FF061742A0BC31E004579AA /* Regions */ = {
+			isa = PBXGroup;
+			children = (
+				0FDA202E2A097B7D008D40D2 /* RegionsViewModel.swift */,
+				0FDA202B2A095008008D40D2 /* RegionsView.swift */,
+			);
+			path = Regions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -451,10 +471,13 @@
 				0F5B8BEA29F83CD90083B81B /* EntryView.swift in Sources */,
 				0F37F0382A03F78B00679932 /* DecodedCountries.swift in Sources */,
 				0FB281092A02B28000E79982 /* UserViewModel.swift in Sources */,
+				0FDA20232A092B13008D40D2 /* CountryView.swift in Sources */,
+				0FDA20252A092B32008D40D2 /* CountryViewModel.swift in Sources */,
 				0FB2810B2A02B2C400E79982 /* UserView.swift in Sources */,
 				0FB281012A0154DE00E79982 /* AuthManager.swift in Sources */,
 				0FB281062A02AA3B00E79982 /* TabBarButton.swift in Sources */,
 				0F37F03A2A03F80700679932 /* CatalogNetworkManager.swift in Sources */,
+				0FDA202F2A097B7D008D40D2 /* RegionsViewModel.swift in Sources */,
 				0FD8A75629FA859A004EA3F0 /* EntryViewModel.swift in Sources */,
 				0FD8A76E29FAB70A004EA3F0 /* PasswordTextField.swift in Sources */,
 				0F6C168229FC0D4B00F6D104 /* NetworkErrors.swift in Sources */,
@@ -475,6 +498,7 @@
 				0F6C168029FC0D2400F6D104 /* AuthNetworkManager.swift in Sources */,
 				0FD8A75F29FA9018004EA3F0 /* UserDataManager.swift in Sources */,
 				0F37F0302A03F33200679932 /* CatalogView.swift in Sources */,
+				0FDA202C2A095008008D40D2 /* RegionsView.swift in Sources */,
 				0FD8A75829FA8929004EA3F0 /* TabBarView.swift in Sources */,
 				0FD8A75B29FA898F004EA3F0 /* TabBarViewModel.swift in Sources */,
 				0FD8A77229FAC2A8004EA3F0 /* AsyncButton.swift in Sources */,
@@ -618,6 +642,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
@@ -649,6 +674,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";

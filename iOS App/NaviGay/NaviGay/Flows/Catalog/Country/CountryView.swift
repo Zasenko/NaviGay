@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct CountryView: View {
     
@@ -31,10 +32,47 @@ struct CountryView: View {
                     }
                     .frame(width: geometry.size.width, height: geometry.size.width)
 
-                    
-                    
                     //   BView(country: viewModel.$country, geometrySize: geometry.size)
+          //          CitiesView(cities: <#T##[City]#>)
                     
+                        
+                    if let steps = viewModel.country.regions?.allObjects as? [Region] {
+                      ForEach(steps) {step in
+                          
+                          Section {
+                              
+                              if let steps2 = step.cities?.allObjects as? [City] {
+                                  HStack {
+                                      ForEach(steps2) {step2 in
+                                          Text(step2.name ?? "")
+                                              .padding(.horizontal)
+                                              .padding(.horizontal)
+                                              .frame(height: 50)
+                                              .background(AppColors.red)
+                                              .clipShape(Capsule(style: .continuous))
+                                      }
+                                  }
+                              }
+                              
+                          } header: {
+                              Text("\(step.name ?? "step")")
+                                  .font(.caption)
+                                  .bold()
+                          } footer: {}
+                      }
+                    }
+                        
+//                        ForEach(viewModel.country.regions) { region in
+//
+//                            Section {
+//                                CityView(cities: region.cities)
+//                            } header: {
+//                                Text(region.name ?? "")
+//                            } footer: {}
+//
+//                        }
+
+
                     
                     
                     Text(viewModel.country.about ?? "")
@@ -55,9 +93,9 @@ struct CountryView: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 HStack {
-                    Text("\(viewModel.country.flag ?? "🏳️‍🌈")")
+                    Text(viewModel.country.flag ?? "🏳️‍🌈")
                         .font(.title)
-                    Text("\(viewModel.country.name ?? "")")
+                    Text(viewModel.country.name ?? "")
                         .foregroundStyle(AppColors.rainbowGradient)
                         .font(.largeTitle)
                 }
