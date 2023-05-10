@@ -1,7 +1,7 @@
 <?php
 
-$user_email = trim($_POST["email"]);
-$user_password = trim($_POST["password"]);
+$user_email = isset($_POST["email"]);
+$user_password = isset($_POST["password"]);
 
 $user_email = filter_var($user_email, FILTER_SANITIZE_EMAIL);
 
