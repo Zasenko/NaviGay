@@ -18,7 +18,6 @@ struct CatalogView: View {
     var body: some View {
         NavigationStack {
             List {
-                
                 switch viewModel.loadState {
                 case .normal, .success:
                     Section {
@@ -27,9 +26,9 @@ struct CatalogView: View {
                             .listRowSeparator(.hidden)
                     }
                     Section {
-                        ForEach(viewModel.activeCountries) { country in
+                        ForEach($viewModel.activeCountries) { country in
                             NavigationLink {
-                                CountryView(viewModel: CountryViewModel(country: country, networkManager: viewModel.networkManager, dataManager: viewModel.dataManager))
+                                CountryView(viewModel: CountryViewModel(country: country.wrappedValue, networkManager: viewModel.networkManager, dataManager: viewModel.dataManager))
                             } label: {
                                 CountryCell(country: country)
                             }
@@ -41,9 +40,8 @@ struct CatalogView: View {
                 case .failure:
                     Text("что-то пошло не так")
                 }
-                
-                
             }
+
             .listStyle(.plain)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
