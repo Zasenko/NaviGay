@@ -14,6 +14,8 @@ final class CatalogViewModel: ObservableObject {
     @Published var countries: [Country] = []
     @Published var activeCountries: [Country] = []
     
+    @Published var loadState: LoadState = .normal
+    
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
     
@@ -32,63 +34,69 @@ extension CatalogViewModel {
     //MARK: - Functions
     func getCountries() {
         Task {
-            await getCountriesFromDB()
-            await fetchCountries()
+            await self.getCountriesFromDB()
+            await self.fetchCountries()
         }
     }
     
+    //MARK: - Private Functions
+    
     @MainActor
-    func getCountriesFromDB() async {
+    private func getCountriesFromDB() async {
         let result = await dataManager.getCountries()
         switch result {
         case .success(let countries):
             withAnimation(.spring()) {
-                self.countries = countries
-                self.activeCountries = countries.filter(( { $0.isActive == true} ))
+                if countries.isEmpty {
+                    loadState = .loading
+                } else {
+                    self.countries = countries
+                    self.activeCountries = countries.filter(( { $0.isActive == true} ))
+                }
             }
-            
         case .failure(let error):
             
             // TODO
-            
             print("getCountriesFromDB() failure ->>>>>>>>>>> ", error)
         }
     }
     
     @MainActor
-    func fetchCountries() async {
-            Task {
-                do {
-                    let result = try await networkManager.fetchCountries()
-                    if let error = result.error {
-                        
-                        //TODO
-                        
-                        print(error)
-                        return
-                    }
-                    if let decodedCountries = result.countries {
-                        for decodedCountry in decodedCountries {
-                            if let country = countries.first(where: { $0.id == Int16(decodedCountry.id)}) {
-                                country.about = decodedCountry.about
-                                country.flag = decodedCountry.flag
-                                country.name = decodedCountry.name
-                                country.photo = decodedCountry.photo
-                                country.isActive = decodedCountry.isActive == 1 ? true : false
-                            } else {
-                                let newCountry = await dataManager.createCountry(decodedCountry: decodedCountry)
-                                countries.append(newCountry)
-                            }
-                        }
-                        await dataManager.save()
-                        await getCountriesFromDB()
-                    }
-                } catch {
-                    
+    private func fetchCountries() async {
+        Task {
+            do {
+                let result = try await networkManager.fetchCountries()
+                if let error = result.error {
                     //TODO
-                    
-                    print("Error fetching country ->>>>>>>>>>> \(error)")
+                    print(error)
+                    return
                 }
+                if let decodedCountries = result.countries {
+                    for decodedCountry in decodedCountries {
+                        if let country = countries.first(where: { $0.id == Int16(decodedCountry.id)}) {
+                            country.about = decodedCountry.about
+                            country.flag = decodedCountry.flag
+                            country.name = decodedCountry.name
+                            country.photo = decodedCountry.photo
+                            country.smallDescriprion = await dataManager.createSmallDescriprion(decription: decodedCountry.about)
+                            country.isActive = decodedCountry.isActive == 1 ? true : false
+                        } else {
+                            let newCountry = await dataManager.createCountry(decodedCountry: decodedCountry)
+                            countries.append(newCountry)
+                        }
+                    }
+                    await dataManager.save()
+                    await getCountriesFromDB()
+                }
+                withAnimation(.spring()) {
+                    loadState = .normal
+                }
+            } catch {
+                
+                //TODO
+                
+                print("Error fetching country ->>>>>>>>>>> \(error)")
             }
+        }
     }
 }

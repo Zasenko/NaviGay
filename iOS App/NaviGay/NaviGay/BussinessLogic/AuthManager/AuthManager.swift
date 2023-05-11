@@ -7,21 +7,13 @@
 
 import Foundation
 
-enum AuthManagerErrors: Error {
-    case emptyEmail
-    case emptyPassword
-    case noUppercase
-    case noDigit
-    case noLowercase
-    case noMinCharacters
-    case wrongEmail
-}
-
 protocol AuthManagerProtocol {
     func checkEmailPassword(email: String, password: String, complition: @escaping((Result<Bool, AuthManagerErrors>) -> Void))
 }
 
-final class AuthManager {}
+final class AuthManager {
+    
+}
 
 extension AuthManager: AuthManagerProtocol {
     func checkEmailPassword(email: String, password: String, complition: @escaping((Result<Bool, AuthManagerErrors>) -> Void)) {
