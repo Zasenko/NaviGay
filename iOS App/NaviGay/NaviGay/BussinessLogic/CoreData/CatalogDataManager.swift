@@ -14,6 +14,7 @@ protocol CatalogDataManagerProtocol {
     func createCountry(decodedCountry: DecodedCountry) async -> Country
     func createRegion(decodedRegion: DecodedRegion) async -> Region
     func createCity(decodedCity: DecodedCity) async -> City
+    func createPlace(decodedPlace: DecodedPlace)  async -> Place
     func save() async
     func createSmallDescriprion(decription: String) async -> String?
 }
@@ -116,6 +117,18 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
         newCity.name = decodedCity.name
         newCity.isActive = decodedCity.isActive == 1 ? true : false
         return newCity
+    }
+    
+    func createPlace(decodedPlace: DecodedPlace) async -> Place {
+        let newPlace = Place(context: manager.context)
+        newPlace.id = Int32(decodedPlace.id)
+        newPlace.name = decodedPlace.name
+        newPlace.about = decodedPlace.about
+        newPlace.photo = decodedPlace.photo
+        newPlace.latitude = decodedPlace.latitude
+        newPlace.longitude = decodedPlace.longitude
+        newPlace.isActive = decodedPlace.isActive == 1 ? true : false
+        return newPlace
     }
     
     func createSmallDescriprion(decription: String) async -> String? {

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import CoreData
 
 struct CountryView: View {
     
@@ -51,10 +50,6 @@ struct CountryView: View {
                                                   .background(AppColors.red)
                                                   .clipShape(Capsule(style: .continuous))
                                           }
-
-                                          
-                                          
-                                          
                                       }
                                   }
                                   .padding(.bottom)
@@ -80,7 +75,7 @@ struct CountryView: View {
             }
             .edgesIgnoringSafeArea(.top)
         }
-        .toolbarBackground(AppColors.background, for: .navigationBar)
+       // .toolbarBackground(AppColors.background, for: .navigationBar)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {

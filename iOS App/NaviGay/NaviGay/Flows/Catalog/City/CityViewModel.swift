@@ -61,21 +61,45 @@ extension CityViewModel {
     private func fetchCity(id: Int16) {
         Task {
             do {
-                let result = try await networkManager.fetchCity(id: Int(id))
+                let result = try await self.networkManager.fetchCity(id: Int(id))
                 if let error = result.error {
                     //TODO
                     print(error)
                     return
                 }
                 if let decodedCity = result.city {
+                    
                     city.about = decodedCity.about
                     city.name = decodedCity.name
                     city.photo = decodedCity.photo
                     city.isActive = decodedCity.isActive == 1 ? true : false
+                    
+                    if let decodedPlaces = decodedCity.places {
+                        
+                        if let places = city.places?.allObjects as? [Place] {
+                            
+                            for decodedPlace in decodedPlaces {
+                                
+                                if let place = places.first(where: { $0.id == Int16(decodedPlace.id) } ) {
+                                    place.name = decodedPlace.name
+                                    place.about = decodedPlace.about
+                                    place.photo = decodedPlace.photo
+                                    place.latitude = decodedPlace.latitude
+                                    place.longitude = decodedPlace.longitude
+                                    place.isActive = decodedPlace.isActive == 1 ? true : false
+                                } else {
+                                    let place = await dataManager.createPlace(decodedPlace: decodedPlace)
+                                    self.city.addToPlaces(place)
+                                }
+                                
+                            }
+                        }
+                    }
+  
                     await dataManager.save()
                     await getCityFromDB(id: city.id)
                 }
-            }catch {
+            } catch {
                     
                     //TODO
                     

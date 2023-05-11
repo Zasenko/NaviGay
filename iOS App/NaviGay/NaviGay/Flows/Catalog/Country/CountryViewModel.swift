@@ -99,10 +99,9 @@ extension CountryViewModel {
                                 
                             }
                         }
-                        
-                        await dataManager.save()
-                        await getCountryFromDB(id: country.id)
                     }
+                    await dataManager.save()
+                    await getCountryFromDB(id: country.id)
                 }
             }catch {
                     

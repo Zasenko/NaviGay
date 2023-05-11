@@ -17,37 +17,58 @@ struct CityView: View {
     
     var body: some View {
         NavigationStack {
-            
             ScrollView {
-                    VStack {
-                        
-                        AsyncImage(url: URL(string: viewModel.city.photo ?? "")) { img in
-                            img
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 100, height: 100)
-                        } placeholder: {
-                            ProgressView()
-                        }.frame(width: 100, height: 100)
-                        
-                        Text(viewModel.city.about ?? "")
-                        
-                        
-
+                VStack {
+                    AsyncImage(url: URL(string: viewModel.city.photo ?? "")) { img in
+                        img
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 100, height: 100)
+                    } placeholder: {
+                        ProgressView()
+                    }.frame(width: 100, height: 100)
+                    
+                    Text(viewModel.city.about ?? "")
+                    
+                    if let places = viewModel.city.places?.allObjects as? [Place] {
+                        VStack {
+                            ForEach(places) { place in
+                                
+                                Text(place.name ?? "")
+                                    .font(.headline)
+                                AsyncImage(url: URL(string: place.photo ?? "")) { img in
+                                    img
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 100, height: 100)
+                                } placeholder: {
+                                    ProgressView()
+                                        .frame(width: 100, height: 100)
+                                }
+                                Text(place.about ?? "")
+                                    .padding(.bottom)
+                                
+                                
+                                
+                            }
+                        }
                     }
                     
-            }
-            .navigationTitle(viewModel.city.name ?? "")
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    HStack {
-                        Text("!")
-                            .bold()
-                    }
-                    .bold()
                 }
                 
+            }
+            
+                   .navigationTitle(viewModel.city.name ?? "")
+            //     .navigationBarBackButtonHidden(true)
+            .toolbar {
+                //                ToolbarItem(placement: .navigationBarLeading) {
+                //                    HStack {
+                //                        Text("!")
+                //                            .bold()
+                //                    }
+                //                    .bold()
+                //                }
+                //
                 ToolbarItem(placement: .principal) {
                     HStack {
                         Text(viewModel.city.name ?? "")
@@ -57,7 +78,6 @@ struct CityView: View {
                     .bold()
                 }
             }
-            
             
             
         }
