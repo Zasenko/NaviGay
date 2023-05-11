@@ -44,6 +44,7 @@ struct CatalogView: View {
 
             .listStyle(.plain)
             .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Countries")
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("Countries")
@@ -52,7 +53,6 @@ struct CatalogView: View {
                         .foregroundStyle(AppColors.rainbowGradient)
                 }
             }
-            .navigationTitle("")
             .toolbarBackground(AppColors.background, for: .navigationBar)
             .background(
                 Color.clear

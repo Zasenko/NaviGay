@@ -10,6 +10,7 @@ import CoreData
 protocol CatalogDataManagerProtocol {
     func getCountries() async -> Result<[Country], Error>
     func getCountry(id: Int16) async -> Result<Country, Error>
+    func getCity(id: Int16) async -> Result<City, Error>
     func createCountry(decodedCountry: DecodedCountry) async -> Country
     func createRegion(decodedRegion: DecodedRegion) async -> Region
     func createCity(decodedCity: DecodedCity) async -> City
@@ -20,7 +21,7 @@ protocol CatalogDataManagerProtocol {
 final class CatalogDataManager {
     
     enum CatalogDataManagerErrors: Error {
-        case noCountry
+        case noCountry, noCity
     }
     
     // MARK: - Private Properties
@@ -46,7 +47,7 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
         let sort = NSSortDescriptor(keyPath: \Country.name, ascending: true)
         request.sortDescriptors = [sort]
         do {
-            let countries = try self.manager.context.fetch(request)//.filter { $0.isActive == true }
+            let countries = try self.manager.context.fetch(request)
             return .success(countries)
         } catch let error {
             return.failure(error)
@@ -54,7 +55,6 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
     }
     
     func getCountry(id: Int16) async -> Result<Country, Error> {
-        
         let request = NSFetchRequest<Country>(entityName: "Country")
         request.predicate = NSPredicate(format: "id = %@", String(id))
         
@@ -63,6 +63,20 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
                 return.failure(CatalogDataManagerErrors.noCountry)
             }
             return .success(country)
+        } catch let error {
+            return.failure(error)
+        }
+    }
+    
+    func getCity(id: Int16) async -> Result<City, Error> {
+        let request = NSFetchRequest<City>(entityName: "City")
+        request.predicate = NSPredicate(format: "id = %@", String(id))
+        
+        do {
+            guard let city = try self.manager.context.fetch(request).first else {
+                return.failure(CatalogDataManagerErrors.noCity)
+            }
+            return .success(city)
         } catch let error {
             return.failure(error)
         }

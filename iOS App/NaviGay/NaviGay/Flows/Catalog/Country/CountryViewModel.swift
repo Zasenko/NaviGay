@@ -39,6 +39,8 @@ extension CountryViewModel {
         }
     }
     
+    //MARK: - Private Functions
+    
     @MainActor
     private func getCountryFromDB(id: Int16) async {
         let result = await dataManager.getCountry(id: id)

@@ -39,6 +39,8 @@ extension CatalogViewModel {
         }
     }
     
+    //MARK: - Private Functions
+    
     @MainActor
     private func getCountriesFromDB() async {
         let result = await dataManager.getCountries()

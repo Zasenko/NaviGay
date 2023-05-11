@@ -20,7 +20,6 @@ struct CountryView: View {
         GeometryReader { geometry in
             ScrollView(.vertical, showsIndicators: false) {
                 VStack() {
-                    
                     AsyncImage(url: URL(string: viewModel.country.photo!), scale: 1) { image in
                         image
                             .resizable()
@@ -32,53 +31,46 @@ struct CountryView: View {
                     }
                     .frame(width: geometry.size.width, height: geometry.size.width)
 
-                    //   BView(country: viewModel.$country, geometrySize: geometry.size)
-          //          CitiesView(cities: <#T##[City]#>)
-                    
-                        
-                    if let steps = viewModel.country.regions?.allObjects as? [Region] {
-                      ForEach(steps) {step in
+
+                    if let regions = viewModel.country.regions?.allObjects as? [Region] {
+                      ForEach(regions) { region in
                           
                           Section {
-                              
-                              if let steps2 = step.cities?.allObjects as? [City] {
+                              if let cities = region.cities?.allObjects as? [City] {
                                   HStack {
-                                      ForEach(steps2) {step2 in
-                                          Text(step2.name ?? "")
-                                              .padding(.horizontal)
-                                              .padding(.horizontal)
-                                              .frame(height: 50)
-                                              .background(AppColors.red)
-                                              .clipShape(Capsule(style: .continuous))
+                                      ForEach(cities) {city in
+                                          
+                                          
+                                          NavigationLink {
+                                              CityView(viewModel: CityViewModel(city: city, networkManager: viewModel.networkManager, dataManager: viewModel.dataManager))
+                                          } label: {
+                                              Text(city.name ?? "")
+                                                  .padding(.horizontal)
+                                                  .padding(.horizontal)
+                                                  .frame(height: 50)
+                                                  .background(AppColors.red)
+                                                  .clipShape(Capsule(style: .continuous))
+                                          }
+
+                                          
+                                          
+                                          
                                       }
                                   }
+                                  .padding(.bottom)
                               }
-                              
                           } header: {
-                              Text("\(step.name ?? "step")")
+                              Text(region.name ?? "")
                                   .font(.caption)
                                   .bold()
                           } footer: {}
                       }
                     }
                         
-//                        ForEach(viewModel.country.regions) { region in
-//
-//                            Section {
-//                                CityView(cities: region.cities)
-//                            } header: {
-//                                Text(region.name ?? "")
-//                            } footer: {}
-//
-//                        }
-
-
-                    
-                    
                     Text(viewModel.country.about ?? "")
                         .font(.body)
                         .padding()
-                    //    .lineSpacing(12)
+                        .lineSpacing(10)
                         .foregroundColor(.secondary)
                     Text(viewModel.country.lastUpdate?.formatted(date: .complete, time: .complete) ?? "")
                     Text(viewModel.country.flag ?? "🏳️‍🌈")
@@ -118,62 +110,3 @@ struct CountryView: View {
 //            CountryView()
 //        }
 //    }
-    
-    
-//    struct BView: View {
-//
-//        @Binding var country:  Country
-//        var geometrySize: CGSize
-//
-//        var body: some View {
-//
-//            var width = CGFloat.zero
-//            var height = CGFloat.zero
-//
-//            return ZStack(alignment: .topLeading) {
-//                ForEach($country.) { city in
-//                    CityViewTest(city: city)
-//                        .alignmentGuide(.leading, computeValue: { d in
-//                            if (abs(width - d.width) > geometrySize.width)
-//                            {
-//                                width = 0
-//                                height -= d.height
-//                            }
-//                            let result = width
-//                            if city.id == country.cities.last?.id {
-//                                width = 0 //last item
-//                            } else {
-//                                width -= d.width
-//                            }
-//                            return result
-//                        })
-//                        .alignmentGuide(.top, computeValue: { d in
-//                            let result = height
-//                            if city.id == country.cities.last?.id {
-//                                height = 0 // last item
-//                            }
-//                            return result
-//                        })
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//struct CityViewTest: View {
-//
-//    @Binding var city: City
-//
-//    var body: some View {
-//        Text(city.name)
-//                                    .bold()
-//                                    .foregroundColor(.white)
-//                                    .lineLimit(1)
-//                                    .padding(.horizontal)
-//                                    .padding(.horizontal)
-//                                    .frame(height: 50)
-//                                    .background(AppColors.red)
-//                                    .clipShape(Capsule(style: .continuous))
-//                                    .padding(4)
-//    }
-//}

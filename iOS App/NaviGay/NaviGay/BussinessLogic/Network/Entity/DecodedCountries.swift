@@ -40,8 +40,15 @@ struct DecodedRegion: Identifiable, Codable {
     let isActive: Int
 }
 
+struct CityResult: Codable {
+    let error: String?
+    let city: DecodedCity?
+}
+
 struct DecodedCity: Identifiable, Codable {
     let id: Int
     let name: String
     let isActive: Int
+    let about: String?
+    let photo: String?
 }

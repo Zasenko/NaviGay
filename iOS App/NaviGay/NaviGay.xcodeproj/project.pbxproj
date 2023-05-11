@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F07AE862A0CEABC0029A940 /* CityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F07AE852A0CEABC0029A940 /* CityView.swift */; };
+		0F07AE882A0CEACA0029A940 /* CityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F07AE872A0CEACA0029A940 /* CityViewModel.swift */; };
 		0F37F02E2A03D48600679932 /* DictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F37F02D2A03D48600679932 /* DictionaryExtension.swift */; };
 		0F37F0302A03F33200679932 /* CatalogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F37F02F2A03F33200679932 /* CatalogView.swift */; };
 		0F37F0322A03F34000679932 /* CatalogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F37F0312A03F34000679932 /* CatalogViewModel.swift */; };
@@ -46,12 +48,12 @@
 		0FD8A77529FAC3BB004EA3F0 /* ShakeEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A77429FAC3BB004EA3F0 /* ShakeEffect.swift */; };
 		0FDA20232A092B13008D40D2 /* CountryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDA20222A092B13008D40D2 /* CountryView.swift */; };
 		0FDA20252A092B32008D40D2 /* CountryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDA20242A092B32008D40D2 /* CountryViewModel.swift */; };
-		0FDA202C2A095008008D40D2 /* RegionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDA202B2A095008008D40D2 /* RegionsView.swift */; };
-		0FDA202F2A097B7D008D40D2 /* RegionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDA202E2A097B7D008D40D2 /* RegionsViewModel.swift */; };
 		0FF389722A0541F600830A96 /* AuthManagerErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF389712A0541F600830A96 /* AuthManagerErrors.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0F07AE852A0CEABC0029A940 /* CityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityView.swift; sourceTree = "<group>"; };
+		0F07AE872A0CEACA0029A940 /* CityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityViewModel.swift; sourceTree = "<group>"; };
 		0F37F02D2A03D48600679932 /* DictionaryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtension.swift; sourceTree = "<group>"; };
 		0F37F02F2A03F33200679932 /* CatalogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogView.swift; sourceTree = "<group>"; };
 		0F37F0312A03F34000679932 /* CatalogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewModel.swift; sourceTree = "<group>"; };
@@ -92,8 +94,6 @@
 		0FD8A77429FAC3BB004EA3F0 /* ShakeEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeEffect.swift; sourceTree = "<group>"; };
 		0FDA20222A092B13008D40D2 /* CountryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryView.swift; sourceTree = "<group>"; };
 		0FDA20242A092B32008D40D2 /* CountryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryViewModel.swift; sourceTree = "<group>"; };
-		0FDA202B2A095008008D40D2 /* RegionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionsView.swift; sourceTree = "<group>"; };
-		0FDA202E2A097B7D008D40D2 /* RegionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionsViewModel.swift; sourceTree = "<group>"; };
 		0FF389712A0541F600830A96 /* AuthManagerErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManagerErrors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -224,7 +224,6 @@
 			children = (
 				0FDA20242A092B32008D40D2 /* CountryViewModel.swift */,
 				0FDA20222A092B13008D40D2 /* CountryView.swift */,
-				0FF061742A0BC31E004579AA /* Regions */,
 			);
 			path = Country;
 			sourceTree = "<group>";
@@ -232,6 +231,8 @@
 		0F5B8C3629F97AD40083B81B /* City */ = {
 			isa = PBXGroup;
 			children = (
+				0F07AE872A0CEACA0029A940 /* CityViewModel.swift */,
+				0F07AE852A0CEABC0029A940 /* CityView.swift */,
 			);
 			path = City;
 			sourceTree = "<group>";
@@ -388,15 +389,6 @@
 			path = GeometryEffects;
 			sourceTree = "<group>";
 		};
-		0FF061742A0BC31E004579AA /* Regions */ = {
-			isa = PBXGroup;
-			children = (
-				0FDA202E2A097B7D008D40D2 /* RegionsViewModel.swift */,
-				0FDA202B2A095008008D40D2 /* RegionsView.swift */,
-			);
-			path = Regions;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -477,8 +469,8 @@
 				0FB281012A0154DE00E79982 /* AuthManager.swift in Sources */,
 				0FB281062A02AA3B00E79982 /* TabBarButton.swift in Sources */,
 				0F37F03A2A03F80700679932 /* CatalogNetworkManager.swift in Sources */,
-				0FDA202F2A097B7D008D40D2 /* RegionsViewModel.swift in Sources */,
 				0FD8A75629FA859A004EA3F0 /* EntryViewModel.swift in Sources */,
+				0F07AE882A0CEACA0029A940 /* CityViewModel.swift in Sources */,
 				0FD8A76E29FAB70A004EA3F0 /* PasswordTextField.swift in Sources */,
 				0F6C168229FC0D4B00F6D104 /* NetworkErrors.swift in Sources */,
 				0F37F0322A03F34000679932 /* CatalogViewModel.swift in Sources */,
@@ -498,13 +490,13 @@
 				0F6C168029FC0D2400F6D104 /* AuthNetworkManager.swift in Sources */,
 				0FD8A75F29FA9018004EA3F0 /* UserDataManager.swift in Sources */,
 				0F37F0302A03F33200679932 /* CatalogView.swift in Sources */,
-				0FDA202C2A095008008D40D2 /* RegionsView.swift in Sources */,
 				0FD8A75829FA8929004EA3F0 /* TabBarView.swift in Sources */,
 				0FD8A75B29FA898F004EA3F0 /* TabBarViewModel.swift in Sources */,
 				0FD8A77229FAC2A8004EA3F0 /* AsyncButton.swift in Sources */,
 				0FF389722A0541F600830A96 /* AuthManagerErrors.swift in Sources */,
 				0F37F0362A03F53D00679932 /* CatalogDataManager.swift in Sources */,
 				0FD8A76A29FAB439004EA3F0 /* LoginTextField.swift in Sources */,
+				0F07AE862A0CEABC0029A940 /* CityView.swift in Sources */,
 				0FD8A76329FAA772004EA3F0 /* LoginViewModel.swift in Sources */,
 				0F5B8C2F29F977CE0083B81B /* NaviGay.xcdatamodeld in Sources */,
 			);
