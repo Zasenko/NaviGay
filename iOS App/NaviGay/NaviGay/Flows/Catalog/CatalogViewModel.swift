@@ -19,11 +19,16 @@ final class CatalogViewModel: ObservableObject {
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
     
+    let safeArea: EdgeInsets
+    let size: CGSize
+    
     //MARK: - Inits
     
-    init(networkManager: CatalogNetworkManagerProtocol, dataManager: CatalogDataManagerProtocol) {
+    init(networkManager: CatalogNetworkManagerProtocol, dataManager: CatalogDataManagerProtocol, safeArea: EdgeInsets, size: CGSize) {
         self.networkManager = networkManager
         self.dataManager = dataManager
+        self.safeArea = safeArea
+        self.size = size
         getCountries()
     }
     
@@ -38,6 +43,11 @@ extension CatalogViewModel {
             await self.fetchCountries()
         }
     }
+    
+    func cteateCountryView(country: Country) -> AnyView {
+        AnyView(CountryView(viewModel: CountryViewModel(country: country, networkManager: self.networkManager, dataManager: self.dataManager), safeArea: safeArea, size: size))
+    }
+
     
     //MARK: - Private Functions
     
@@ -57,7 +67,7 @@ extension CatalogViewModel {
         case .failure(let error):
             
             // TODO
-            print("getCountriesFromDB() failure ->>>>>>>>>>> ", error)
+            print("CatalogViewModel getCountriesFromDB() failure ->>>>>>>>>>> ", error.localizedDescription)
         }
     }
     

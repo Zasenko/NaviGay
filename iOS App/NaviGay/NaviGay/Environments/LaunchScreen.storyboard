@@ -34,7 +34,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="r4T-la-qtC" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" id="U2H-Eq-1xl"/>
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" secondItem="r4T-la-qtC" secondAttribute="bottom" id="ZLM-cA-16b"/>

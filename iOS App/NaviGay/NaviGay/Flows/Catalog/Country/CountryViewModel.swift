@@ -12,6 +12,7 @@ final class CountryViewModel: ObservableObject {
     //MARK: - Properties
     
     @Published var country: Country
+    @Published var countryImage: Image = AppImages.appIcon
     
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
@@ -24,22 +25,42 @@ final class CountryViewModel: ObservableObject {
         self.country = country
         self.networkManager = networkManager
         self.dataManager = dataManager
+        loadImage()
         getCountry(id: country.id)
     }
+    
 }
 
 extension CountryViewModel {
     
-    //MARK: - Functions
+    //MARK: - Private Functions
     
-    func getCountry(id: Int16) {
+    private func getCountry(id: Int16) {
         Task {
-            await getCountryFromDB(id: id)
+            //    await getCountryFromDB(id: id)
             await fetchCountry(id: id)
         }
     }
     
-    //MARK: - Private Functions
+    private func loadImage() {
+        Task {
+            await self.loadFromCache()
+        }
+    }
+    
+    @MainActor
+    private func loadFromCache() async {
+        guard let urlString = country.photo else { return }
+        do {
+            self.countryImage = try await ImageLoader.shared.loadImage(urlString: urlString)
+        }
+        catch {
+            
+            //TODO
+            
+            print(error.localizedDescription)
+        }
+    }
     
     @MainActor
     private func getCountryFromDB(id: Int16) async {
@@ -51,7 +72,7 @@ extension CountryViewModel {
             }
         case .failure(let error):
             // TODO
-            print("getCountriesFromDB() failure ->>>>>>>>>>> ", error)
+            print("CountryViewModel getCountryFromDB() failure ->>>>>>>>>>> ", error)
         }
     }
     

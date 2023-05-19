@@ -13,50 +13,39 @@ struct TabBarView: View {
     
     @StateObject var viewModel: TabBarViewModel
     
+    
     // MARK: - Body
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            TabView(selection: $viewModel.selectedItem) {
-                ForEach(0..<viewModel.items.count, id: \.self) { index in
-                    switch index {
-                    case 0 :
-                        viewModel.items[index].view
-                            .tag(index)
-                          //  .ignoresSafeArea()
-                    default:
-                        viewModel.items[index].view
-                            .tag(index)
-                    }
+        GeometryReader {
+            let safeArea = $0.safeAreaInsets
+            let size = $0.size
+            
+            VStack {
+                //                Home(safeArea: safeArea, size: size)
+                //                    .ignoresSafeArea(.container, edges: .top)
+                switch viewModel.selectedPage {
+                case .home:
+                    Color.red
+                case .user:
+                    Color.red
+                case .map:
+                    MapView()
+                        .ignoresSafeArea()
+                case .catalog:
+                    viewModel.cteateCatalogView(safeArea: safeArea, size: size)
                 }
+                tabBar
             }
-            tabBar
         }
     }
     
     private var tabBar: some View {
-            HStack {
-                ForEach(0..<viewModel.items.count, id: \.self) { index in
-                    Button {
-                        viewModel.buttonTappde(index: index)
-                    } label: {
-                        viewModel.items[index].img
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 24)
-                            .padding()
-                            .bold()
-                    }
-                    .foregroundColor(viewModel.selectedItem == index ? .red : AppColors.lightGray5)
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .background(AppColors.background)
+        HStack {
+            TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.mapButton)
+            TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.calendarButton)
+            TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.catalogButton)
+            TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.userButton)
         }
+    }
 }
-
-//struct TabView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TabBarView(viewModel: TabBarViewModel(isUserLogin: .constant(true)))
-//    }
-//}

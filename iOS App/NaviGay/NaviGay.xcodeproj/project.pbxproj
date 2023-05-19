@@ -33,6 +33,12 @@
 		0FB2810B2A02B2C400E79982 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB2810A2A02B2C400E79982 /* UserView.swift */; };
 		0FB2810D2A02B6DD00E79982 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB2810C2A02B6DD00E79982 /* SignUpViewModel.swift */; };
 		0FB2810F2A02B6ED00E79982 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB2810E2A02B6ED00E79982 /* SignUpView.swift */; };
+		0FBD1F892A16263B00B11CCE /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD1F882A16263B00B11CCE /* MapView.swift */; };
+		0FBD1F8B2A1632F900B11CCE /* TabBarButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD1F8A2A1632F900B11CCE /* TabBarButtonView.swift */; };
+		0FBD1F8E2A16502F00B11CCE /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD1F8D2A16502F00B11CCE /* ImageCache.swift */; };
+		0FBD1F902A16508700B11CCE /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD1F8F2A16508700B11CCE /* ImageLoader.swift */; };
+		0FBD1F922A1650BB00B11CCE /* CachedImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD1F912A1650BB00B11CCE /* CachedImageViewModel.swift */; };
+		0FBD1F942A1651B600B11CCE /* CachedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD1F932A1651B600B11CCE /* CachedImageView.swift */; };
 		0FD8A75629FA859A004EA3F0 /* EntryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A75529FA859A004EA3F0 /* EntryViewModel.swift */; };
 		0FD8A75829FA8929004EA3F0 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A75729FA8929004EA3F0 /* TabBarView.swift */; };
 		0FD8A75B29FA898F004EA3F0 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD8A75A29FA898F004EA3F0 /* TabBarViewModel.swift */; };
@@ -79,6 +85,12 @@
 		0FB2810A2A02B2C400E79982 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		0FB2810C2A02B6DD00E79982 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
 		0FB2810E2A02B6ED00E79982 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		0FBD1F882A16263B00B11CCE /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		0FBD1F8A2A1632F900B11CCE /* TabBarButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarButtonView.swift; sourceTree = "<group>"; };
+		0FBD1F8D2A16502F00B11CCE /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		0FBD1F8F2A16508700B11CCE /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		0FBD1F912A1650BB00B11CCE /* CachedImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedImageViewModel.swift; sourceTree = "<group>"; };
+		0FBD1F932A1651B600B11CCE /* CachedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedImageView.swift; sourceTree = "<group>"; };
 		0FD8A75529FA859A004EA3F0 /* EntryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryViewModel.swift; sourceTree = "<group>"; };
 		0FD8A75729FA8929004EA3F0 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		0FD8A75A29FA898F004EA3F0 /* TabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
@@ -266,6 +278,7 @@
 				0FB281052A02AA3B00E79982 /* TabBarButton.swift */,
 				0FD8A75A29FA898F004EA3F0 /* TabBarViewModel.swift */,
 				0FD8A75729FA8929004EA3F0 /* TabBarView.swift */,
+				0FBD1F8A2A1632F900B11CCE /* TabBarButtonView.swift */,
 			);
 			path = TabBarView;
 			sourceTree = "<group>";
@@ -283,6 +296,7 @@
 		0F5B8C3C29F97BC20083B81B /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				0FBD1F882A16263B00B11CCE /* MapView.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -333,6 +347,17 @@
 			path = Entity;
 			sourceTree = "<group>";
 		};
+		0FBD1F8C2A16500F00B11CCE /* ImageCacher */ = {
+			isa = PBXGroup;
+			children = (
+				0FBD1F8D2A16502F00B11CCE /* ImageCache.swift */,
+				0FBD1F8F2A16508700B11CCE /* ImageLoader.swift */,
+				0FBD1F912A1650BB00B11CCE /* CachedImageViewModel.swift */,
+				0FBD1F932A1651B600B11CCE /* CachedImageView.swift */,
+			);
+			path = ImageCacher;
+			sourceTree = "<group>";
+		};
 		0FD8A76429FAB225004EA3F0 /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -357,6 +382,7 @@
 		0FD8A76829FAB390004EA3F0 /* BussinessLogic */ = {
 			isa = PBXGroup;
 			children = (
+				0FBD1F8C2A16500F00B11CCE /* ImageCacher */,
 				0FB280FF2A0154D100E79982 /* AuthManager */,
 				0F6C167A29FC07F900F6D104 /* Network */,
 				0F5B8C2C29F9770E0083B81B /* CoreData */,
@@ -467,16 +493,20 @@
 				0FDA20252A092B32008D40D2 /* CountryViewModel.swift in Sources */,
 				0FB2810B2A02B2C400E79982 /* UserView.swift in Sources */,
 				0FB281012A0154DE00E79982 /* AuthManager.swift in Sources */,
+				0FBD1F942A1651B600B11CCE /* CachedImageView.swift in Sources */,
 				0FB281062A02AA3B00E79982 /* TabBarButton.swift in Sources */,
 				0F37F03A2A03F80700679932 /* CatalogNetworkManager.swift in Sources */,
 				0FD8A75629FA859A004EA3F0 /* EntryViewModel.swift in Sources */,
 				0F07AE882A0CEACA0029A940 /* CityViewModel.swift in Sources */,
 				0FD8A76E29FAB70A004EA3F0 /* PasswordTextField.swift in Sources */,
+				0FBD1F922A1650BB00B11CCE /* CachedImageViewModel.swift in Sources */,
+				0FBD1F8E2A16502F00B11CCE /* ImageCache.swift in Sources */,
 				0F6C168229FC0D4B00F6D104 /* NetworkErrors.swift in Sources */,
 				0F37F0322A03F34000679932 /* CatalogViewModel.swift in Sources */,
 				0FB281042A02970800E79982 /* DecodedUser.swift in Sources */,
 				0F6C167E29FC087800F6D104 /* ApiProperties.swift in Sources */,
 				0F5B8BE829F83CD90083B81B /* NaviGayApp.swift in Sources */,
+				0FBD1F892A16263B00B11CCE /* MapView.swift in Sources */,
 				0FD8A76129FAA755004EA3F0 /* LoginView.swift in Sources */,
 				0F37F0342A03F41B00679932 /* CountryCell.swift in Sources */,
 				0FD8A77529FAC3BB004EA3F0 /* ShakeEffect.swift in Sources */,
@@ -484,7 +514,9 @@
 				0FB2810D2A02B6DD00E79982 /* SignUpViewModel.swift in Sources */,
 				0F5B8BFB29F857750083B81B /* CoreDataManager.swift in Sources */,
 				0FB2810F2A02B6ED00E79982 /* SignUpView.swift in Sources */,
+				0FBD1F8B2A1632F900B11CCE /* TabBarButtonView.swift in Sources */,
 				0F6C167C29FC083900F6D104 /* NetworkMonitor.swift in Sources */,
+				0FBD1F902A16508700B11CCE /* ImageLoader.swift in Sources */,
 				0FD8A76C29FAB45D004EA3F0 /* AppImages.swift in Sources */,
 				0F37F02E2A03D48600679932 /* DictionaryExtension.swift in Sources */,
 				0F6C168029FC0D2400F6D104 /* AuthNetworkManager.swift in Sources */,
@@ -634,7 +666,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UIRequiresFullScreen = NO;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
@@ -666,7 +698,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UIRequiresFullScreen = NO;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";

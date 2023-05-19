@@ -11,5 +11,5 @@ struct TabBarButton: Identifiable {
     let id: Int
     let title: String
     let img: Image
-    let view: AnyView
+    let page: TabBarRouter
 }

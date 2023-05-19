@@ -9,9 +9,11 @@ import SwiftUI
 
 final class CityViewModel: ObservableObject {
     
+    
     //MARK: - Properties
     
     @Published var city: City
+    @Published var cityImage: Image = AppImages.appIcon
     
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
@@ -24,13 +26,34 @@ final class CityViewModel: ObservableObject {
         self.city = city
         self.networkManager = networkManager
         self.dataManager = dataManager
-        self.getCity(id: city.id)
+        loadImage()
+        getCity(id: city.id)
     }
 }
 
 extension CityViewModel {
     
     //MARK: - Functions
+    
+    private func loadImage() {
+        Task {
+            await self.loadFromCache()
+        }
+    }
+    
+    @MainActor
+    private func loadFromCache() async {
+        guard let urlString = city.photo else { return }
+        do {
+            self.cityImage = try await ImageLoader.shared.loadImage(urlString: urlString)
+        }
+        catch {
+            
+            //TODO
+            
+            print(error.localizedDescription)
+        }
+    }
     
     func getCity(id: Int16) {
         Task {
@@ -53,7 +76,7 @@ extension CityViewModel {
             }
         case .failure(let error):
             // TODO
-            print("getCountriesFromDB() failure ->>>>>>>>>>> ", error)
+            print("CityViewModel getCityFromDB() failure ->>>>>>>>>>> ", error)
         }
     }
     
@@ -91,11 +114,9 @@ extension CityViewModel {
                                     let place = await dataManager.createPlace(decodedPlace: decodedPlace)
                                     self.city.addToPlaces(place)
                                 }
-                                
                             }
                         }
                     }
-  
                     await dataManager.save()
                     await getCityFromDB(id: city.id)
                 }

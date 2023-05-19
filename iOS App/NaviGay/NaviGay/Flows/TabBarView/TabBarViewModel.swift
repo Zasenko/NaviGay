@@ -7,13 +7,37 @@
 
 import SwiftUI
 
+enum TabBarRouter {
+    case catalog
+    case map
+    case home
+    case user
+}
+
 final class TabBarViewModel: ObservableObject {
     
     // MARK: - Properties
     
-    @Published var items: [TabBarButton] = []
-    @Published var selectedItem = 0
+    @Published var selectedPage: TabBarRouter = TabBarRouter.home
+    
     @Binding var isUserLogin: Bool
+    
+    let mapButton = TabBarButton(id: 1,
+                          title: "Map",
+                          img: AppImages.iconMap,
+                          page: .map)
+    let calendarButton = TabBarButton(id: 2,
+                                      title: "Calendar",
+                                      img: AppImages.iconCalendar,
+                                      page: .home)
+    let catalogButton = TabBarButton(id: 3,
+                                     title: "Catalog",
+                                     img: AppImages.iconSearch,
+                                     page: .catalog)
+    let userButton = TabBarButton(id: 4,
+                                  title: "User",
+                                  img: AppImages.iconPerson,
+                                  page: .user)
 
     // MARK: - Private Properties
     
@@ -31,43 +55,14 @@ final class TabBarViewModel: ObservableObject {
         self.networkMonitor = networkMonitor
         self.dataManager = dataManager
         self.api = api
-        createTabbar()
     }
 }
 
 extension TabBarViewModel {
     
     // MARK: - Functios
-    
-    func buttonTappde(index: Int) {
-        selectedItem = index
-    }
 
-    // MARK: - Private Functions
-    
-    private func createTabbar() {
-        
-        items = [
-            TabBarButton(id: 1,
-                         title: "Map",
-                         img: AppImages.iconMap,
-                         view: AnyView(Color.red)
-                        ),
-            TabBarButton(id: 2,
-                         title: "Calendar",
-                         img: AppImages.iconCalendar,
-                         view: AnyView(Color.orange)
-                        ),
-            TabBarButton(id: 3,
-                         title: "Catalog",
-                         img: AppImages.iconSearch,
-                         view: AnyView(CatalogView(viewModel: CatalogViewModel(networkManager: self.catalogNetworkManager, dataManager: self.catalogDataManager)))
-                        ),
-            TabBarButton(id: 4,
-                         title: "User",
-                         img: AppImages.iconPerson,
-                         view: AnyView(UserView(vm: UserViewModel(isUserLogin: $isUserLogin)))
-                        )
-        ]
+    func cteateCatalogView(safeArea: EdgeInsets, size: CGSize) -> AnyView {
+        AnyView(CatalogView(viewModel: CatalogViewModel(networkManager: self.catalogNetworkManager, dataManager: self.catalogDataManager, safeArea: safeArea, size: size)))
     }
 }

@@ -43,6 +43,7 @@ extension CoreDataManager {
     func saveData() {
         do {
             try context.save()
+            debugPrint("CoreDataManager  Saving ->>>>>>>>>> OK")
         } catch let error {
             //TODO
             debugPrint("CoreDataManager Error Saving ->>>>>>>>>> \(error.localizedDescription)")

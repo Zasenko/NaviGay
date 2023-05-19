@@ -29,7 +29,7 @@ struct LoginTextField: View {
 //                }
         }
         .padding()
-        .background(AppColors.lightGray)
+        .background(AppColors.lightGray6)
         .cornerRadius(8)
         .overlay {
             RoundedRectangle(cornerRadius: 8)
