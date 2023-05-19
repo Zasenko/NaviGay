@@ -37,8 +37,7 @@ extension CountryViewModel {
     
     private func getCountry(id: Int16) {
         Task {
-            //    await getCountryFromDB(id: id)
-            await fetchCountry(id: id)
+            await fetchCountry()
         }
     }
     
@@ -63,8 +62,8 @@ extension CountryViewModel {
     }
     
     @MainActor
-    private func getCountryFromDB(id: Int16) async {
-        let result = await dataManager.getCountry(id: id)
+    private func getCountryFromDB() async {
+        let result = await dataManager.getCountry(id: country.objectID)
         switch result {
         case .success(let country):
             withAnimation(.spring()) {
@@ -78,10 +77,10 @@ extension CountryViewModel {
     
     
     @MainActor
-    private func fetchCountry(id: Int16) {
+    private func fetchCountry() {
         Task {
             do {
-                let result = try await networkManager.fetchCountry(countryId: Int(id))
+                let result = try await networkManager.fetchCountry(countryId: Int(country.id))
                 if let error = result.error {
                     //TODO
                     print(error)
@@ -116,13 +115,14 @@ extension CountryViewModel {
                                 } else {
                                     let region = await dataManager.createRegion(decodedRegion: decodedRegion)
                                     self.country.addToRegions(region)
+
                                 }
                                 
                             }
                         }
                     }
                     await dataManager.save()
-                    await getCountryFromDB(id: country.id)
+                    await getCountryFromDB()
                 }
             }catch {
                     

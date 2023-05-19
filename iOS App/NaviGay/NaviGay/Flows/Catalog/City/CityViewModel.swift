@@ -57,16 +57,15 @@ extension CityViewModel {
     
     func getCity(id: Int16) {
         Task {
-            await getCityFromDB(id: id)
-            await fetchCity(id: id)
+            await fetchCity()
         }
     }
     
     //MARK: - Private Functions
     
     @MainActor
-    private func getCityFromDB(id: Int16) async {
-        let result = await dataManager.getCity(id: id)
+    private func getCityFromDB() async {
+        let result = await dataManager.getCity(id: city.objectID)
         switch result {
         case .success(let city):
             withAnimation(.spring()) {
@@ -74,6 +73,7 @@ extension CityViewModel {
                     self.city = city
                 }
             }
+            
         case .failure(let error):
             // TODO
             print("CityViewModel getCityFromDB() failure ->>>>>>>>>>> ", error)
@@ -81,17 +81,16 @@ extension CityViewModel {
     }
     
     @MainActor
-    private func fetchCity(id: Int16) {
+    private func fetchCity() {
         Task {
             do {
-                let result = try await self.networkManager.fetchCity(id: Int(id))
+                let result = try await self.networkManager.fetchCity(id: Int(city.id))
                 if let error = result.error {
                     //TODO
                     print(error)
                     return
                 }
                 if let decodedCity = result.city {
-                    
                     city.about = decodedCity.about
                     city.name = decodedCity.name
                     city.photo = decodedCity.photo
@@ -102,7 +101,6 @@ extension CityViewModel {
                         if let places = city.places?.allObjects as? [Place] {
                             
                             for decodedPlace in decodedPlaces {
-                                
                                 if let place = places.first(where: { $0.id == Int16(decodedPlace.id) } ) {
                                     place.name = decodedPlace.name
                                     place.about = decodedPlace.about
@@ -117,8 +115,9 @@ extension CityViewModel {
                             }
                         }
                     }
+                    
                     await dataManager.save()
-                    await getCityFromDB(id: city.id)
+                    await getCityFromDB()
                 }
             } catch {
                     

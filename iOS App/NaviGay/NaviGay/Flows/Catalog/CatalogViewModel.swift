@@ -45,7 +45,8 @@ extension CatalogViewModel {
     }
     
     func cteateCountryView(country: Country) -> AnyView {
-        AnyView(CountryView(viewModel: CountryViewModel(country: country, networkManager: self.networkManager, dataManager: self.dataManager), safeArea: safeArea, size: size))
+        print("CatalogViewModel - cteateCountryView, country id \(country.id)")
+        return AnyView(CountryView(viewModel: CountryViewModel(country: country, networkManager: self.networkManager, dataManager: self.dataManager), safeArea: safeArea, size: size))
     }
 
     
@@ -92,7 +93,8 @@ extension CatalogViewModel {
                             country.isActive = decodedCountry.isActive == 1 ? true : false
                         } else {
                             let newCountry = await dataManager.createCountry(decodedCountry: decodedCountry)
-                            countries.append(newCountry)
+                            self.countries.append(newCountry)
+
                         }
                     }
                     await dataManager.save()

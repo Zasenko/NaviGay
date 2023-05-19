@@ -49,7 +49,7 @@ struct DecodedCity: Identifiable, Codable {
     let name: String
     let isActive: Int
     let about: String?
-    let photo: String?
+    let photo: String
     let places: [DecodedPlace]?
 }
 
@@ -57,7 +57,7 @@ struct DecodedPlace: Identifiable, Codable {
     let id: Int
     let name: String
     let about: String
-    let photo: String
+    let photo: String?
     let latitude: Float
     let longitude: Float
     let isActive: Int

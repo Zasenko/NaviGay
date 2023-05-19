@@ -9,8 +9,8 @@ import CoreData
 
 protocol CatalogDataManagerProtocol {
     func getCountries() async -> Result<[Country], Error>
-    func getCountry(id: Int16) async -> Result<Country, Error>
-    func getCity(id: Int16) async -> Result<City, Error>
+    func getCountry(id: NSManagedObjectID) async -> Result<Country, Error>
+    func getCity(id: NSManagedObjectID) async -> Result<City, Error>
     func createCountry(decodedCountry: DecodedCountry) async -> Country
     func createRegion(decodedRegion: DecodedRegion) async -> Region
     func createCity(decodedCity: DecodedCity) async -> City
@@ -49,32 +49,37 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
         request.sortDescriptors = [sort]
         do {
             let countries = try self.manager.context.fetch(request)
+            print("----------------------")
+            print(countries.count)
+            print("------")
+
+            print(countries)
+            print("----------------------")
             return .success(countries)
         } catch let error {
             return.failure(error)
         }
     }
     
-    func getCountry(id: Int16) async -> Result<Country, Error> {
+    func getCountry(id: NSManagedObjectID) async -> Result<Country, Error> {
+        print("getCountry from DB")
         let request = NSFetchRequest<Country>(entityName: "Country")
-        request.predicate = NSPredicate(format: "id = %@", String(id))
-        
         do {
-            guard let country = try self.manager.context.fetch(request).first else {
-                return.failure(CatalogDataManagerErrors.noCountry)
+            let country = try self.manager.context.fetch(request).first(where: { $0.objectID == id })
+            guard let country = country else {
+                return .failure(CatalogDataManagerErrors.noCountry)
             }
             return .success(country)
         } catch let error {
-            return.failure(error)
+            return .failure(error)
         }
     }
     
-    func getCity(id: Int16) async -> Result<City, Error> {
+    func getCity(id: NSManagedObjectID) async -> Result<City, Error> {
         let request = NSFetchRequest<City>(entityName: "City")
-        request.predicate = NSPredicate(format: "id = %@", String(id))
         
         do {
-            guard let city = try self.manager.context.fetch(request).first else {
+            guard let city = try self.manager.context.fetch(request).first(where: { $0.objectID == id }) else {
                 return.failure(CatalogDataManagerErrors.noCity)
             }
             return .success(city)
@@ -115,6 +120,7 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
         let newCity = City(context: manager.context)
         newCity.id = Int16(decodedCity.id)
         newCity.name = decodedCity.name
+        newCity.photo = decodedCity.photo
         newCity.isActive = decodedCity.isActive == 1 ? true : false
         return newCity
     }

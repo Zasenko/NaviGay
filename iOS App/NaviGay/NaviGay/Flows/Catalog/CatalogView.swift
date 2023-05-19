@@ -36,12 +36,6 @@ struct CatalogView: View {
     
     @ViewBuilder private var listWithCountries: some View {
         List {
-//            Section {
-//                Color.clear
-//                    .frame(height: 20)
-//                    .listRowSeparator(.hidden)
-//            }
-            
             Section {
                 ForEach($viewModel.activeCountries) { country in
                     NavigationLink {
@@ -53,8 +47,6 @@ struct CatalogView: View {
                 }
                 .listRowBackground(AppColors.background)
             }
-            
-
         }
         .listStyle(.plain)
         .toolbarBackground(AppColors.background, for: .navigationBar)

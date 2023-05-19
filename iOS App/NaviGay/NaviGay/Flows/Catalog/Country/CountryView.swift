@@ -13,9 +13,13 @@ struct CountryView: View {
     
     @StateObject var viewModel: CountryViewModel
     @Environment(\.dismiss) private var dismiss
-    var safeArea: EdgeInsets
-    var size: CGSize
+    
+    let safeArea: EdgeInsets
+    let size: CGSize
     let coordinateSpace: CoordinateSpace = .named("CountryViewScroll")
+    
+    @State private var photoViewTitleSize: CGSize = .zero
+    @State private var showAbout: Bool = false
     
     //MARK: - Body
     
@@ -24,26 +28,23 @@ struct CountryView: View {
             VStack{
                 photoView
                 mainView
-                .padding(.top, 10)
+                    .padding(.top, 10)
             }
             .overlay(alignment: .top) {
                 headerView
             }
-            
         }
-        .coordinateSpace(name: "CountryViewScroll")
+        .coordinateSpace(name: coordinateSpace)
         .navigationBarHidden(true)
     }
-    
     
     // MARK: - Header View
     
     var headerView: some View {
         GeometryReader{ proxy in
+            
             let minY = proxy.frame(in: coordinateSpace).minY
-            let height = size.height * 0.45
-            //let progress = minY / (height * (minY > 0 ? 0.5 : 0.8))
-            let titleProgress =  minY / height
+            let height = (size.width / 4 ) * 5 ///высота картинки
             
             HStack(spacing: 15) {
                 Button {
@@ -52,20 +53,13 @@ struct CountryView: View {
                     }
                 } label: {
                     Image(systemName: "chevron.left")
-                        .font(.title3)
-                        .foregroundColor(.white)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(.blue)
                         .bold()
                 }
-                Spacer(minLength: 0)
-                
-                Button {
-                    
-                } label: {
-                    Image(systemName: "ellipsis")
-                        .font(.title3)
-                        .foregroundColor(.white)
-                        .bold()
-                }
+                Spacer()
             }
             .overlay() {
                 HStack {
@@ -76,44 +70,33 @@ struct CountryView: View {
                         .font(.title)
                 }
                 .fontWeight(.semibold)
-                .offset(y: -titleProgress > 1 ? 0 : 100)
+                .offset(y: -minY > (height - photoViewTitleSize.height) ? 0 : 100)
                 .clipped()
-                .animation(.easeOut(duration: 0.25), value: -titleProgress > 1)
+                .animation(.easeOut(duration: 0.25), value: -minY > (height - photoViewTitleSize.height))
                 .padding(.horizontal, 40)
             }
-            .padding(.top, safeArea.top)// + 10)
+            .padding(.top, safeArea.top)
             .padding()
             .background(
-                // .ultraThinMaterial.opacity(-progress > 1 ? 1 : 0)
-                .ultraThinMaterial.opacity(-titleProgress > 1 ? 1 : 0)
+                .ultraThinMaterial.opacity( -minY > (height - photoViewTitleSize.height) ? 1 : 0)
             )
-            .offset(y: -minY)
-            
+            .offset(y: -minY )
         }
-        //.frame(height: 35)
     }
     
     // MARK: - Photo View
     @ViewBuilder var photoView: some View {
-        let height = size.height * 0.7
+        let height = (size.width / 4 ) * 5
         GeometryReader { proxy in
             let size = proxy.size
             let minY = proxy.frame(in: coordinateSpace).minY
             let progress = minY / (height * (minY > 0 ? 0.5 : 0.8))
-            
-            //            Image("hotel")
-            //                .resizable()
-            //                .aspectRatio(contentMode: .fill)
-            //                .frame(width: size.width, height: size.height + (minY > 0 ? minY : 0 ))
-            //                .clipped()
             viewModel.countryImage
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: size.width, height: size.height + (minY > 0 ? minY : 0 ))
-                    .clipped()
-           
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: size.width, height: size.height + (minY > 0 ? minY : 0 ))
+                .clipped()
                 .overlay() {
-                    
                     ZStack(alignment: .bottom) {
                         
                         // MARK: - Gradient Overlay
@@ -128,7 +111,7 @@ struct CountryView: View {
                                     AppColors.background.opacity(1),
                                 ], startPoint: .top, endPoint: .bottom)
                             )
-
+                        
                         // MARK: - Info
                         VStack(spacing: 0) {
                             Text(viewModel.country.name ?? "")
@@ -140,12 +123,22 @@ struct CountryView: View {
                                 .fontWeight(.bold)
                                 .foregroundColor(.gray)
                                 .padding(.top, 15)
+                                .padding(.bottom, 50)
                         }
                         .opacity(1 + (progress > 0 ? -progress : progress))
-                        .padding(.bottom, 55)
-                        
-                        // Moving with Scroll View
                         .offset(y: minY < 0 ? minY : 0 )
+                        .background(
+                            GeometryReader { proxy in
+                                Color.clear
+                                    .preference(
+                                        key: SizePreferenceKey.self,
+                                        value: proxy.size
+                                    )
+                            }
+                        )
+                    }
+                    .onPreferenceChange(SizePreferenceKey.self) { preferences in
+                        self.photoViewTitleSize = preferences
                     }
                 }
                 .offset(y: -minY)
@@ -155,12 +148,31 @@ struct CountryView: View {
     
     // MARK: - Main View
     
-    @ViewBuilder var mainView: some View {
+    var mainView: some View {
         VStack(spacing:  25) {
+            Text(viewModel.country.about ?? "")
+                .font(.body)
+                .lineSpacing(10)
+                .lineLimit(showAbout ? nil : 4)
+                .foregroundColor(.secondary)
+                .padding(.horizontal)
+            Button {
+                withAnimation {
+                    showAbout.toggle()
+                }
+            } label: {
+                Text("Show more")
+            }
+            
             if let regions = viewModel.country.regions?.allObjects as? [Region] {
                 ForEach(regions) { region in
-                    
-                    Section {
+                    VStack {
+                        
+                        Text(region.name ?? "")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .bold()
+                        
                         if let cities = region.cities?.allObjects as? [City] {
                             VStack {
                                 ForEach(cities) {city in
@@ -177,24 +189,16 @@ struct CountryView: View {
                                     }
                                 }
                             }
-                            .padding(.bottom)
+                            .padding(.bottom, 10)
                         }
-                    } header: {
-                        Text(region.name ?? "")
-                            .font(.caption)
-                            .bold()
-                    } footer: {}
+                        
+                    }
                 }
             }
             
-            Text(viewModel.country.about ?? "")
-                .font(.body)
-                .padding()
-                .lineSpacing(10)
-                .foregroundColor(.secondary)
             
             Text(viewModel.country.lastUpdate?.formatted(date: .complete, time: .complete) ?? "")
-
+            
         }
     }
 }
@@ -204,3 +208,13 @@ struct CountryView: View {
 //            CountryView()
 //        }
 //    }
+
+
+struct SizePreferenceKey: PreferenceKey {
+    typealias Value = CGSize
+    static var defaultValue: Value = .zero
+    
+    static func reduce(value: inout Value, nextValue: () -> Value) {
+        value = nextValue()
+    }
+}

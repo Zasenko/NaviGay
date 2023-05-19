@@ -41,12 +41,14 @@ extension CoreDataManager {
     //MARK: - Functions
 
     func saveData() {
-        do {
-            try context.save()
-            debugPrint("CoreDataManager  Saving ->>>>>>>>>> OK")
-        } catch let error {
-            //TODO
-            debugPrint("CoreDataManager Error Saving ->>>>>>>>>> \(error.localizedDescription)")
+        DispatchQueue.global(qos: .utility).async {
+            do {
+                try self.context.save()
+                debugPrint("CoreDataManager  Saving ->>>>>>>>>> OK")
+            } catch let error {
+                //TODO
+                debugPrint("CoreDataManager Error Saving ->>>>>>>>>> \(error.localizedDescription)")
+            }
         }
     }
 }
