@@ -39,6 +39,7 @@ while ($row = $city_result->fetch_assoc()) {
 }
 
 $sql = "SELECT Place.id, Place.name, PlaceType.name as type, Place.photo, Place.address, Place.latitude, Place.longitude, Place.is_active, Place.is_checked FROM Place INNER JOIN PlaceType ON PlaceType.id = Place.type_id WHERE Place.city_id = ?";
+
 $stmt = $conn->stmt_init();
 if (!$stmt->prepare($sql)) {
     $conn->close();
@@ -113,6 +114,64 @@ while ($row = $places_result->fetch_assoc()) {
 }
 
 $city += ['places' => $places];
+
+
+$sql = "SELECT Event.id, Event.name, EventType.name as type, Event.cover, Event.address, Event.latitude, Event.longitude, Event.start_time, Event.close_time, Event.is_active, Event.is_checked FROM Event INNER JOIN EventType ON EventType.id = EventType.type_id WHERE Event.city_id = ? && DATE(Event.close_time) >= now()";
+
+$stmt = $conn->stmt_init();
+if (!$stmt->prepare($sql)) {
+    $conn->close();
+    $json = array('error' => 3, 'errorDescription' => '177 Prepare Error');
+    echo json_encode($json, JSON_NUMERIC_CHECK);
+    exit;
+}
+$stmt->bind_param('i', $city_id);
+if (!$stmt->execute()) {
+    $conn->close();
+    $json = array('error' => 4, 'errorDescription' => '1 Execute error');
+    echo json_encode($json, JSON_NUMERIC_CHECK);
+    exit;
+}
+$events_result = $stmt->get_result();
+$stmt->close();
+
+$events = array();
+while ($row = $events_result->fetch_assoc()) {
+    $event = array(
+        'id' => $row['id'],
+        'name' => $row["name"],
+        'type' => $row['type'],
+        'cover' => $row['cover'],
+        'address' => $row['address'],
+        'latitude' => $row['latitude'],
+        'longitude' => $row['longitude'],
+
+        'startTime' => $row['start_time'],
+        'finishTime' => $row['close_time'],
+
+        'isActive' => $row['is_active'],
+        'isChecked' => $row['is_checked'],
+    );
+
+    $event_id = $row['id'];
+
+    $sql = "SELECT Tag.name as name FROM EventTag INNER JOIN Tag ON Tag.id = EventTag.tag_id WHERE EventTag.event_id = $event_id";
+    $tags = array();
+    if ($tags_result = mysqli_query($conn, $sql)) {
+        while ($row = $tags_result->fetch_assoc()) {
+            array_push($tags, $row['name']);
+        }
+    } else {
+        $conn->close();
+        $json = array('error' => 44, 'errorDescription' => 'mysqli_query city_result error');
+        echo json_encode($json, JSON_NUMERIC_CHECK);
+        exit;
+    }
+    $event += ['tags' => $tags];
+    array_push($events, $event);
+}
+
+$city += ['events' => $events];
 
 $conn->close();
 $json = array('city' => $city);

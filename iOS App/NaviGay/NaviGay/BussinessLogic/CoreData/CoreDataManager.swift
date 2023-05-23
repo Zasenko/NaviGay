@@ -44,7 +44,7 @@ extension CoreDataManager {
         DispatchQueue.main.async {
             do {
                 try self.context.save()
-                debugPrint("CoreDataManager  Saving ->>>>>>>>>> OK")
+          //      debugPrint("CoreDataManager  Saving ->>>>>>>>>> OK")
                     complition(true)
             } catch let error {
                 //TODO

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22E261" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22F66" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="City" representedClassName=".City" syncable="YES">
         <attribute name="about" optional="YES" attributeType="String"/>
         <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -18,16 +18,15 @@
         <attribute name="photo" attributeType="String"/>
         <relationship name="regions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Region" inverseName="country" inverseEntity="Region"/>
     </entity>
-    <entity name="Entity" representedClassName="Entity" syncable="YES" codeGenerationType="class"/>
     <entity name="Event" representedClassName=".Event" syncable="YES">
         <attribute name="about" optional="YES" attributeType="String"/>
         <attribute name="about_en" optional="YES" attributeType="String"/>
         <attribute name="address" attributeType="String"/>
         <attribute name="cover" optional="YES" attributeType="String"/>
         <attribute name="fb" optional="YES" attributeType="String"/>
-        <attribute name="fee" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="fee" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="fee_about" optional="YES" attributeType="String"/>
-        <attribute name="finish_time" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="finishTime" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="insta" optional="YES" attributeType="String"/>
         <attribute name="is_active" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -36,11 +35,13 @@
         <attribute name="latitude" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="longitude" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
-        <attribute name="phone" optional="YES" attributeType="String"/>
+        <attribute name="phone" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="placeName" optional="YES" attributeType="String"/>
-        <attribute name="start_time" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="startTime" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="tickets" optional="YES" attributeType="String"/>
+        <attribute name="type" attributeType="String"/>
         <attribute name="www" optional="YES" attributeType="String"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="events" inverseEntity="Tag"/>
     </entity>
     <entity name="Photo" representedClassName=".Photo" syncable="YES">
         <attribute name="url" attributeType="String"/>
@@ -59,12 +60,8 @@
         <attribute name="type" optional="YES" attributeType="String"/>
         <relationship name="city" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="City" inverseName="places" inverseEntity="City"/>
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Photo" inverseName="place" inverseEntity="Photo"/>
-        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlaceTag" inverseName="place" inverseEntity="PlaceTag"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="places" inverseEntity="Tag"/>
         <relationship name="workingTimes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WorkingTime" inverseName="place" inverseEntity="WorkingTime"/>
-    </entity>
-    <entity name="PlaceTag" representedClassName=".PlaceTag" syncable="YES">
-        <attribute name="name" attributeType="String"/>
-        <relationship name="place" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Place" inverseName="tags" inverseEntity="Place"/>
     </entity>
     <entity name="Region" representedClassName=".Region" syncable="YES">
         <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -72,6 +69,11 @@
         <attribute name="name" attributeType="String"/>
         <relationship name="cities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="City" inverseName="region" inverseEntity="City"/>
         <relationship name="country" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Country" inverseName="regions" inverseEntity="Country"/>
+    </entity>
+    <entity name="Tag" representedClassName=".Tag" syncable="YES">
+        <attribute name="name" attributeType="String"/>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="tags" inverseEntity="Event"/>
+        <relationship name="places" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Place" inverseName="tags" inverseEntity="Place"/>
     </entity>
     <entity name="User" representedClassName=".User" syncable="YES">
         <attribute name="bio" optional="YES" attributeType="String"/>

@@ -31,6 +31,9 @@ struct CityPlacesView: View {
                 }
                 .frame(width: size.width)
             }
+            .onChange(of: places) { newValue in
+                print(newValue)
+            }
         }
     }
 }

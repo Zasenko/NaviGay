@@ -63,17 +63,16 @@ extension CountryViewModel {
     
     @MainActor
     private func reloadCountry() async {
-        print("CountryViewModel getCountryFromDB()  start")
         let result = await dataManager.getCountry(id: country.objectID)
         switch result {
         case .success(let country):
             if let country = country {
                 withAnimation(.spring()) {
                     self.country = country
-                    print("CountryViewModel getCountryFromDB()  success country id: \(country.id)")
+                  //  print("CountryViewModel getCountryFromDB()  success country id: \(country.id)")
                 }
             } else {
-                print("---- NoCountry ------")
+              //  print("---- NoCountry ------")
             }
         case .failure(let error):
             // TODO
@@ -86,7 +85,7 @@ extension CountryViewModel {
     private func fetchCountry() {
         Task {
             do {
-                print("fetchCountry()")
+              //  print("fetchCountry()")
                 let result = try await networkManager.fetchCountry(countryId: Int(country.id))
                 if let error = result.error {
                     //TODO
@@ -94,7 +93,7 @@ extension CountryViewModel {
                     return
                 }
                 if let decodedCountry = result.country {
-                    print("fetchCountry() - decodedCountry id:", decodedCountry.id)
+                 //   print("fetchCountry() - decodedCountry id:", decodedCountry.id)
                     country.about = decodedCountry.about
                     country.flag = decodedCountry.flag
                     country.name = decodedCountry.name
@@ -104,7 +103,7 @@ extension CountryViewModel {
                     if let decodedRegions = decodedCountry.regions {
                         if let regions = country.regions?.allObjects as? [Region] {
                             for decodedRegion in decodedRegions {
-                                print("fetchCountry() - decodedRegion id: ", decodedRegion.id)
+                               // print("fetchCountry() - decodedRegion id: ", decodedRegion.id)
                                 let region = regions.first(where: { $0.id == decodedRegion.id } )
                                 if region != nil {
                                     region?.name = decodedRegion.name
@@ -114,46 +113,46 @@ extension CountryViewModel {
                                         
                                         if let decodedCities = decodedRegion.cities {
                                             for decodedCity in decodedCities {
-                                                print("fetchCountry() - decodedCity id :", decodedCity.id)
+                                             //   print("fetchCountry() - decodedCity id :", decodedCity.id)
                                                 if let city = cities.first(where: { $0.id == decodedCity.id } ) {
-                                                    print("fetchCountry() - city id: ", city.id)
+                                                 //   print("fetchCountry() - city id: ", city.id)
                                                     city.name = decodedCity.name
                                                     city.photo = decodedCity.photo
                                                     city.isActive = decodedCity.isActive == 1 ? true : false
-                                                    print("fetchCountry() - city changed id: ", city.id)
+                                                 //   print("fetchCountry() - city changed id: ", city.id)
                                                 } else {
-                                                    print("fetchCountry() - NEW decodedCity id:", decodedCity.id)
+                                                  //  print("fetchCountry() - NEW decodedCity id:", decodedCity.id)
                                                     let city = await dataManager.createCity(decodedCity: decodedCity)
                                                     region?.addToCities(city)
-                                                    print("fetchCountry() - NEW decodedCity added to region cityID: ", city.id)
+                                                   // print("fetchCountry() - NEW decodedCity added to region cityID: ", city.id)
                                                 }
                                             }
                                         }
                                     }
                                 } else {
-                                    print("fetchCountry() - NEW region")
+                                   // print("fetchCountry() - NEW region")
                                     let newRegion = await dataManager.createRegion(decodedRegion: decodedRegion)
 
                                         if let decodedCities = decodedRegion.cities {
                                             for decodedCity in decodedCities {
-                                                print("fetchCountry() - decodedCity id :", decodedCity.id)
+                                               // print("fetchCountry() - decodedCity id :", decodedCity.id)
                                                 switch await dataManager.findCity(id: decodedCity.id) {
                                                 case .success(let city):
                                                     if let city = city {
-                                                        print("fetchCountry() - findCity city id :", city.id)
+                                                      //  print("fetchCountry() - findCity city id :", city.id)
                                                         city.name = decodedCity.name
                                                         city.photo = decodedCity.photo
                                                         city.isActive = decodedCity.isActive == 1 ? true : false
-                                                        print("fetchCountry() - findCity city changed id :", city.id)
+                                                      //  print("fetchCountry() - findCity city changed id :", city.id)
                                                         newRegion.addToCities(city)
-                                                        print("fetchCountry() - findCity city add to new Region , city id :", city.id)
+                                                     //   print("fetchCountry() - findCity city add to new Region , city id :", city.id)
                                                     } else {
-                                                        print("------- 222 no city ---------")
-                                                        print("fetchCountry() - NEW decodedCity id:", decodedCity.id)
+                                                      //  print("------- 222 no city ---------")
+                                                      //  print("fetchCountry() - NEW decodedCity id:", decodedCity.id)
                                                         let city = await dataManager.createCity(decodedCity: decodedCity)
-                                                        print("fetchCountry() - new City created city id :", city.id)
+                                                     //   print("fetchCountry() - new City created city id :", city.id)
                                                         newRegion.addToCities(city)
-                                                        print("fetchCountry() - NEW decodedCity added to region cityID: ", city.id)
+                                                 //       print("fetchCountry() - NEW decodedCity added to region cityID: ", city.id)
                                                     }
                                                 case .failure(let error):
                                                     print("fetchCountry() - findCity failure :", error)
@@ -163,17 +162,17 @@ extension CountryViewModel {
                                     
                                     
                                     self.country.addToRegions(newRegion)
-                                    print("fetchCountry() - region = NEW region id: ", newRegion.id)
+                                 //   print("fetchCountry() - region = NEW region id: ", newRegion.id)
                                 }
                             }
                         }
                     }
                     
-                    print("fetchCountry() - FINAL save")
+                 //   print("fetchCountry() - FINAL save")
                     dataManager.save() { [weak self] result in
-                        print("fetchCountry() -  FINAL saved")
+                       // print("fetchCountry() -  FINAL saved")
                         if result {
-                            print("---- result FINAL saved -------", result)
+                           // print("---- result FINAL saved -------", result)
                             Task {
                                 await self?.reloadCountry()
                             }

@@ -147,7 +147,10 @@ struct CityView: View {
     
     @ViewBuilder private var mainView: some View {
         Text(viewModel.city.about ?? "")
-        CityPlacesView(places: $viewModel.placesGroupedByType, size: size)
+        
+        if !viewModel.placesGroupedByType.isEmpty {
+            CityPlacesView(places: $viewModel.placesGroupedByType, size: size)
+        }
     }
 }
 

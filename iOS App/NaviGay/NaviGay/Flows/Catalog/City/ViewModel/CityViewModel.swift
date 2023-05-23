@@ -15,7 +15,6 @@ final class CityViewModel: ObservableObject {
     
     @Published var city: City
     @Published var cityImage: Image = AppImages.appIcon
-    
     @Published var placesGroupedByType: [(key: String, value: [Place])] = []
     
     
@@ -32,16 +31,25 @@ final class CityViewModel: ObservableObject {
         self.dataManager = dataManager
         loadImage()
         getCity()
+        if let places = city.places?.allObjects as? [Place] {
+            self.groupPlacesByType(places)
+        }
     }
 }
 
 extension CityViewModel {
     
-    //MARK: - Functions
+    //MARK: - Private Functions
     
     private func loadImage() {
         Task {
             await self.loadFromCache()
+        }
+    }
+    
+    private func getCity() {
+        Task {
+            await fetchCity()
         }
     }
     
@@ -52,20 +60,10 @@ extension CityViewModel {
             self.cityImage = try await ImageLoader.shared.loadImage(urlString: urlString)
         }
         catch {
-            
             //TODO
-            
             print(error.localizedDescription)
         }
     }
-    
-    func getCity() {
-        Task {
-            await fetchCity()
-        }
-    }
-    
-    //MARK: - Private Functions
     
     @MainActor
     private func getCityFromDB() async {
@@ -76,11 +74,11 @@ extension CityViewModel {
                 withAnimation(.spring()) {
                     self.city = city
                     if let places = city.places?.allObjects as? [Place] {
-                        self.placesGroupedByType = groupPlacesByType(places)
+                        groupPlacesByType(places)
                     }
                 }
             } else {
-                print("---- NoCity ------")
+             //   print("---- NoCity ------")
             }
         case .failure(let error):
             // TODO
@@ -90,7 +88,7 @@ extension CityViewModel {
     
     @MainActor
     private func fetchCity() {
-        print("fetchCity")
+        print("fetchCity()")
         Task {
             do {
                 let result = try await self.networkManager.fetchCity(id: Int(city.id))
@@ -116,26 +114,20 @@ extension CityViewModel {
                                     place.longitude = decodedPlace.longitude
                                     place.isActive = decodedPlace.isActive == 1 ? true : false
                                     place.isChecked = decodedPlace.isChecked == 1 ? true : false
-                                    
-                                    if let tags = place.tags?.allObjects as? [PlaceTag] {
+                                    if let tags = place.tags?.allObjects as? [Tag] {
                                         for tag in tags {
                                             place.removeFromTags(tag)
                                         }
                                     }
-                                    
                                     if let decodedTags = decodedPlace.tags {
-                                        
                                         for decodedTag in decodedTags {
                                             switch await dataManager.findPlaceTag(tag: decodedTag) {
                                             case .success(let tag):
                                                 if let tag = tag {
                                                     place.addToTags(tag)
-                                                    print("fetchCountry() - findCity city add to new Region , city id :", city.id)
                                                 } else {
-                                                    print("------- 222 no tag ---------")
                                                     let tag = await dataManager.createTag(tag: decodedTag)
                                                     place.addToTags(tag)
-                                                    print("fetchCountry() -createTag created tag id :", tag.id)
                                                 }
                                             case .failure(let error):
                                                 print("fetchCountry() - findCity failure :", error)
@@ -150,27 +142,49 @@ extension CityViewModel {
                                     //                                    }
                                     
                                 } else {
-                                    let place = await dataManager.createPlace(decodedPlace: decodedPlace)
-                                    if let decodedTags = decodedPlace.tags {
-                                        for decodedTag in decodedTags {
-                                            
-                                            switch await dataManager.findPlaceTag(tag: decodedTag) {
-                                            case .success(let tag):
-                                                if let tag = tag {
-                                                    place.addToTags(tag)
-                                                    print("fetchCountry() - findCity city add to new Region , city id :", city.id)
-                                                } else {
-                                                    print("------- 222 no tag ---------")
-                                                    let tag = await dataManager.createTag(tag: decodedTag)
-                                                    place.addToTags(tag)
-                                                    print("fetchCountry() -createTag created tag id :", tag.id)
+                                    switch await dataManager.findPlace(id: decodedPlace.id) {
+                                    case .success(let place):
+                                        if let place = place {
+                                            if let decodedTags = decodedPlace.tags {
+                                                for decodedTag in decodedTags {
+                                                    
+                                                    switch await dataManager.findPlaceTag(tag: decodedTag) {
+                                                    case .success(let tag):
+                                                        if let tag = tag {
+                                                            place.addToTags(tag)
+                                                        } else {
+                                                            let tag = await dataManager.createTag(tag: decodedTag)
+                                                            place.addToTags(tag)
+                                                        }
+                                                    case .failure(let error):
+                                                        print("fetchCountry() - findCity failure :", error)
+                                                    }
                                                 }
-                                            case .failure(let error):
-                                                print("fetchCountry() - findCity failure :", error)
                                             }
+                                            self.city.addToPlaces(place)
+                                        } else {
+                                            let place = await dataManager.createPlace(decodedPlace: decodedPlace)
+                                            if let decodedTags = decodedPlace.tags {
+                                                for decodedTag in decodedTags {
+                                                    
+                                                    switch await dataManager.findPlaceTag(tag: decodedTag) {
+                                                    case .success(let tag):
+                                                        if let tag = tag {
+                                                            place.addToTags(tag)
+                                                        } else {
+                                                            let tag = await dataManager.createTag(tag: decodedTag)
+                                                            place.addToTags(tag)
+                                                        }
+                                                    case .failure(let error):
+                                                        print("fetchCountry() - findPlaceTag failure :", error)
+                                                    }
+                                                }
+                                            }
+                                            self.city.addToPlaces(place)
                                         }
+                                    case .failure(let error):
+                                        print(error)
                                     }
-                                    self.city.addToPlaces(place)
                                 }
                             }
                         }
@@ -194,9 +208,10 @@ extension CityViewModel {
         }
     }
     
-    private func groupPlacesByType(_ places: [Place]) -> [(key: String, value: [Place])] {
+    private func groupPlacesByType(_ places: [Place]) {
+        
         let groupedPlaces = Dictionary(grouping: places, by: { $0.type ?? "" })
         let sortedGroups = groupedPlaces.sorted(by: { $0.key < $1.key })
-        return sortedGroups
+        placesGroupedByType = sortedGroups
     }
 }

@@ -1,5 +1,5 @@
 //
-//  PlaceTag+CoreDataClass.swift
+//  Tag+CoreDataClass.swift
 //  NaviGay
 //
 //  Created by Dmitry Zasenko on 23.05.23.
@@ -10,6 +10,6 @@ import Foundation
 import CoreData
 
 
-public class PlaceTag: NSManagedObject {
+public class Tag: NSManagedObject {
 
 }

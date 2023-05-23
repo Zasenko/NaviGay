@@ -15,11 +15,11 @@ protocol CatalogDataManagerProtocol {
     func createRegion(decodedRegion: DecodedRegion) async -> Region
     func createCity(decodedCity: DecodedCity) async -> City
     func createPlace(decodedPlace: DecodedPlace)  async -> Place
-    func createTag(tag: String) async -> PlaceTag
+    func createTag(tag: String) async -> Tag
     func save(complition: @escaping( (Bool) -> Void ))
     func findCity(id: Int) async -> Result<City?, Error>
     func findPlace(id: Int) async -> Result<Place?, Error>
-    func findPlaceTag(tag: String) async -> Result<PlaceTag?, Error>
+    func findPlaceTag(tag: String) async -> Result<Tag?, Error>
 }
 
 enum CatalogDataManagerErrors: Error {
@@ -105,8 +105,8 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
         }
     }
     
-    func findPlaceTag(tag: String) async -> Result<PlaceTag?, Error> {
-        let request = NSFetchRequest<PlaceTag>(entityName: "PlaceTag")
+    func findPlaceTag(tag: String) async -> Result<Tag?, Error> {
+        let request = NSFetchRequest<Tag>(entityName: "Tag")
         
         do {
             let findedTag = try self.manager.context.fetch(request).first(where: { $0.name == tag })
@@ -139,7 +139,6 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
 //                newRegion.addToCities(newCity)
 //            }
 //        }
-        print("-- newRegion created --") 
         return newRegion
     }
     
@@ -176,17 +175,9 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
         return newPlace
     }
     
-    func createTag(tag: String) async -> PlaceTag {
-        let newTag = PlaceTag(context: manager.context)
+    func createTag(tag: String) async -> Tag {
+        let newTag = Tag(context: manager.context)
         newTag.name = tag
         return newTag
-    }
-    
-    func createSmallDescriprion(decription: String) async -> String? {
-        if let description = decription.split(separator: ".").first {
-            return "\(description)."
-        } else {
-            return nil
-        }
     }
 }

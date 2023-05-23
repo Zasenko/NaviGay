@@ -35,7 +35,7 @@ struct CityPlaceView: View {
             }
             .padding()
             .background(Color.white)
-            if let tags = viewModel.place.tags?.allObjects as? [PlaceTag] {
+            if let tags = viewModel.place.tags?.allObjects as? [Tag] {
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
                         ForEach(tags) {

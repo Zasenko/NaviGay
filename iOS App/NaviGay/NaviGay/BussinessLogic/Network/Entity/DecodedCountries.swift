@@ -51,26 +51,28 @@ struct DecodedCity: Identifiable, Codable {
     let photo: String
     let isActive: Int
     let places: [DecodedPlace]?
+    let events: [DecodedEvent]?
 }
 
-enum PlaseType: String, Codable {
+enum PlaceType: String, Codable {
     case bar, cafe, restaurant, club, hotel, sauna, cruise, beach, shop, gym, culture, community
 }
 
 struct DecodedPlace: Identifiable, Codable {
     let id: Int
     let name: String
-    let type: PlaseType
+    let type: PlaceType
     let latitude: Float
     let longitude: Float
     let address: String
     let isActive: Int
     let isChecked: Int
     
+    let tags: [String]?  // почему ?  узнать api
+    
     let about: String?
     let photo: String?
     let phone: Int?
-    let tags: [String]?
     let workingTimes: [WorkingHours]?
 }
 
@@ -96,4 +98,29 @@ struct WorkingHours: Codable {
         case opening = "opening_time"
         case closing = "closing_time"
     }
+}
+
+
+enum EventType: String, Codable {
+    case party
+}
+
+
+struct DecodedEvent: Identifiable, Codable {
+    let id: Int
+    let name: String
+    let type: EventType
+    let cover: String? // почему ?  узнать api
+    
+    let address: String
+    let latitude: Float
+    let longitude: Float
+    
+    let startTime: String
+    let finishTime: String
+    
+    let isActive: Int
+    let isChecked: Int
+
+    let tags: [String]
 }

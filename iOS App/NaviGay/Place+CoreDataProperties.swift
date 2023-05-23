@@ -16,7 +16,6 @@ extension Place {
         return NSFetchRequest<Place>(entityName: "Place")
     }
 
-    @NSManaged public var about: String?
     @NSManaged public var address: String?
     @NSManaged public var id: Int64
     @NSManaged public var isActive: Bool
@@ -55,10 +54,10 @@ extension Place {
 extension Place {
 
     @objc(addTagsObject:)
-    @NSManaged public func addToTags(_ value: PlaceTag)
+    @NSManaged public func addToTags(_ value: Tag)
 
     @objc(removeTagsObject:)
-    @NSManaged public func removeFromTags(_ value: PlaceTag)
+    @NSManaged public func removeFromTags(_ value: Tag)
 
     @objc(addTags:)
     @NSManaged public func addToTags(_ values: NSSet)
