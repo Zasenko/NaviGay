@@ -12,84 +12,45 @@ struct CatalogView: View {
     //MARK: - Proreties
     
     @StateObject var viewModel: CatalogViewModel
+    @State private var searchText = ""
     
     //MARK: - Body
     
     var body: some View {
         NavigationStack {
-            List {
-                switch viewModel.loadState {
-                case .normal, .success:
-                    Section {
-                        Color.clear
-                            .frame(height: 20)
-                            .listRowSeparator(.hidden)
-                    }
-                    Section {
-                        ForEach($viewModel.activeCountries) { country in
-                            NavigationLink {
-                                CountryView(viewModel: CountryViewModel(country: country.wrappedValue, networkManager: viewModel.networkManager, dataManager: viewModel.dataManager))
-                            } label: {
-                                CountryCell(country: country)
-                            }
-                        }
-                        .listRowBackground(AppColors.background)
-                    }
-                case .loading:
-                    ProgressView()
-                case .failure:
-                    Text("что-то пошло не так")
-                }
+            switch viewModel.loadState {
+            case .normal, .success:
+                listWithCountries
+            case .loading:
+                ProgressView()
+            case .failure:
+                // TODO - сделать окошко с ошибкой и повторить
+                // сейчас ошибка вообще не отображается
+                Text("что-то пошло не так")
             }
-
-            .listStyle(.plain)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle("Countries")
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("Countries")
-                        .font(.largeTitle)
-                        .bold()
-                        .foregroundStyle(AppColors.rainbowGradient)
-                }
-            }
-            .toolbarBackground(AppColors.background, for: .navigationBar)
-            .background(
-                Color.clear
-                //                    NavigationConfigurator { navigationConfigurator in
-                //                        navigationConfigurator.hidesBarsOnSwipe = true
-                //                     //   navigationConfigurator.hidesBottomBarWhenPushed = false
-                //                     //   navigationConfigurator.isToolbarHidden = true
-                //                     //   navigationConfigurator.toolbar.backgroundColor = .orange
-                //                    }
-            )
         }
+        .searchable(text: $searchText, prompt: "Look for something")
     }
     
-    //MARK: - Views
-    //    @ViewBuilder private var listWithCountries: some View {
-    //        List {
-    //            Section {
-    //                Color.clear
-    //                    .frame(height: 20)
-    //                    .listRowSeparator(.hidden)
-    //            }
-    //            Section {
-    //                ForEach($viewModel.countries) { country in
-    //                    NavigationLink {
-    //                        viewModel.makeCountryView(country: country)
-    //                    } label: {
-    //                        CountryCell(country: country)
-    //                    }
-    //                }
-    //                .listRowBackground(AppColors.background)
-    //            }
-    //        }
-    //        .listStyle(.plain)
-    //        .onAppear() {
-    //            viewModel.getCountries()
-    //        }
-    //    }
+    // MARK: - Views
+    
+    @ViewBuilder private var listWithCountries: some View {
+        List {
+            Section {
+                ForEach($viewModel.activeCountries) { country in
+                    NavigationLink {
+                        viewModel.cteateCountryView(country: country.wrappedValue)
+                            .ignoresSafeArea(.container, edges: .top)
+                    } label: {
+                        CountryCell(country: country)
+                    }
+                }
+                .listRowBackground(AppColors.background)
+            }
+        }
+        .listStyle(.plain)
+        .toolbarBackground(AppColors.background, for: .navigationBar)
+    }
 }
 
 //struct CatalogView_Previews: PreviewProvider {

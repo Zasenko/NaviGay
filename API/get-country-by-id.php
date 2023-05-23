@@ -72,7 +72,7 @@ while ($row = $region_result->fetch_assoc()) {
 
     $region_id = $row['id'];
 
-    $sql = "SELECT id, name_$lang as name, is_active as isActive FROM City WHERE region_id = $region_id";
+    $sql = "SELECT id, name_$lang as name, photo, is_active as isActive FROM City WHERE region_id = $region_id";
 
     $cities = array();
     if ($city_result = mysqli_query($conn, $sql)) {
@@ -80,6 +80,7 @@ while ($row = $region_result->fetch_assoc()) {
             $city = array(
                 'id' => $row['id'],
                 'name' => $row["name"],
+                'photo' => $row["photo"],
                 'isActive' => $row['isActive']
             );
             array_push($cities, $city);

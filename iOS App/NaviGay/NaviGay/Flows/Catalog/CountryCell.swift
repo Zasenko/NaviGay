@@ -10,9 +10,11 @@ import SwiftUI
 struct CountryCell: View {
     
     //MARK: - Properties
+    
     @Binding var country: Country
     
     //MARK: - Body
+    
     var body: some View {
         HStack(alignment: .top) {
             Text(country.flag ?? "🏳️‍🌈")
@@ -22,9 +24,6 @@ struct CountryCell: View {
                 Text(country.name ?? "")
                     .font(.title)
                     .padding(.bottom, 4)
-                Text(country.smallDescriprion ?? "")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
             }
             Spacer()
         }

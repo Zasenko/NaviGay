@@ -1,22 +1,22 @@
 //
-//  CountryView.swift
+//  CityView.swift
 //  NaviGay
 //
-//  Created by Dmitry Zasenko on 08.05.23.
+//  Created by Dmitry Zasenko on 11.05.23.
 //
 
 import SwiftUI
 
-struct CountryView: View {
+struct CityView: View {
     
     //MARK: - Proreties
     
-    @StateObject var viewModel: CountryViewModel
+    @StateObject var viewModel: CityViewModel
     @Environment(\.dismiss) private var dismiss
     
     let safeArea: EdgeInsets
     let size: CGSize
-    let coordinateSpace: CoordinateSpace = .named("CountryViewScroll")
+    let coordinateSpace: CoordinateSpace = .named("CityViewScroll")
     
     @State private var photoViewTitleSize: CGSize = .zero
     @State private var showAbout: Bool = false
@@ -33,19 +33,17 @@ struct CountryView: View {
             .overlay(alignment: .top) {
                 headerView
             }
+            
         }
-        .onChange(of: viewModel.country, perform: { newValue in
-            print(newValue)
-        })
         .coordinateSpace(name: coordinateSpace)
         .navigationBarHidden(true)
     }
+    
     
     // MARK: - Header View
     
     @ViewBuilder private var headerView: some View {
         GeometryReader{ proxy in
-            
             let minY = proxy.frame(in: coordinateSpace).minY
             let height = (size.width / 4 ) * 5 ///высота картинки
             
@@ -56,19 +54,15 @@ struct CountryView: View {
                     }
                 } label: {
                     Image(systemName: "chevron.left")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(.blue)
+                        .font(.title3)
+                        .foregroundColor(.red)
                         .bold()
                 }
                 Spacer()
             }
             .overlay() {
                 HStack {
-                    Text(viewModel.country.flag ?? "🏳️‍🌈")
-                        .font(.title)
-                    Text(viewModel.country.name ?? "")
+                    Text(viewModel.city.name ?? "")
                         .foregroundStyle(AppColors.rainbowGradient)
                         .font(.title)
                 }
@@ -83,7 +77,8 @@ struct CountryView: View {
             .background(
                 .ultraThinMaterial.opacity( -minY > (height - photoViewTitleSize.height) ? 1 : 0)
             )
-            .offset(y: -minY )
+            .offset(y: -minY)
+            
         }
     }
     
@@ -94,8 +89,7 @@ struct CountryView: View {
             let size = proxy.size
             let minY = proxy.frame(in: coordinateSpace).minY
             let progress = minY / (height * (minY > 0 ? 0.5 : 0.8))
-            
-            viewModel.countryImage
+            viewModel.cityImage
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: size.width, height: size.height + (minY > 0 ? minY : 0 ))
@@ -118,7 +112,7 @@ struct CountryView: View {
                         
                         // MARK: - Info
                         VStack(spacing: 0) {
-                            Text(viewModel.country.name ?? "")
+                            Text(viewModel.city.name ?? "")
                                 .font(.system(size: 45))
                                 .fontWeight(.bold)
                                 .multilineTextAlignment(.center)
@@ -127,7 +121,6 @@ struct CountryView: View {
                                 .fontWeight(.bold)
                                 .foregroundColor(.gray)
                                 .padding(.top, 15)
-                                .padding(.bottom, 50)
                         }
                         .opacity(1 + (progress > 0 ? -progress : progress))
                         .offset(y: minY < 0 ? minY : 0 )
@@ -153,72 +146,16 @@ struct CountryView: View {
     // MARK: - Main View
     
     @ViewBuilder private var mainView: some View {
-        VStack(spacing:  25) {
-            Text(viewModel.country.about ?? "")
-                .font(.body)
-                //.lineSpacing(10)
-                .lineLimit(showAbout ? nil : 4)
-                .foregroundColor(.secondary)
-                .padding(.horizontal)
-            Button {
-                withAnimation {
-                    showAbout.toggle()
-                }
-            } label: {
-                Text("Show more")
-            }
-            
-            if let regions = viewModel.country.regions?.allObjects as? [Region] {
-                ForEach(regions) { region in
-                    VStack {
-                        
-                        Text(region.name ?? "")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .bold()
-                        
-                        if let cities = region.cities?.allObjects as? [City] {
-                            VStack {
-                                ForEach(cities) {city in
-                                    NavigationLink {
-                                        CityView(viewModel: CityViewModel(city: city, networkManager: viewModel.networkManager, dataManager: viewModel.dataManager), safeArea: safeArea, size: size)
-                                    } label: {
-                                        Text(city.name ?? "")
-                                            .padding(.horizontal)
-                                            .padding(.horizontal)
-                                            .frame(height: 50)
-                                            .foregroundColor(.white)
-                                            .background(AppColors.red.gradient)
-                                            .clipShape(Capsule(style: .continuous))
-                                    }
-                                }
-                            }
-                            .padding(.bottom, 10)
-                        }
-                        
-                    }
-                }
-            }
-            
-            
-          //  Text(viewModel.country.lastUpdate?.formatted(date: .complete, time: .complete) ?? "")
-            
+        Text(viewModel.city.about ?? "")
+        
+        if !viewModel.placesGroupedByType.isEmpty {
+            CityPlacesView(places: $viewModel.placesGroupedByType, size: size)
         }
     }
 }
 
-//    struct CountryView_Previews: PreviewProvider {
-//        static var previews: some View {
-//            CountryView()
-//        }
+//struct CityView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CityView()
 //    }
-
-
-struct SizePreferenceKey: PreferenceKey {
-    typealias Value = CGSize
-    static var defaultValue: Value = .zero
-    
-    static func reduce(value: inout Value, nextValue: () -> Value) {
-        value = nextValue()
-    }
-}
+//}

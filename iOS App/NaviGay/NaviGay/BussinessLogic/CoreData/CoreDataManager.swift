@@ -9,7 +9,7 @@ import CoreData
 
 protocol CoreDataManagerProtocol {
     var context: NSManagedObjectContext { get }
-    func saveData()
+    func saveData(complition: @escaping( (Bool) -> Void ))
 }
 
 final class CoreDataManager: CoreDataManagerProtocol {
@@ -40,12 +40,17 @@ extension CoreDataManager {
     
     //MARK: - Functions
 
-    func saveData() {
-        do {
-            try context.save()
-        } catch let error {
-            //TODO
-            debugPrint("CoreDataManager Error Saving ->>>>>>>>>> \(error.localizedDescription)")
+    func saveData(complition: @escaping( (Bool) -> Void )) {
+        DispatchQueue.main.async {
+            do {
+                try self.context.save()
+          //      debugPrint("CoreDataManager  Saving ->>>>>>>>>> OK")
+                    complition(true)
+            } catch let error {
+                //TODO
+                debugPrint("CoreDataManager Error ->>>>>>>>>> \(error)")
+                complition(false)
+            }
         }
     }
 }

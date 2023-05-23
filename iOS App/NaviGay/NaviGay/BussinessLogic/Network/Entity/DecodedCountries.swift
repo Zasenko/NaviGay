@@ -47,19 +47,80 @@ struct CityResult: Codable {
 struct DecodedCity: Identifiable, Codable {
     let id: Int
     let name: String
-    let isActive: Int
     let about: String?
-    let photo: String?
+    let photo: String
+    let isActive: Int
     let places: [DecodedPlace]?
+    let events: [DecodedEvent]?
+}
+
+enum PlaceType: String, Codable {
+    case bar, cafe, restaurant, club, hotel, sauna, cruise, beach, shop, gym, culture, community
 }
 
 struct DecodedPlace: Identifiable, Codable {
     let id: Int
     let name: String
-    let about: String
-    let photo: String
+    let type: PlaceType
     let latitude: Float
     let longitude: Float
+    let address: String
     let isActive: Int
+    let isChecked: Int
+    
+    let tags: [String]?  // почему ?  узнать api
+    
+    let about: String?
+    let photo: String?
+    let phone: Int?
+    let workingTimes: [WorkingHours]?
 }
 
+//enum Tags: String, Codable {
+//    case pool, darkroom, terrace
+//    case dragShow = "drag show"
+//    case straightFriendly = "straight friendly"
+//    case gayFriendly = "gay friendly"
+//    case menOnly = "men only"
+//}
+
+enum WeekDay: String, Codable {
+    case Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+}
+
+struct WorkingHours: Codable {
+    let day: WeekDay
+    let opening: String
+    let closing: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case day = "day_of_week"
+        case opening = "opening_time"
+        case closing = "closing_time"
+    }
+}
+
+
+enum EventType: String, Codable {
+    case party
+}
+
+
+struct DecodedEvent: Identifiable, Codable {
+    let id: Int
+    let name: String
+    let type: EventType
+    let cover: String? // почему ?  узнать api
+    
+    let address: String
+    let latitude: Float
+    let longitude: Float
+    
+    let startTime: String
+    let finishTime: String
+    
+    let isActive: Int
+    let isChecked: Int
+
+    let tags: [String]
+}
