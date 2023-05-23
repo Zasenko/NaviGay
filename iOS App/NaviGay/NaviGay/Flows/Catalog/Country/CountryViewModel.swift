@@ -26,7 +26,7 @@ final class CountryViewModel: ObservableObject {
         self.networkManager = networkManager
         self.dataManager = dataManager
         loadImage()
-        getCountry(id: country.id)
+        getCountry()
     }
     
 }
@@ -35,7 +35,7 @@ extension CountryViewModel {
     
     //MARK: - Private Functions
     
-    private func getCountry(id: Int16) {
+    private func getCountry() {
         Task {
             await fetchCountry()
         }
@@ -62,12 +62,18 @@ extension CountryViewModel {
     }
     
     @MainActor
-    private func getCountryFromDB() async {
+    private func reloadCountry() async {
+        print("CountryViewModel getCountryFromDB()  start")
         let result = await dataManager.getCountry(id: country.objectID)
         switch result {
         case .success(let country):
-            withAnimation(.spring()) {
-                self.country = country
+            if let country = country {
+                withAnimation(.spring()) {
+                    self.country = country
+                    print("CountryViewModel getCountryFromDB()  success country id: \(country.id)")
+                }
+            } else {
+                print("---- NoCountry ------")
             }
         case .failure(let error):
             // TODO
@@ -80,6 +86,7 @@ extension CountryViewModel {
     private func fetchCountry() {
         Task {
             do {
+                print("fetchCountry()")
                 let result = try await networkManager.fetchCountry(countryId: Int(country.id))
                 if let error = result.error {
                     //TODO
@@ -87,49 +94,98 @@ extension CountryViewModel {
                     return
                 }
                 if let decodedCountry = result.country {
+                    print("fetchCountry() - decodedCountry id:", decodedCountry.id)
                     country.about = decodedCountry.about
                     country.flag = decodedCountry.flag
                     country.name = decodedCountry.name
                     country.photo = decodedCountry.photo
-                    country.smallDescriprion = await dataManager.createSmallDescriprion(decription: decodedCountry.about)
                     country.isActive = decodedCountry.isActive == 1 ? true : false
+                    
                     if let decodedRegions = decodedCountry.regions {
                         if let regions = country.regions?.allObjects as? [Region] {
                             for decodedRegion in decodedRegions {
-                                if let region = regions.first(where: { $0.id == Int16(decodedRegion.id) } ) {
-                                    region.name = decodedRegion.name
-                                    region.isActive = decodedRegion.isActive == 1 ? true : false
-                                    if let cities = region.cities?.allObjects as? [City] {
+                                print("fetchCountry() - decodedRegion id: ", decodedRegion.id)
+                                let region = regions.first(where: { $0.id == decodedRegion.id } )
+                                if region != nil {
+                                    region?.name = decodedRegion.name
+                                    region?.isActive = decodedRegion.isActive == 1 ? true : false
+                                    
+                                    if let cities = region?.cities?.allObjects as? [City] {
+                                        
                                         if let decodedCities = decodedRegion.cities {
                                             for decodedCity in decodedCities {
-                                                if let city = cities.first(where: { $0.id == Int16(decodedCity.id) } ) {
+                                                print("fetchCountry() - decodedCity id :", decodedCity.id)
+                                                if let city = cities.first(where: { $0.id == decodedCity.id } ) {
+                                                    print("fetchCountry() - city id: ", city.id)
                                                     city.name = decodedCity.name
+                                                    city.photo = decodedCity.photo
                                                     city.isActive = decodedCity.isActive == 1 ? true : false
+                                                    print("fetchCountry() - city changed id: ", city.id)
                                                 } else {
+                                                    print("fetchCountry() - NEW decodedCity id:", decodedCity.id)
                                                     let city = await dataManager.createCity(decodedCity: decodedCity)
-                                                    region.addToCities(city)
+                                                    region?.addToCities(city)
+                                                    print("fetchCountry() - NEW decodedCity added to region cityID: ", city.id)
                                                 }
                                             }
                                         }
                                     }
                                 } else {
-                                    let region = await dataManager.createRegion(decodedRegion: decodedRegion)
-                                    self.country.addToRegions(region)
+                                    print("fetchCountry() - NEW region")
+                                    let newRegion = await dataManager.createRegion(decodedRegion: decodedRegion)
 
+                                        if let decodedCities = decodedRegion.cities {
+                                            for decodedCity in decodedCities {
+                                                print("fetchCountry() - decodedCity id :", decodedCity.id)
+                                                switch await dataManager.findCity(id: decodedCity.id) {
+                                                case .success(let city):
+                                                    if let city = city {
+                                                        print("fetchCountry() - findCity city id :", city.id)
+                                                        city.name = decodedCity.name
+                                                        city.photo = decodedCity.photo
+                                                        city.isActive = decodedCity.isActive == 1 ? true : false
+                                                        print("fetchCountry() - findCity city changed id :", city.id)
+                                                        newRegion.addToCities(city)
+                                                        print("fetchCountry() - findCity city add to new Region , city id :", city.id)
+                                                    } else {
+                                                        print("------- 222 no city ---------")
+                                                        print("fetchCountry() - NEW decodedCity id:", decodedCity.id)
+                                                        let city = await dataManager.createCity(decodedCity: decodedCity)
+                                                        print("fetchCountry() - new City created city id :", city.id)
+                                                        newRegion.addToCities(city)
+                                                        print("fetchCountry() - NEW decodedCity added to region cityID: ", city.id)
+                                                    }
+                                                case .failure(let error):
+                                                    print("fetchCountry() - findCity failure :", error)
+                                                }
+                                            }
+                                        }
+                                    
+                                    
+                                    self.country.addToRegions(newRegion)
+                                    print("fetchCountry() - region = NEW region id: ", newRegion.id)
                                 }
-                                
                             }
                         }
                     }
-                    await dataManager.save()
-                    await getCountryFromDB()
-                }
-            }catch {
                     
-                    //TODO
-                    
-                    print("Error fetching country ->>>>>>>>>>> \(error)")
+                    print("fetchCountry() - FINAL save")
+                    dataManager.save() { [weak self] result in
+                        print("fetchCountry() -  FINAL saved")
+                        if result {
+                            print("---- result FINAL saved -------", result)
+                            Task {
+                                await self?.reloadCountry()
+                            }
+                        }
+                    }
                 }
+            } catch {
+                
+                //TODO
+                
+                print("Error fetching country ->>>>>>>>>>> \(error)")
             }
         }
     }
+}

@@ -24,9 +24,6 @@ struct CountryCell: View {
                 Text(country.name ?? "")
                     .font(.title)
                     .padding(.bottom, 4)
-                Text(country.smallDescriprion ?? "")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
             }
             Spacer()
         }

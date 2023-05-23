@@ -18,7 +18,7 @@ final class TabBarViewModel: ObservableObject {
     
     // MARK: - Properties
     
-    @Published var selectedPage: TabBarRouter = TabBarRouter.home
+    @Published var selectedPage: TabBarRouter = TabBarRouter.catalog
     
     @Binding var isUserLogin: Bool
     

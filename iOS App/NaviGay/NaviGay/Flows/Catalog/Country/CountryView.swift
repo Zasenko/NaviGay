@@ -34,13 +34,16 @@ struct CountryView: View {
                 headerView
             }
         }
+        .onChange(of: viewModel.country, perform: { newValue in
+            print(newValue)
+        })
         .coordinateSpace(name: coordinateSpace)
         .navigationBarHidden(true)
     }
     
     // MARK: - Header View
     
-    var headerView: some View {
+    @ViewBuilder private var headerView: some View {
         GeometryReader{ proxy in
             
             let minY = proxy.frame(in: coordinateSpace).minY
@@ -85,12 +88,13 @@ struct CountryView: View {
     }
     
     // MARK: - Photo View
-    @ViewBuilder var photoView: some View {
+    @ViewBuilder private var photoView: some View {
         let height = (size.width / 4 ) * 5
         GeometryReader { proxy in
             let size = proxy.size
             let minY = proxy.frame(in: coordinateSpace).minY
             let progress = minY / (height * (minY > 0 ? 0.5 : 0.8))
+            
             viewModel.countryImage
                 .resizable()
                 .aspectRatio(contentMode: .fill)
@@ -148,11 +152,11 @@ struct CountryView: View {
     
     // MARK: - Main View
     
-    var mainView: some View {
+    @ViewBuilder private var mainView: some View {
         VStack(spacing:  25) {
             Text(viewModel.country.about ?? "")
                 .font(.body)
-                .lineSpacing(10)
+                //.lineSpacing(10)
                 .lineLimit(showAbout ? nil : 4)
                 .foregroundColor(.secondary)
                 .padding(.horizontal)
@@ -197,7 +201,7 @@ struct CountryView: View {
             }
             
             
-            Text(viewModel.country.lastUpdate?.formatted(date: .complete, time: .complete) ?? "")
+          //  Text(viewModel.country.lastUpdate?.formatted(date: .complete, time: .complete) ?? "")
             
         }
     }

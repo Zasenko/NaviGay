@@ -45,7 +45,6 @@ extension CatalogViewModel {
     }
     
     func cteateCountryView(country: Country) -> AnyView {
-        print("CatalogViewModel - cteateCountryView, country id \(country.id)")
         return AnyView(CountryView(viewModel: CountryViewModel(country: country, networkManager: self.networkManager, dataManager: self.dataManager), safeArea: safeArea, size: size))
     }
 
@@ -76,7 +75,9 @@ extension CatalogViewModel {
     private func fetchCountries() async {
         Task {
             do {
+                print("fetchCountries() - start")
                 let result = try await networkManager.fetchCountries()
+                print("fetchCountries() - finish")
                 if let error = result.error {
                     //TODO
                     print(error)
@@ -84,21 +85,34 @@ extension CatalogViewModel {
                 }
                 if let decodedCountries = result.countries {
                     for decodedCountry in decodedCountries {
-                        if let country = countries.first(where: { $0.id == Int16(decodedCountry.id)}) {
+                        print("fetchCountries() - decodedCountry id: ", decodedCountry.id)
+                        if let country = countries.first(where: { $0.id == decodedCountry.id}) {
+                            print("fetchCountries() - country id: ", country.id)
                             country.about = decodedCountry.about
                             country.flag = decodedCountry.flag
                             country.name = decodedCountry.name
                             country.photo = decodedCountry.photo
-                            country.smallDescriprion = await dataManager.createSmallDescriprion(decription: decodedCountry.about)
+                        //    country.smallDescriprion = await dataManager.createSmallDescriprion(decription: decodedCountry.about)
                             country.isActive = decodedCountry.isActive == 1 ? true : false
+                            print("fetchCountries() - country changed: ", country.id)
                         } else {
+                            print("fetchCountries() - new country - decoded country id: ", decodedCountry.id)
                             let newCountry = await dataManager.createCountry(decodedCountry: decodedCountry)
+                            print("fetchCountries() - new country id: ", newCountry.id)
                             self.countries.append(newCountry)
-
+                            print("fetchCountries() - new country appended id: ", newCountry.id)
                         }
                     }
-                    await dataManager.save()
-                    await getCountriesFromDB()
+                    dataManager.save() { [weak self] result in
+                        print("fetchCountries() - dataManager saved")
+                        if result {
+                            Task {
+                                print("fetchCountries() - getCountriesFromDB")
+                                await self?.getCountriesFromDB()
+                                print("fetchCountries() - getCountriesFromDB finished")
+                            }
+                        }
+                    }
                 }
                 withAnimation(.spring()) {
                     loadState = .normal

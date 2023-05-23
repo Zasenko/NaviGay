@@ -42,7 +42,7 @@ struct CityView: View {
     
     // MARK: - Header View
     
-    var headerView: some View {
+    @ViewBuilder private var headerView: some View {
         GeometryReader{ proxy in
             let minY = proxy.frame(in: coordinateSpace).minY
             let height = (size.width / 4 ) * 5 ///высота картинки
@@ -83,7 +83,7 @@ struct CityView: View {
     }
     
     // MARK: - Photo View
-    @ViewBuilder var photoView: some View {
+    @ViewBuilder private var photoView: some View {
         let height = (size.width / 4 ) * 5
         GeometryReader { proxy in
             let size = proxy.size
@@ -145,33 +145,10 @@ struct CityView: View {
     
     // MARK: - Main View
     
-    @ViewBuilder var mainView: some View {
-        
+    @ViewBuilder private var mainView: some View {
         Text(viewModel.city.about ?? "")
-        if let places = viewModel.city.places?.allObjects as? [Place] {
-            VStack {
-                ForEach(places) { place in
-                    
-                    Text(place.name ?? "")
-                        .font(.headline)
-                    AsyncImage(url: URL(string: place.photo ?? "")) { img in
-                        img
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 100, height: 100)
-                    } placeholder: {
-                        ProgressView()
-                            .frame(width: 100, height: 100)
-                    }
-                    Text(place.about ?? "")
-                        .padding(.bottom)
-                    
-                }
-            }
-        }
-        
+        CityPlacesView(places: $viewModel.placesGroupedByType, size: size)
     }
-    
 }
 
 //struct CityView_Previews: PreviewProvider {

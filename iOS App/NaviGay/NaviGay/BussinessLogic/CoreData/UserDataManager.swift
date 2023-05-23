@@ -46,12 +46,14 @@ extension UserDataManager: UserDataManagerProtocol {
     
     func saveNewUser(decodedUser: DecodedUser) async {
         let newUser = User(context: manager.context)
-        newUser.id = Int32(decodedUser.id)
+        newUser.id = Int64(decodedUser.id)
         newUser.name = decodedUser.name
         newUser.photo = decodedUser.photo
         newUser.bio = decodedUser.bio
         newUser.status = decodedUser.status.rawValue
         user = newUser
-        manager.saveData()
+        manager.saveData { _ in
+            
+        }
     }
 }
