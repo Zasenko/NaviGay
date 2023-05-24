@@ -14,10 +14,13 @@ final class CityPlaceViewModel: ObservableObject {
     @Published var place: Place
     @Published var placeImage: Image = AppImages.appIcon
     
+    let dataManager: CoreDataManagerProtocol
+    
     //MARK: - Inits
     
-    init(place: Place) {
+    init(place: Place, dataManager: CoreDataManagerProtocol) {
         self.place = place
+        self.dataManager = dataManager
         loadImage()
     }
 }

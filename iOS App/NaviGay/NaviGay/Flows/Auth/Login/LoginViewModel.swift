@@ -25,18 +25,13 @@ final class LoginViewModel: ObservableObject {
     
     let userDataManager: UserDataManagerProtocol
     
-    lazy var networkManager: AuthNetworkManagerProtocol = AuthNetworkManager(api: api)
+    lazy var networkManager: AuthNetworkManagerProtocol = AuthNetworkManager()
     lazy var authManager = AuthManager()
-    
-    // MARK: - Private Properties
-
-    private let api: ApiProperties
         
     // MARK: - Inits
     
-    init(entryRouter: Binding<EntryViewRouter>, isUserLogin: Binding<Bool>, api: ApiProperties, userDataManager: UserDataManagerProtocol) {
+    init(entryRouter: Binding<EntryViewRouter>, isUserLogin: Binding<Bool>, userDataManager: UserDataManagerProtocol) {
         self.userDataManager = userDataManager
-        self.api = api
         self._entryRouter = entryRouter
         self._isUserLogin = isUserLogin
     }

@@ -146,15 +146,24 @@ struct CityView: View {
     // MARK: - Main View
     
     @ViewBuilder private var mainView: some View {
+        
+        VStack(alignment: .leading) {
+            ForEach(viewModel.sortedKeys, id: \.self) { key in
+                Section(header: Text(key)) {
+                    ForEach(viewModel.sortedDictionary[key] ?? []) { place in
+                        CityPlaceView(viewModel: CityPlaceViewModel(place: place, dataManager: viewModel.tESTdataManager), size: size, safeArea: safeArea)
+                    }
+                }
+            }
+        }
         Text(viewModel.city.about ?? "")
         
         let events = viewModel.city.events?.allObjects as? [Event]
-        CityEventsView(events: events ?? [], size: size)
-        
-        if !viewModel.placesGroupedByType.isEmpty {
-            CityPlacesView(places: $viewModel.placesGroupedByType, size: size)
+        VStack(alignment: .leading) {
+            ForEach(events ?? []) { event in
+                CityEventView(viewModel: CityEventViewModel(event: event), size: size)
+            }
         }
-        
     }
 }
 

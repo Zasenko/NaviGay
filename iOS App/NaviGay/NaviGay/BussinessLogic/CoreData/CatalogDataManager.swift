@@ -11,17 +11,20 @@ protocol CatalogDataManagerProtocol {
     func getCountries() async -> Result<[Country], Error>
     func getCountry(id: NSManagedObjectID) async -> Result<Country?, Error>
     func getCity(id: NSManagedObjectID) async -> Result<City?, Error>
+    
     func createCountry(decodedCountry: DecodedCountry) async -> Country
     func createRegion(decodedRegion: DecodedRegion) async -> Region
     func createCity(decodedCity: DecodedCity) async -> City
     func createPlace(decodedPlace: DecodedPlace)  async -> Place
     func createEvent(decodedEvent: DecodedEvent)  async -> Event
     func createTag(tag: String) async -> Tag
-    func save(complition: @escaping( (Bool) -> Void ))
+    
     func findCity(id: Int) async -> Result<City?, Error>
     func findPlace(id: Int) async -> Result<Place?, Error>
     func findEvent(id: Int) async -> Result<Event?, Error>
     func findTag(tag: String) async -> Result<Tag?, Error>
+    
+    func save(complition: @escaping( (Bool) -> Void ))
 }
 
 enum CatalogDataManagerErrors: Error {

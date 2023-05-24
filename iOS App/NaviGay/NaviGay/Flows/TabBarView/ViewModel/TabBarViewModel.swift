@@ -41,18 +41,16 @@ final class TabBarViewModel: ObservableObject {
 
     // MARK: - Private Properties
     
-    private let api: ApiProperties
     private let dataManager: CoreDataManagerProtocol
     
-    private lazy var catalogNetworkManager = CatalogNetworkManager(api: api)
+    private lazy var catalogNetworkManager = CatalogNetworkManager()
     private lazy var catalogDataManager = CatalogDataManager(manager: dataManager)
     
     // MARK: - Inits
     
-    init(isUserLogin: Binding<Bool>, api: ApiProperties, dataManager: CoreDataManagerProtocol) {
+    init(isUserLogin: Binding<Bool>, dataManager: CoreDataManagerProtocol) {
         self._isUserLogin = isUserLogin
         self.dataManager = dataManager
-        self.api = api
     }
 }
 
@@ -61,6 +59,6 @@ extension TabBarViewModel {
     // MARK: - Functios
 
     func cteateCatalogView(safeArea: EdgeInsets, size: CGSize) -> AnyView {
-        AnyView(CatalogView(viewModel: CatalogViewModel(networkManager: self.catalogNetworkManager, dataManager: self.catalogDataManager, safeArea: safeArea, size: size)))
+        AnyView(CatalogView(viewModel: CatalogViewModel(networkManager: self.catalogNetworkManager, dataManager: self.catalogDataManager, safeArea: safeArea, size: size, tESTdataManager: self.dataManager)))
     }
 }

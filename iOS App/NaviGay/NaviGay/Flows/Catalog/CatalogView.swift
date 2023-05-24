@@ -29,7 +29,6 @@ struct CatalogView: View {
                 Text("что-то пошло не так")
             }
         }
-        .searchable(text: $searchText, prompt: "Look for something")
     }
     
     // MARK: - Views
@@ -48,6 +47,9 @@ struct CatalogView: View {
                 .listRowBackground(AppColors.background)
             }
         }
+        //УБРАТЬ!!!!!
+        .searchable(text: $searchText, prompt: "Look for something")
+        //----------------
         .listStyle(.plain)
         .toolbarBackground(AppColors.background, for: .navigationBar)
     }

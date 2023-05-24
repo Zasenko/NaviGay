@@ -21,26 +21,9 @@ extension City {
     @NSManaged public var isActive: Bool
     @NSManaged public var name: String?
     @NSManaged public var photo: String?
+    @NSManaged public var events: NSSet?
     @NSManaged public var places: NSSet?
     @NSManaged public var region: Region?
-    @NSManaged public var events: NSSet?
-
-}
-
-// MARK: Generated accessors for places
-extension City {
-
-    @objc(addPlacesObject:)
-    @NSManaged public func addToPlaces(_ value: Place)
-
-    @objc(removePlacesObject:)
-    @NSManaged public func removeFromPlaces(_ value: Place)
-
-    @objc(addPlaces:)
-    @NSManaged public func addToPlaces(_ values: NSSet)
-
-    @objc(removePlaces:)
-    @NSManaged public func removeFromPlaces(_ values: NSSet)
 
 }
 
@@ -58,6 +41,23 @@ extension City {
 
     @objc(removeEvents:)
     @NSManaged public func removeFromEvents(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for places
+extension City {
+
+    @objc(addPlacesObject:)
+    @NSManaged public func addToPlaces(_ value: Place)
+
+    @objc(removePlacesObject:)
+    @NSManaged public func removeFromPlaces(_ value: Place)
+
+    @objc(addPlaces:)
+    @NSManaged public func addToPlaces(_ values: NSSet)
+
+    @objc(removePlaces:)
+    @NSManaged public func removeFromPlaces(_ values: NSSet)
 
 }
 
