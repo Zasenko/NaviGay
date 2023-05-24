@@ -104,6 +104,29 @@ if ($tags_result = mysqli_query($conn, $sql)) {
 }
 $place += ['tags' => $tags];
 
+$sql = "SELECT PlaceComment.id, User.id as userId, User.name as userName, User.photo as userPhoto, PlaceComment.comment, PlaceComment.created_at FROM PlaceComment INNER JOIN User ON PlaceComment.user_id = User.id WHERE place_id = $place_id";
+
+$commnets = array();
+if ($commnets_result = mysqli_query($conn, $sql)) {
+    while ($row = $commnets_result->fetch_assoc()) {
+        $commnet = array(
+            'id' => $row['id'],
+            'userId' => $row["userId"],
+            'userName' => $row["userName"],
+            'userPhoto' => $row["userPhoto"],
+            'comment' => $row["comment"],
+            'createdAt' => $row["created_at"],
+        );
+        array_push($commnets, $commnet);
+    }
+} else {
+    $conn->close();
+    $json = array('error' => 4444444555555, 'errorDescription' => 'mysqli_query city_result error');
+    echo json_encode($json, JSON_NUMERIC_CHECK);
+    exit;
+}
+$place += ['comments' => $commnets];
+
 $conn->close();
 $json = array('place' => $place);
 echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
