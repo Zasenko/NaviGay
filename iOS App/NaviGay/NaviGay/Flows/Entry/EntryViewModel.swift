@@ -21,7 +21,6 @@ final class EntryViewModel: ObservableObject {
     @Published var isUserLogin: Bool = false
     @Published var userStatus: UserStatus = .anonim
     
-    let networkMonitor: NetworkMonitor
     let api: ApiProperties
     let userDataManager: UserDataManagerProtocol
     let dataManager: CoreDataManagerProtocol
@@ -37,7 +36,6 @@ final class EntryViewModel: ObservableObject {
     // MARK: - Inits
     
     init() {
-        self.networkMonitor = NetworkMonitor()
         self.api = ApiProperties()
         self.dataManager = CoreDataManager()
         self.userDataManager = UserDataManager(manager: dataManager)

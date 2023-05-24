@@ -2,7 +2,7 @@
 //  Tag+CoreDataProperties.swift
 //  NaviGay
 //
-//  Created by Dmitry Zasenko on 23.05.23.
+//  Created by Dmitry Zasenko on 24.05.23.
 //
 //
 
@@ -17,25 +17,8 @@ extension Tag {
     }
 
     @NSManaged public var name: String?
-    @NSManaged public var places: NSSet?
     @NSManaged public var events: NSSet?
-
-}
-
-// MARK: Generated accessors for places
-extension Tag {
-
-    @objc(addPlacesObject:)
-    @NSManaged public func addToPlaces(_ value: Place)
-
-    @objc(removePlacesObject:)
-    @NSManaged public func removeFromPlaces(_ value: Place)
-
-    @objc(addPlaces:)
-    @NSManaged public func addToPlaces(_ values: NSSet)
-
-    @objc(removePlaces:)
-    @NSManaged public func removeFromPlaces(_ values: NSSet)
+    @NSManaged public var places: NSSet?
 
 }
 
@@ -53,6 +36,23 @@ extension Tag {
 
     @objc(removeEvents:)
     @NSManaged public func removeFromEvents(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for places
+extension Tag {
+
+    @objc(addPlacesObject:)
+    @NSManaged public func addToPlaces(_ value: Place)
+
+    @objc(removePlacesObject:)
+    @NSManaged public func removeFromPlaces(_ value: Place)
+
+    @objc(addPlaces:)
+    @NSManaged public func addToPlaces(_ values: NSSet)
+
+    @objc(removePlaces:)
+    @NSManaged public func removeFromPlaces(_ values: NSSet)
 
 }
 

@@ -41,18 +41,16 @@ final class TabBarViewModel: ObservableObject {
 
     // MARK: - Private Properties
     
-    private let networkMonitor: NetworkMonitor
     private let api: ApiProperties
     private let dataManager: CoreDataManagerProtocol
     
-    private lazy var catalogNetworkManager = CatalogNetworkManager(networkMonitor: networkMonitor, api: api)
+    private lazy var catalogNetworkManager = CatalogNetworkManager(api: api)
     private lazy var catalogDataManager = CatalogDataManager(manager: dataManager)
     
     // MARK: - Inits
     
-    init(isUserLogin: Binding<Bool>, networkMonitor: NetworkMonitor, api: ApiProperties, dataManager: CoreDataManagerProtocol) {
+    init(isUserLogin: Binding<Bool>, api: ApiProperties, dataManager: CoreDataManagerProtocol) {
         self._isUserLogin = isUserLogin
-        self.networkMonitor = networkMonitor
         self.dataManager = dataManager
         self.api = api
     }

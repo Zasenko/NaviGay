@@ -25,9 +25,9 @@ struct EntryView: View {
                     .scaledToFit()
                     .frame(height: 50)
             case .loginView:
-                LoginView(viewModel: LoginViewModel(entryRouter: $vm.router, isUserLogin: $vm.isUserLogin, networkMonitor: vm.networkMonitor, api: vm.api, userDataManager: vm.userDataManager))
+                LoginView(viewModel: LoginViewModel(entryRouter: $vm.router, isUserLogin: $vm.isUserLogin, api: vm.api, userDataManager: vm.userDataManager))
             case .tabView:
-                TabBarView(viewModel: TabBarViewModel(isUserLogin: $vm.isUserLogin, networkMonitor: vm.networkMonitor, api: vm.api, dataManager: vm.dataManager))
+                TabBarView(viewModel: TabBarViewModel(isUserLogin: $vm.isUserLogin, api: vm.api, dataManager: vm.dataManager))
             }
         }
         .onAppear() {
