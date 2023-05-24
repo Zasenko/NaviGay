@@ -15,11 +15,13 @@ protocol CatalogDataManagerProtocol {
     func createRegion(decodedRegion: DecodedRegion) async -> Region
     func createCity(decodedCity: DecodedCity) async -> City
     func createPlace(decodedPlace: DecodedPlace)  async -> Place
+    func createEvent(decodedEvent: DecodedEvent)  async -> Event
     func createTag(tag: String) async -> Tag
     func save(complition: @escaping( (Bool) -> Void ))
     func findCity(id: Int) async -> Result<City?, Error>
     func findPlace(id: Int) async -> Result<Place?, Error>
-    func findPlaceTag(tag: String) async -> Result<Tag?, Error>
+    func findEvent(id: Int) async -> Result<Event?, Error>
+    func findTag(tag: String) async -> Result<Tag?, Error>
 }
 
 enum CatalogDataManagerErrors: Error {
@@ -94,6 +96,16 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
         }
     }
     
+    func findEvent(id: Int) async -> Result<Event?, Error> {
+        let request = NSFetchRequest<Event>(entityName: "Event")
+        do {
+            let event = try self.manager.context.fetch(request).first(where: { $0.id == Int64(id) })
+            return .success(event)
+        } catch let error {
+            return .failure(error)
+        }
+    }
+    
     func getCity(id: NSManagedObjectID) async -> Result<City?, Error> {
         let request = NSFetchRequest<City>(entityName: "City")
         
@@ -105,7 +117,7 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
         }
     }
     
-    func findPlaceTag(tag: String) async -> Result<Tag?, Error> {
+    func findTag(tag: String) async -> Result<Tag?, Error> {
         let request = NSFetchRequest<Tag>(entityName: "Tag")
         
         do {
@@ -173,6 +185,26 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
 //            }
 //        }
         return newPlace
+    }
+    
+    func createEvent(decodedEvent: DecodedEvent) async -> Event {
+        let newEvent = Event(context: manager.context)
+        newEvent.id = Int64(decodedEvent.id)
+        newEvent.name = decodedEvent.name
+        newEvent.cover = decodedEvent.cover
+        newEvent.address = decodedEvent.address
+        newEvent.latitude = decodedEvent.latitude
+        newEvent.longitude = decodedEvent.longitude
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
+       // dateFormatter.timeZone = TimeZone(name: "UTC")
+        newEvent.startTime = dateFormatter.date(from: decodedEvent.startTime)
+        newEvent.finishTime = dateFormatter.date(from: decodedEvent.finishTime)
+        
+        newEvent.isActive = decodedEvent.isActive == 1 ? true : false
+        newEvent.isChecked = decodedEvent.isChecked == 1 ? true : false
+        return newEvent
     }
     
     func createTag(tag: String) async -> Tag {

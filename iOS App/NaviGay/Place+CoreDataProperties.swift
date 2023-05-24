@@ -2,7 +2,7 @@
 //  Place+CoreDataProperties.swift
 //  NaviGay
 //
-//  Created by Dmitry Zasenko on 23.05.23.
+//  Created by Dmitry Zasenko on 24.05.23.
 //
 //
 

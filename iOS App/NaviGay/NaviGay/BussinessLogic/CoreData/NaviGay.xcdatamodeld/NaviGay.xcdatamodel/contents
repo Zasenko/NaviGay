@@ -6,6 +6,7 @@
         <attribute name="isActive" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="photo" optional="YES" attributeType="String"/>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Event" inverseName="city" inverseEntity="Event"/>
         <relationship name="places" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Place" inverseName="city" inverseEntity="Place"/>
         <relationship name="region" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Region" inverseName="cities" inverseEntity="Region"/>
     </entity>
@@ -20,27 +21,28 @@
     </entity>
     <entity name="Event" representedClassName=".Event" syncable="YES">
         <attribute name="about" optional="YES" attributeType="String"/>
-        <attribute name="about_en" optional="YES" attributeType="String"/>
-        <attribute name="address" attributeType="String"/>
+        <attribute name="aboutEn" optional="YES" attributeType="String"/>
+        <attribute name="address" optional="YES" attributeType="String"/>
         <attribute name="cover" optional="YES" attributeType="String"/>
         <attribute name="fb" optional="YES" attributeType="String"/>
         <attribute name="fee" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="fee_about" optional="YES" attributeType="String"/>
-        <attribute name="finishTime" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="feeAbout" optional="YES" attributeType="String"/>
+        <attribute name="finishTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="insta" optional="YES" attributeType="String"/>
-        <attribute name="is_active" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="is_checked" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isActive" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isChecked" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="lang" optional="YES" attributeType="String"/>
         <attribute name="latitude" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="longitude" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="name" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="phone" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="placeName" optional="YES" attributeType="String"/>
-        <attribute name="startTime" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="startTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="tickets" optional="YES" attributeType="String"/>
-        <attribute name="type" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
         <attribute name="www" optional="YES" attributeType="String"/>
+        <relationship name="city" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="City" inverseName="events" inverseEntity="City"/>
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="events" inverseEntity="Tag"/>
     </entity>
     <entity name="Photo" representedClassName=".Photo" syncable="YES">

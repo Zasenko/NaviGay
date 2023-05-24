@@ -148,9 +148,13 @@ struct CityView: View {
     @ViewBuilder private var mainView: some View {
         Text(viewModel.city.about ?? "")
         
+        let events = viewModel.city.events?.allObjects as? [Event]
+        CityEventsView(events: events ?? [], size: size)
+        
         if !viewModel.placesGroupedByType.isEmpty {
             CityPlacesView(places: $viewModel.placesGroupedByType, size: size)
         }
+        
     }
 }
 

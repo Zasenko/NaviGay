@@ -28,7 +28,6 @@ final class CountryViewModel: ObservableObject {
         loadImage()
         getCountry()
     }
-    
 }
 
 extension CountryViewModel {

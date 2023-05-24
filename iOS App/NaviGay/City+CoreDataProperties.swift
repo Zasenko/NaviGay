@@ -2,7 +2,7 @@
 //  City+CoreDataProperties.swift
 //  NaviGay
 //
-//  Created by Dmitry Zasenko on 23.05.23.
+//  Created by Dmitry Zasenko on 24.05.23.
 //
 //
 
@@ -23,6 +23,7 @@ extension City {
     @NSManaged public var photo: String?
     @NSManaged public var places: NSSet?
     @NSManaged public var region: Region?
+    @NSManaged public var events: NSSet?
 
 }
 
@@ -40,6 +41,23 @@ extension City {
 
     @objc(removePlaces:)
     @NSManaged public func removeFromPlaces(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for events
+extension City {
+
+    @objc(addEventsObject:)
+    @NSManaged public func addToEvents(_ value: Event)
+
+    @objc(removeEventsObject:)
+    @NSManaged public func removeFromEvents(_ value: Event)
+
+    @objc(addEvents:)
+    @NSManaged public func addToEvents(_ values: NSSet)
+
+    @objc(removeEvents:)
+    @NSManaged public func removeFromEvents(_ values: NSSet)
 
 }
 

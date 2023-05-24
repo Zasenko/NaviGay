@@ -16,13 +16,11 @@ final class AuthNetworkManager {
     
     //MARK: - Private properties
     
-    private let networkMonitor: NetworkMonitor
     private let api: ApiPropertiesProtocol
     
     //MARK: - Inits
     
-    init(networkMonitor: NetworkMonitor, api: ApiPropertiesProtocol) {
-        self.networkMonitor = networkMonitor
+    init(api: ApiPropertiesProtocol) {
         self.api = api
     }
 }

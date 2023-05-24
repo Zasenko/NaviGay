@@ -22,6 +22,10 @@ struct CityPlacesView: View {
         ForEach(places, id: \.key) { type, places in
             VStack {
                 Text(type)
+                    .font(.system(size: 20))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.primary)
+                
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         ForEach(places) { place in
@@ -31,6 +35,7 @@ struct CityPlacesView: View {
                 }
                 .frame(width: size.width)
             }
+            //TODO
             .onChange(of: places) { newValue in
                 print(newValue)
             }

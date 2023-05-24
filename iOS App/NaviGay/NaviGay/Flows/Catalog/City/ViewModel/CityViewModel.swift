@@ -78,7 +78,7 @@ extension CityViewModel {
                     }
                 }
             } else {
-             //   print("---- NoCity ------")
+                //   print("---- NoCity ------")
             }
         case .failure(let error):
             // TODO
@@ -88,7 +88,6 @@ extension CityViewModel {
     
     @MainActor
     private func fetchCity() {
-        print("fetchCity()")
         Task {
             do {
                 let result = try await self.networkManager.fetchCity(id: Int(city.id))
@@ -121,7 +120,7 @@ extension CityViewModel {
                                     }
                                     if let decodedTags = decodedPlace.tags {
                                         for decodedTag in decodedTags {
-                                            switch await dataManager.findPlaceTag(tag: decodedTag) {
+                                            switch await dataManager.findTag(tag: decodedTag) {
                                             case .success(let tag):
                                                 if let tag = tag {
                                                     place.addToTags(tag)
@@ -148,7 +147,7 @@ extension CityViewModel {
                                             if let decodedTags = decodedPlace.tags {
                                                 for decodedTag in decodedTags {
                                                     
-                                                    switch await dataManager.findPlaceTag(tag: decodedTag) {
+                                                    switch await dataManager.findTag(tag: decodedTag) {
                                                     case .success(let tag):
                                                         if let tag = tag {
                                                             place.addToTags(tag)
@@ -167,7 +166,7 @@ extension CityViewModel {
                                             if let decodedTags = decodedPlace.tags {
                                                 for decodedTag in decodedTags {
                                                     
-                                                    switch await dataManager.findPlaceTag(tag: decodedTag) {
+                                                    switch await dataManager.findTag(tag: decodedTag) {
                                                     case .success(let tag):
                                                         if let tag = tag {
                                                             place.addToTags(tag)
@@ -189,6 +188,96 @@ extension CityViewModel {
                             }
                         }
                     }
+                    
+                    if let decodedEvents = decodedCity.events {
+                        if let events = city.events?.allObjects as? [Event] {
+                            for decodedEvent in decodedEvents {
+                                if let event = events.first(where: { $0.id == decodedEvent.id } ) {
+                                    event.name = decodedEvent.name
+                                    event.type = decodedEvent.type.rawValue
+                                    event.cover = decodedEvent.cover
+                                    event.address = decodedEvent.address
+                                    event.latitude = decodedEvent.latitude
+                                    event.longitude = decodedEvent.longitude
+                                    
+                                    let dateFormatter = DateFormatter()
+                                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                                    dateFormatter.timeZone = .gmt
+                                    event.startTime = dateFormatter.date(from: decodedEvent.startTime)
+                                    event.finishTime = dateFormatter.date(from: decodedEvent.finishTime)
+
+                                    event.isActive = decodedEvent.isActive == 1 ? true : false
+                                    event.isChecked = decodedEvent.isChecked == 1 ? true : false
+                                    
+                                    if let tags = event.tags?.allObjects as? [Tag] {
+                                        for tag in tags {
+                                            event.removeFromTags(tag)
+                                        }
+                                    }
+                                    
+                                    for decodedTag in decodedEvent.tags {
+                                        switch await dataManager.findTag(tag: decodedTag) {
+                                        case .success(let tag):
+                                            if let tag = tag {
+                                                event.addToTags(tag)
+                                            } else {
+                                                let tag = await dataManager.createTag(tag: decodedTag)
+                                                event.addToTags(tag)
+                                            }
+                                        case .failure(let error):
+                                            //TODO
+                                            print("fetchCountry() - findCity failure :", error)
+                                        }
+                                    }
+                                } else {
+                                    switch await dataManager.findEvent(id: decodedEvent.id) {
+                                    case .success(let event):
+                                        if let event = event {
+                                            for decodedTag in decodedEvent.tags {
+                                                switch await dataManager.findTag(tag: decodedTag) {
+                                                case .success(let tag):
+                                                    if let tag = tag {
+                                                        event.addToTags(tag)
+                                                    } else {
+                                                        let tag = await dataManager.createTag(tag: decodedTag)
+                                                        event.addToTags(tag)
+                                                    }
+                                                case .failure(let error):
+                                                    //TODO
+                                                    print("fetchCountry() - findCity failure :", error)
+                                                }
+                                            }
+                                            
+                                            self.city.addToEvents(event)
+                                        } else {
+                                            let event = await dataManager.createEvent(decodedEvent: decodedEvent)
+                                            for decodedTag in decodedEvent.tags {
+
+                                                switch await dataManager.findTag(tag: decodedTag) {
+                                                case .success(let tag):
+                                                    if let tag = tag {
+                                                        event.addToTags(tag)
+                                                    } else {
+                                                        let tag = await dataManager.createTag(tag: decodedTag)
+                                                        event.addToTags(tag)
+                                                    }
+                                                case .failure(let error):
+                                                    print("fetchCountry() - findPlaceTag failure :", error)
+                                                }
+                                            }
+                                            
+                                            self.city.addToEvents(event)
+                                        }
+                                    case .failure(let error):
+                                        print(error)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    
+                    
                     dataManager.save { [weak self] result in
                         if result {
                             Task {
