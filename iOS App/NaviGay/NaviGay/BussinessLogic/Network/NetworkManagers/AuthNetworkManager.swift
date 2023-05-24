@@ -16,20 +16,14 @@ final class AuthNetworkManager {
     
     //MARK: - Private properties
     
-    private let api: ApiPropertiesProtocol
-    
     //MARK: - Inits
-    
-    init(api: ApiPropertiesProtocol) {
-        self.api = api
-    }
 }
 
 // MARK: - AuthNetworkManagerProtocol
 extension AuthNetworkManager: AuthNetworkManagerProtocol {
     
     func login(email: String, password: String) async throws -> LoginResult {
-        guard let url = await api.getLoginUrl() else {
+        guard let url = await ApiProperties.shared.getLoginUrl() else {
             throw NetworkErrors.bedUrl
         }
         var request = URLRequest(url: url)
@@ -52,7 +46,7 @@ extension AuthNetworkManager: AuthNetworkManagerProtocol {
     }
     
     func registration(email: String, password: String) async throws -> LoginResult {
-        guard let url = await api.getrRegistrationUrl() else {
+        guard let url = await ApiProperties.shared.getrRegistrationUrl() else {
             throw NetworkErrors.bedUrl
         }
         var request = URLRequest(url: url)

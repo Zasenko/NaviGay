@@ -13,7 +13,7 @@ import CoreData
 extension Photo {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Photo> {
-        return NSFetchRequest<Photo>(entityName: "PlacePhoto")
+        return NSFetchRequest<Photo>(entityName: "Photo")
     }
 
     @NSManaged public var url: String?

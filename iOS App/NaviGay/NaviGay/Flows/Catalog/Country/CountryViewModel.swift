@@ -17,14 +17,17 @@ final class CountryViewModel: ObservableObject {
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
     
+    let tESTdataManager: CoreDataManagerProtocol
+    
     //MARK: - Inits
     
     init(country: Country,
          networkManager: CatalogNetworkManagerProtocol,
-         dataManager: CatalogDataManagerProtocol) {
+         dataManager: CatalogDataManagerProtocol, tESTdataManager: CoreDataManagerProtocol) {
         self.country = country
         self.networkManager = networkManager
         self.dataManager = dataManager
+        self.tESTdataManager = tESTdataManager
         loadImage()
         getCountry()
     }

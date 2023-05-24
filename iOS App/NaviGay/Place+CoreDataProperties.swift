@@ -23,9 +23,13 @@ extension Place {
     @NSManaged public var latitude: Float
     @NSManaged public var longitude: Float
     @NSManaged public var name: String?
-    @NSManaged public var phone: Int64
+    @NSManaged public var phone: String?
     @NSManaged public var photo: String?
     @NSManaged public var type: String?
+    @NSManaged public var about: String?
+    @NSManaged public var fb: String?
+    @NSManaged public var insta: String?
+    @NSManaged public var www: String?
     @NSManaged public var city: City?
     @NSManaged public var photos: NSSet?
     @NSManaged public var tags: NSSet?

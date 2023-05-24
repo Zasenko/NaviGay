@@ -32,6 +32,7 @@ while ($row = $place_result->fetch_assoc()) {
     $place = array(
         'id' => $row['id'],
         'name' => $row["name"],
+        'type' => $row['type'],
         'about' => $row["about"],
         'photo' => $row['photo'],
         'address' => $row['address'],
@@ -45,7 +46,7 @@ while ($row = $place_result->fetch_assoc()) {
         'insta' => $row['insta'],
         'name' => $row["name"],
         'phone' => $row["phone"],
-        'isActive' => $row['isActive'],
+        'isActive' => $row['is_active'],
         'isChecked' => $row['is_checked'],
     );
     $place_id = $row['id'];
@@ -72,15 +73,11 @@ if ($working_times_result = mysqli_query($conn, $sql)) {
 $place += ['workingTimes' => $working_times];
 
 
-$sql = "SELECT id, photo FROM PlacePhoto WHERE place_id = $place_id";
+$sql = "SELECT photo FROM PlacePhoto WHERE place_id = $place_id";
 $photos = array();
 if ($photos_result = mysqli_query($conn, $sql)) {
     while ($row = $photos_result->fetch_assoc()) {
-        $photo = array(
-            'id' => $row['id'],
-            'photo' => $row["photo"],
-        );
-        array_push($photos, $photo);
+        array_push($photos, $row["photo"]);
     }
 } else {
     $conn->close();

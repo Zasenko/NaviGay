@@ -45,35 +45,39 @@
         <relationship name="city" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="City" inverseName="events" inverseEntity="City"/>
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="events" inverseEntity="Tag"/>
     </entity>
+    <entity name="Photo" representedClassName=".Photo" syncable="YES">
+        <attribute name="url" attributeType="String"/>
+        <relationship name="place" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Place" inverseName="photos" inverseEntity="Place"/>
+    </entity>
     <entity name="Place" representedClassName=".Place" syncable="YES">
+        <attribute name="about" optional="YES" attributeType="String"/>
         <attribute name="address" optional="YES" attributeType="String"/>
+        <attribute name="fb" optional="YES" attributeType="String"/>
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="insta" optional="YES" attributeType="String"/>
         <attribute name="isActive" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="isChecked" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="latitude" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="longitude" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="phone" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="phone" optional="YES" attributeType="String"/>
         <attribute name="photo" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="www" optional="YES" attributeType="String"/>
         <relationship name="city" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="City" inverseName="places" inverseEntity="City"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PlaceComment" inverseName="place" inverseEntity="PlaceComment"/>
-        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PlacePhoto" inverseName="place" inverseEntity="PlacePhoto"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="place" inverseEntity="Photo"/>
         <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="places" inverseEntity="Tag"/>
         <relationship name="workingTimes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="WorkingTime" inverseName="place" inverseEntity="WorkingTime"/>
     </entity>
     <entity name="PlaceComment" representedClassName=".PlaceComment" syncable="YES">
-        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="createdAt" attributeType="String"/>
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="text" attributeType="String"/>
         <attribute name="userId" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="userName" attributeType="String"/>
         <attribute name="userPhoto" optional="YES" attributeType="String"/>
         <relationship name="place" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Place" inverseName="comments" inverseEntity="Place"/>
-    </entity>
-    <entity name="PlacePhoto" representedClassName=".Photo" syncable="YES">
-        <attribute name="url" attributeType="String"/>
-        <relationship name="place" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Place" inverseName="photos" inverseEntity="Place"/>
     </entity>
     <entity name="Region" representedClassName=".Region" syncable="YES">
         <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>

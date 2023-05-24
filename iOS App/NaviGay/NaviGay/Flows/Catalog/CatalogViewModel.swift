@@ -18,17 +18,20 @@ final class CatalogViewModel: ObservableObject {
     
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
+    let tESTdataManager: CoreDataManagerProtocol
+    
     
     let safeArea: EdgeInsets
     let size: CGSize
     
     //MARK: - Inits
     
-    init(networkManager: CatalogNetworkManagerProtocol, dataManager: CatalogDataManagerProtocol, safeArea: EdgeInsets, size: CGSize) {
+    init(networkManager: CatalogNetworkManagerProtocol, dataManager: CatalogDataManagerProtocol, safeArea: EdgeInsets, size: CGSize, tESTdataManager: CoreDataManagerProtocol) {
         self.networkManager = networkManager
         self.dataManager = dataManager
         self.safeArea = safeArea
         self.size = size
+        self.tESTdataManager = tESTdataManager
         getCountries()
     }
     
@@ -45,7 +48,7 @@ extension CatalogViewModel {
     }
     
     func cteateCountryView(country: Country) -> AnyView {
-        return AnyView(CountryView(viewModel: CountryViewModel(country: country, networkManager: self.networkManager, dataManager: self.dataManager), safeArea: safeArea, size: size))
+        return AnyView(CountryView(viewModel: CountryViewModel(country: country, networkManager: self.networkManager, dataManager: self.dataManager, tESTdataManager: self.tESTdataManager), safeArea: safeArea, size: size))
     }
 
     

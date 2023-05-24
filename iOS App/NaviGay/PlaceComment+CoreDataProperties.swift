@@ -21,7 +21,7 @@ extension PlaceComment {
     @NSManaged public var userId: Int64
     @NSManaged public var userName: String?
     @NSManaged public var userPhoto: String?
-    @NSManaged public var createdAt: Date?
+    @NSManaged public var createdAt: String?
     @NSManaged public var place: Place?
 
 }

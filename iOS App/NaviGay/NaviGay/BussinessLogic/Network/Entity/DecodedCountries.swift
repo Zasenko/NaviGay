@@ -58,6 +58,11 @@ enum PlaceType: String, Codable {
     case bar, cafe, restaurant, club, hotel, sauna, cruise, beach, shop, gym, culture, community
 }
 
+struct PlaceResult: Codable {
+    let error: String?
+    let place: DecodedPlace?
+}
+
 struct DecodedPlace: Identifiable, Codable {
     let id: Int
     let name: String
@@ -68,27 +73,39 @@ struct DecodedPlace: Identifiable, Codable {
     let isActive: Int
     let isChecked: Int
     
-    let tags: [String]?  // почему ?  узнать api
+    let tags: [String]
     
     let about: String?
     let photo: String?
+        
+    let countryId: Int?
+    let regionId: Int?
+    let cityId: Int?
+    
+    let www: String?
+    let fb: String?
+    let insta: String?
     let phone: Int?
-    let workingTimes: [WorkingHours]?
+    
+    let workingTimes: [DecodedWorkingHours]?
+    let photos: [String]?
+    let comments: [DecodedComment]?
 }
 
-//enum Tags: String, Codable {
-//    case pool, darkroom, terrace
-//    case dragShow = "drag show"
-//    case straightFriendly = "straight friendly"
-//    case gayFriendly = "gay friendly"
-//    case menOnly = "men only"
-//}
+struct DecodedComment: Identifiable, Codable {
+    let id: Int
+    let userId: Int
+    let userName: String
+    let userPhoto: String?
+    let comment: String
+    let createdAt: String
+}
 
 enum WeekDay: String, Codable {
     case Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
 }
 
-struct WorkingHours: Codable {
+struct DecodedWorkingHours: Codable {
     let day: WeekDay
     let opening: String
     let closing: String

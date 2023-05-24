@@ -14,16 +14,6 @@ protocol CatalogNetworkManagerProtocol {
 }
 
 final class CatalogNetworkManager {
-    
-    //MARK: - Private properties
-    
-    private let api: ApiPropertiesProtocol
-    
-    //MARK: - Inits
-    
-    init(api: ApiPropertiesProtocol) {
-        self.api = api
-    }
 }
 
 // MARK: - CatalogNetworkManagerProtocol
@@ -31,7 +21,7 @@ final class CatalogNetworkManager {
 extension CatalogNetworkManager: CatalogNetworkManagerProtocol {
     
     func fetchCountries() async throws -> CountriesResult {
-        guard let url = await api.getCountriesUrl() else {
+        guard let url = await ApiProperties.shared.getCountriesUrl() else {
             throw NetworkErrors.bedUrl
         }
         var request = URLRequest(url: url)
@@ -54,7 +44,7 @@ extension CatalogNetworkManager: CatalogNetworkManagerProtocol {
     }
     
     func fetchCountry(countryId: Int) async throws -> CountryResult {
-        guard let url = await api.getCountryUrl(countryId: countryId) else {
+        guard let url = await ApiProperties.shared.getCountryUrl(countryId: countryId) else {
             throw NetworkErrors.bedUrl
         }
         var request = URLRequest(url: url)
@@ -77,7 +67,7 @@ extension CatalogNetworkManager: CatalogNetworkManagerProtocol {
     }
     
     func fetchCity(id: Int) async throws -> CityResult {
-        guard let url = await api.getCityUrl(id: id) else {
+        guard let url = await ApiProperties.shared.getCityUrl(id: id) else {
             throw NetworkErrors.bedUrl
         }
         var request = URLRequest(url: url)
