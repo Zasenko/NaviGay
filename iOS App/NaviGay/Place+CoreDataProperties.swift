@@ -30,6 +30,7 @@ extension Place {
     @NSManaged public var photos: NSSet?
     @NSManaged public var tags: NSSet?
     @NSManaged public var workingTimes: NSSet?
+    @NSManaged public var comments: NSSet?
 
 }
 
@@ -81,6 +82,23 @@ extension Place {
 
     @objc(removeWorkingTimes:)
     @NSManaged public func removeFromWorkingTimes(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for comments
+extension Place {
+
+    @objc(addCommentsObject:)
+    @NSManaged public func addToComments(_ value: PlaceComment)
+
+    @objc(removeCommentsObject:)
+    @NSManaged public func removeFromComments(_ value: PlaceComment)
+
+    @objc(addComments:)
+    @NSManaged public func addToComments(_ values: NSSet)
+
+    @objc(removeComments:)
+    @NSManaged public func removeFromComments(_ values: NSSet)
 
 }
 

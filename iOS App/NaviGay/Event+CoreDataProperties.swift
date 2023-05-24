@@ -38,8 +38,8 @@ extension Event {
     @NSManaged public var tickets: String?
     @NSManaged public var type: String?
     @NSManaged public var www: String?
-    @NSManaged public var tags: NSSet?
     @NSManaged public var city: City?
+    @NSManaged public var tags: NSSet?
 
 }
 
