@@ -1,9 +1,6 @@
 <?php
 
-require_once('languages.php');
-
 $event_id = isset($_GET["id"]) ? $_GET["id"] : 0;
-$lang = isset($_GET['lang']) && in_array($_GET['lang'], $languages) ? $_GET['lang'] : 'en';
 
 require_once('dbconfig.php');
 
@@ -41,7 +38,7 @@ while ($row = $events_result->fetch_assoc()) {
         'finishTime' => $row['close_time'],
         'isActive' => $row['is_active'],
         'isChecked' => $row['is_checked'],
-        'aboutEn' => $row['aboutEn'],
+        'aboutEn' => $row['about_en'],
         'about' => $row['about'],
         'lang' => $row['lang'],
         'countryId' => $row['country_id'],
