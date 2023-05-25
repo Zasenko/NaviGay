@@ -15,13 +15,14 @@ final class CityViewModel: ObservableObject {
     
     @Published var city: City
     @Published var cityImage: Image = AppImages.appIcon
-    @Published var placesGroupedByType: [(key: String, value: [Place])] = []
 
     @Published var sortedDictionary: [String: [Place]] = [:]
     @Published var sortedKeys: [String] = []
     
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
+    
+    //TODO!!!
     let tESTdataManager: CoreDataManagerProtocol
     
     //MARK: - Inits
@@ -37,7 +38,6 @@ final class CityViewModel: ObservableObject {
         getCity()
         
         if let places = city.places?.allObjects as? [Place] {
-            print(places)
             Task {
                 await updateSortedDictionary(with: places)
             }
@@ -50,11 +50,8 @@ extension CityViewModel {
     
     @MainActor
     private func updateSortedDictionary(with places: [Place]) {
-        print(places)
         sortedDictionary = Dictionary(grouping: places, by: { $0.type ?? "all places" })
         sortedKeys = sortedDictionary.keys.sorted()
-        print(sortedKeys)
-        print(sortedDictionary)
     }
     
     //MARK: - Private Functions

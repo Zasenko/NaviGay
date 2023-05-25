@@ -31,6 +31,11 @@ struct CityEventView: View {
             .padding()
             .background(Color.white)
             
+            Text(viewModel.event.type ?? "")
+                .font(.system(size: 30))
+                .fontWeight(.heavy)
+                .foregroundColor(.primary)
+            
             Text(viewModel.event.name ?? "")
                 .font(.system(size: 17))
                 .fontWeight(.heavy)
