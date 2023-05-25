@@ -116,7 +116,7 @@ while ($row = $places_result->fetch_assoc()) {
 $city += ['places' => $places];
 
 
-$sql = "SELECT Event.id, Event.name, EventType.name as type, Event.cover, Event.address, Event.latitude, Event.longitude, Event.start_time, Event.close_time, Event.is_active, Event.is_checked FROM Event INNER JOIN EventType ON EventType.id = EventType.type_id WHERE Event.city_id = ? && DATE(Event.close_time) >= now()";
+$sql = "SELECT Event.id, Event.name, EventType.name as type, Event.cover, Event.address, Event.latitude, Event.longitude, Event.start_time, Event.close_time, Event.is_active, Event.is_checked FROM Event INNER JOIN EventType ON EventType.id = Event.type_id WHERE Event.city_id = ? && DATE(Event.close_time) >= now()";
 
 $stmt = $conn->stmt_init();
 if (!$stmt->prepare($sql)) {
