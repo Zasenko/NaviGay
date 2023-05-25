@@ -74,27 +74,6 @@ while ($row = $places_result->fetch_assoc()) {
 
     $place_id = $row['id'];
 
-    // $sql = "SELECT day_of_week, opening_time, closing_time FROM PlaceWorkingTime WHERE place_id = $place_id";
-
-    // $working_times = array();
-    // if ($working_times_result = mysqli_query($conn, $sql)) {
-    //     while ($row = $working_times_result->fetch_assoc()) {
-    //         $working_time = array(
-    //             'day_of_week' => $row['day_of_week'],
-    //             'opening_time' => $row["opening_time"],
-    //             'closing_time' => $row["closing_time"],
-    //         );
-    //         array_push($working_times, $working_time);
-    //     }
-    // } else {
-    //     $conn->close();
-    //     $json = array('error' => 44, 'errorDescription' => 'mysqli_query city_result error');
-    //     echo json_encode($json, JSON_NUMERIC_CHECK);
-    //     exit;
-    // }
-
-    // $place += ['workingTimes' => $working_times];
-
     $sql = "SELECT Tag.name as name FROM PlaceTag INNER JOIN Tag ON Tag.id = PlaceTag.tag_id WHERE PlaceTag.place_id = $place_id";
     $tags = array();
     if ($tags_result = mysqli_query($conn, $sql)) {
