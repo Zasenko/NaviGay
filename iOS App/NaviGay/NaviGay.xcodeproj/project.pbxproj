@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0F07AE862A0CEABC0029A940 /* CityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F07AE852A0CEABC0029A940 /* CityView.swift */; };
 		0F07AE882A0CEACA0029A940 /* CityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F07AE872A0CEACA0029A940 /* CityViewModel.swift */; };
+		0F17FCA42A20D33900527735 /* EventNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F17FCA32A20D33900527735 /* EventNetworkManager.swift */; };
+		0F17FCA62A20D44E00527735 /* EventDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F17FCA52A20D44E00527735 /* EventDataManager.swift */; };
 		0F217B332A1BC84F0009B3F9 /* CityPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F217B322A1BC84F0009B3F9 /* CityPlaceView.swift */; };
 		0F217B352A1BC8680009B3F9 /* CityPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F217B342A1BC8680009B3F9 /* CityPlaceViewModel.swift */; };
 		0F37F02E2A03D48600679932 /* DictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F37F02D2A03D48600679932 /* DictionaryExtension.swift */; };
@@ -90,6 +92,8 @@
 /* Begin PBXFileReference section */
 		0F07AE852A0CEABC0029A940 /* CityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityView.swift; sourceTree = "<group>"; };
 		0F07AE872A0CEACA0029A940 /* CityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityViewModel.swift; sourceTree = "<group>"; };
+		0F17FCA32A20D33900527735 /* EventNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNetworkManager.swift; sourceTree = "<group>"; };
+		0F17FCA52A20D44E00527735 /* EventDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDataManager.swift; sourceTree = "<group>"; };
 		0F217B322A1BC84F0009B3F9 /* CityPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityPlaceView.swift; sourceTree = "<group>"; };
 		0F217B342A1BC8680009B3F9 /* CityPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityPlaceViewModel.swift; sourceTree = "<group>"; };
 		0F37F02D2A03D48600679932 /* DictionaryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtension.swift; sourceTree = "<group>"; };
@@ -303,6 +307,7 @@
 				0FD8A75E29FA9018004EA3F0 /* UserDataManager.swift */,
 				0F37F0352A03F53D00679932 /* CatalogDataManager.swift */,
 				0FE5B4C22A1E31690018E9E0 /* PlaceDataManager.swift */,
+				0F17FCA52A20D44E00527735 /* EventDataManager.swift */,
 				0F5B8C2D29F977CE0083B81B /* NaviGay.xcdatamodeld */,
 			);
 			path = CoreData;
@@ -461,6 +466,7 @@
 				0F6C167F29FC0D2400F6D104 /* AuthNetworkManager.swift */,
 				0F37F0392A03F80700679932 /* CatalogNetworkManager.swift */,
 				0FE5B4C02A1E31370018E9E0 /* PlaceNetworkManager.swift */,
+				0F17FCA32A20D33900527735 /* EventNetworkManager.swift */,
 			);
 			path = NetworkManagers;
 			sourceTree = "<group>";
@@ -649,6 +655,7 @@
 				0FDA20252A092B32008D40D2 /* CountryViewModel.swift in Sources */,
 				0FB2810B2A02B2C400E79982 /* UserView.swift in Sources */,
 				0FE44CBE2A1D2E8D00E6BB3C /* Photo+CoreDataProperties.swift in Sources */,
+				0F17FCA62A20D44E00527735 /* EventDataManager.swift in Sources */,
 				0FB281012A0154DE00E79982 /* AuthManager.swift in Sources */,
 				0FBD1F942A1651B600B11CCE /* CachedImageView.swift in Sources */,
 				0FB281062A02AA3B00E79982 /* TabBarButton.swift in Sources */,
@@ -659,6 +666,7 @@
 				0FD8A76E29FAB70A004EA3F0 /* PasswordTextField.swift in Sources */,
 				0FBD1F922A1650BB00B11CCE /* CachedImageViewModel.swift in Sources */,
 				0FE44CCE2A1D2F8F00E6BB3C /* Tag+CoreDataProperties.swift in Sources */,
+				0F17FCA42A20D33900527735 /* EventNetworkManager.swift in Sources */,
 				0FBD1F8E2A16502F00B11CCE /* ImageCache.swift in Sources */,
 				0F6C168229FC0D4B00F6D104 /* NetworkErrors.swift in Sources */,
 				0F37F0322A03F34000679932 /* CatalogViewModel.swift in Sources */,

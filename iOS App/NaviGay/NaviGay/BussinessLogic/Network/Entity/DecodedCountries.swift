@@ -120,7 +120,10 @@ struct DecodedWorkingHours: Codable {
 //enum EventType: String, Codable {
 //    case party, pride
 //}
-
+struct EventResult: Codable {
+    let error: String?
+    let event: DecodedEvent?
+}
 
 struct DecodedEvent: Identifiable, Codable {
     let id: Int

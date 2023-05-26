@@ -13,7 +13,6 @@ struct TabBarView: View {
     
     @StateObject var viewModel: TabBarViewModel
     
-    
     // MARK: - Body
     
     var body: some View {
@@ -24,19 +23,22 @@ struct TabBarView: View {
             VStack {
                 //                Home(safeArea: safeArea, size: size)
                 //                    .ignoresSafeArea(.container, edges: .top)
-                switch viewModel.selectedPage {
-                case .home:
-                    Color.red
-                case .user:
-                    Color.red
-                case .map:
-                    MapView()
-                        .ignoresSafeArea()
-                case .catalog:
-                    viewModel.cteateCatalogView(safeArea: safeArea, size: size)
-                }
+                VStack {
+                    switch viewModel.selectedPage {
+                    case .home:
+                        Color.red
+                    case .user:
+                        Color.red
+                    case .map:
+                        MapView()
+                            .ignoresSafeArea()
+                    case .catalog:
+                        viewModel.cteateCatalogView(safeArea: safeArea, size: size)
+                    }
+                    Spacer()
+                }.ignoresSafeArea(.container, edges: .all)
                 tabBar
-            }
+            }.ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
     
