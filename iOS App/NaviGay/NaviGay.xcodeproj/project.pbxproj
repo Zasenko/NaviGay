@@ -393,8 +393,8 @@
 		0F5B8C3829F97ADF0083B81B /* Event */ = {
 			isa = PBXGroup;
 			children = (
-				0FD2F85D2A1F54D200F3A8C8 /* EventView.swift */,
 				0FD2F85F2A1F54E000F3A8C8 /* EventViewModel.swift */,
+				0FD2F85D2A1F54D200F3A8C8 /* EventView.swift */,
 			);
 			path = Event;
 			sourceTree = "<group>";

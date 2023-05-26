@@ -200,8 +200,9 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
         newEvent.longitude = decodedEvent.longitude
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
-       // dateFormatter.timeZone = TimeZone(name: "UTC")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dateFormatter.timeZone = TimeZone.current
+       // dateFormatter.timeZone = .gmt
         newEvent.startTime = dateFormatter.date(from: decodedEvent.startTime)
         newEvent.finishTime = dateFormatter.date(from: decodedEvent.finishTime)
         

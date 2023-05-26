@@ -158,9 +158,8 @@ struct CityView: View {
         }
         Text(viewModel.city.about ?? "")
         
-        let events = viewModel.city.events?.allObjects as? [Event]
         VStack(alignment: .leading) {
-            ForEach(events ?? []) { event in
+            ForEach(viewModel.events.filter({ $0.isActive == true }), id: \.id) { event in
                 CityEventView(viewModel: CityEventViewModel(event: event), size: size)
             }
         }

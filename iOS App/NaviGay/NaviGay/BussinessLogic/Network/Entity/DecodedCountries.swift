@@ -54,9 +54,9 @@ struct DecodedCity: Identifiable, Codable {
     let events: [DecodedEvent]?
 }
 
-enum PlaceType: String, Codable {
-    case bar, cafe, restaurant, club, hotel, sauna, cruise, beach, shop, gym, culture, community
-}
+//enum PlaceType: String, Codable {
+//    case bar, cafe, restaurant, club, hotel, sauna, cruise, beach, shop, gym, culture, community
+//}
 
 struct PlaceResult: Codable {
     let error: String?
@@ -66,13 +66,12 @@ struct PlaceResult: Codable {
 struct DecodedPlace: Identifiable, Codable {
     let id: Int
     let name: String
-    let type: PlaceType
+    let type: String
     let latitude: Float
     let longitude: Float
     let address: String
     let isActive: Int
     let isChecked: Int
-    
     let tags: [String]
     
     let about: String?
@@ -101,12 +100,12 @@ struct DecodedComment: Identifiable, Codable {
     let createdAt: String
 }
 
-enum WeekDay: String, Codable {
-    case Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
-}
+//enum WeekDay: String, Codable {
+//    case Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+//}
 
 struct DecodedWorkingHours: Codable {
-    let day: WeekDay
+    let day: String
     let opening: String
     let closing: String
     
@@ -118,15 +117,15 @@ struct DecodedWorkingHours: Codable {
 }
 
 
-enum EventType: String, Codable {
-    case party
-}
+//enum EventType: String, Codable {
+//    case party, pride
+//}
 
 
 struct DecodedEvent: Identifiable, Codable {
     let id: Int
     let name: String
-    let type: EventType
+    let type: String
     let cover: String? // почему ?  узнать api
     
     let address: String

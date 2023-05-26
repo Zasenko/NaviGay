@@ -71,7 +71,7 @@ extension PlaceDataManager: PlaceDataManagerProtocol {
     func findWorkingTime(workingHours: DecodedWorkingHours) async -> Result<WorkingTime?, Error> {
         let request = NSFetchRequest<WorkingTime>(entityName: "WorkingTime")
         do {
-            let place = try self.manager.context.fetch(request).first(where: { $0.day == workingHours.day.rawValue && $0.open == workingHours.opening && $0.close == workingHours.closing })
+            let place = try self.manager.context.fetch(request).first(where: { $0.day == workingHours.day && $0.open == workingHours.opening && $0.close == workingHours.closing })
             return .success(place)
         } catch let error {
             return .failure(error)

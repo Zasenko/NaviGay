@@ -137,7 +137,7 @@ extension PlaceViewModel {
                             place.addToWorkingTimes(workingHours)
                         } else {
                             let workingHours: WorkingTime = await dataManager.createObject()
-                            workingHours.day = decodedWorkingTime.day.rawValue
+                            workingHours.day = decodedWorkingTime.day
                             workingHours.open = decodedWorkingTime.opening
                             workingHours.close = decodedWorkingTime.closing
                             place.addToWorkingTimes(workingHours)

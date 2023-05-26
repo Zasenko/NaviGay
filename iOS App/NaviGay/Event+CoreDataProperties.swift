@@ -2,7 +2,7 @@
 //  Event+CoreDataProperties.swift
 //  NaviGay
 //
-//  Created by Dmitry Zasenko on 24.05.23.
+//  Created by Dmitry Zasenko on 25.05.23.
 //
 //
 

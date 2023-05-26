@@ -19,6 +19,8 @@ final class CityViewModel: ObservableObject {
     @Published var sortedDictionary: [String: [Place]] = [:]
     @Published var sortedKeys: [String] = []
     
+    @Published var events: [Event] = []
+    
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
     
@@ -34,19 +36,25 @@ final class CityViewModel: ObservableObject {
         self.networkManager = networkManager
         self.dataManager = dataManager
         self.tESTdataManager = tESTdataManager
-        loadImage()
-        getCity()
         
+        if let events = city.events?.allObjects as? [Event] {
+            self.events = events
+//            print("------------")
+//            print(events)
+//            print("------------")
+        }
         if let places = city.places?.allObjects as? [Place] {
             Task {
                 await updateSortedDictionary(with: places)
             }
         }
+        
+        loadImage()
+        getCity()
     }
 }
 
 extension CityViewModel {
-    
     
     @MainActor
     private func updateSortedDictionary(with places: [Place]) {
@@ -88,10 +96,16 @@ extension CityViewModel {
             if let city = city {
                 withAnimation(.spring()) {
                     self.city = city
-                    if let places = city.places?.allObjects as? [Place] {
-                        print(places)
-                        updateSortedDictionary(with: places)
+                    if let events = city.events?.allObjects as? [Event] {
+                        self.events = events
+//                        print("------------")
+//                        print(events)
+//                        print("------------")
                     }
+                    if let places = city.places?.allObjects as? [Place] {
+                             updateSortedDictionary(with: places)
+                    }
+                    
                 }
             } else {
                 //   print("---- NoCity ------")
@@ -122,7 +136,7 @@ extension CityViewModel {
                         for decodedPlace in decodedPlaces {
                             if let place = places.first(where: { $0.id == decodedPlace.id } ) {
                                 place.name = decodedPlace.name
-                                place.type = decodedPlace.type.rawValue
+                                place.type = decodedPlace.type
                                 place.photo = decodedPlace.photo
                                 place.address = decodedPlace.address
                                 place.latitude = decodedPlace.latitude
@@ -154,7 +168,7 @@ extension CityViewModel {
                                     if let place = place {
                                         
                                         place.name = decodedPlace.name
-                                        place.type = decodedPlace.type.rawValue
+                                        place.type = decodedPlace.type
                                         place.photo = decodedPlace.photo
                                         place.address = decodedPlace.address
                                         place.latitude = decodedPlace.latitude
@@ -187,7 +201,7 @@ extension CityViewModel {
                                         let place = await dataManager.createPlace(decodedPlace: decodedPlace)
                                         
                                         place.name = decodedPlace.name
-                                        place.type = decodedPlace.type.rawValue
+                                        place.type = decodedPlace.type
                                         place.photo = decodedPlace.photo
                                         place.address = decodedPlace.address
                                         place.latitude = decodedPlace.latitude
@@ -220,12 +234,15 @@ extension CityViewModel {
                     }
                 }
                 
+                
+                self.events = []
+                
                 if let decodedEvents = decodedCity.events {
                     if let events = city.events?.allObjects as? [Event] {
                         for decodedEvent in decodedEvents {
                             if let event = events.first(where: { $0.id == decodedEvent.id } ) {
                                 event.name = decodedEvent.name
-                                event.type = decodedEvent.type.rawValue
+                                event.type = decodedEvent.type
                                 event.cover = decodedEvent.cover
                                 event.address = decodedEvent.address
                                 event.latitude = decodedEvent.latitude
@@ -233,10 +250,14 @@ extension CityViewModel {
                                 
                                 let dateFormatter = DateFormatter()
                                 dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                                dateFormatter.timeZone = .gmt
+                               // dateFormatter.timeZone = .gmt
+                                dateFormatter.timeZone = TimeZone.current
                                 event.startTime = dateFormatter.date(from: decodedEvent.startTime)
                                 event.finishTime = dateFormatter.date(from: decodedEvent.finishTime)
-                                
+//                                print("------------")
+//                                print(event.startTime ?? "-")
+//                                print(event.finishTime ?? "-")
+//                                print("------------")
                                 event.isActive = decodedEvent.isActive == 1 ? true : false
                                 event.isChecked = decodedEvent.isChecked == 1 ? true : false
                                 
@@ -260,10 +281,22 @@ extension CityViewModel {
                                         print("fetchCountry() - findCity failure :", error)
                                     }
                                 }
+                                
+                            //    self.events.append(contentsOf: events)
+                                
                             } else {
                                 switch await dataManager.findEvent(id: decodedEvent.id) {
                                 case .success(let event):
                                     if let event = event {
+                                        
+                                        let dateFormatter = DateFormatter()
+                                        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//                                            .dateStyle = .medium
+//                                            .timeStyle = .medium
+                                        dateFormatter.timeZone = TimeZone.current
+                                        event.startTime = dateFormatter.date(from: decodedEvent.startTime)
+                                        event.finishTime = dateFormatter.date(from: decodedEvent.finishTime)
+                                        
                                         for decodedTag in decodedEvent.tags {
                                             switch await dataManager.findTag(tag: decodedTag) {
                                             case .success(let tag):
@@ -279,6 +312,7 @@ extension CityViewModel {
                                             }
                                         }
                                         self.city.addToEvents(event)
+                               //         self.events.append(event)
                                     } else {
                                         let event = await dataManager.createEvent(decodedEvent: decodedEvent)
                                         for decodedTag in decodedEvent.tags {
@@ -297,6 +331,7 @@ extension CityViewModel {
                                             }
                                         }
                                         self.city.addToEvents(event)
+                               //         self.events.append(event)
                                     }
                                 case .failure(let error):
                                     //TODO

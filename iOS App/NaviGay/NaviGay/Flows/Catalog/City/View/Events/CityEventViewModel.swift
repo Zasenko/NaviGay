@@ -13,28 +13,67 @@ final class CityEventViewModel: ObservableObject {
     
     @Published var event: Event
     @Published var eventImage: Image = AppImages.appIcon
-    @Published var eventStart: String = ""
-    
+    @Published var startTime: String = "startTime"
+    @Published var finishTime: String = "finishTime"
+    @Published var isPartyFinished: Bool = false
     //MARK: - Inits
     
     init(event: Event) {
         self.event = event
         loadImage()
         
-        print(event.startTime ?? "--------")
-        
+//        //TODO!!!!!
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        dateFormatter.dateStyle = .medium
+        dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short
-        dateFormatter.timeZone = .gmt
-        
-        if let time = event.startTime {
-            eventStart = dateFormatter.string(from: time)
+        dateFormatter.timeZone = TimeZone.current
+//        let nowString: String = dateFormatter.string(from: Date.now)
+//        print("nowString ", nowString)
+//
+//
+//
+//
+//        print("------------------------")
+//        print("nowString: ", nowString)
+//
+//        guard let nowDate = dateFormatter.date(from: nowString) else {
+//            return
+//
+//        }
+//        print("Date nowDate: ", nowDate)
+//
+        if let startTime = event.startTime {
+            self.startTime = dateFormatter.string(from: startTime)
         }
         
-        
-        print("start -> ", eventStart)
+        if let finishTime = event.finishTime {
+            
+            self.finishTime = dateFormatter.string(from: finishTime)
+//
+//            dateFormatter.dateFormat = "yyyy-MM-dd"
+//            let fdate: String = dateFormatter.string(from: finishTime)
+//            let ndate: String = dateFormatter.string(from: Date.now)
+//
+//            let f = dateFormatter.date(from: fdate)!
+//            let n = dateFormatter.date(from: ndate)!
+            
+//            print("Date finishTime.formatted(): ", finishTime.formatted())
+//            print("Date.now.formatted(): ", Date.now.formatted())
+//
+//
+//            print("Date finishTime: ", finishTime)
+//
+//            print("Date.now: ", Date.now)
+//
+//            print("------------------------")
+            switch Calendar.current.compare(finishTime, to: Date.now, toGranularity: .hour) {
+            case .orderedAscending, .orderedSame:
+                isPartyFinished = true
+            case .orderedDescending:
+                break
+            }
+        }
     }
 }
 
