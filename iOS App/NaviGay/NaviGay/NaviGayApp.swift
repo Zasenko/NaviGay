@@ -9,10 +9,13 @@ import SwiftUI
 
 @main
 struct NaviGayApp: App {
+    
+    @StateObject var viewBuilder = ViewBuilderManager()
 
     var body: some Scene {
         WindowGroup {
-            EntryView(vm: EntryViewModel())
+            viewBuilder.buildEntryView()
+                .environmentObject(viewBuilder)
         }
     }
 }

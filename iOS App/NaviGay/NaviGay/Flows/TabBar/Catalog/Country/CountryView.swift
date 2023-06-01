@@ -181,7 +181,7 @@ struct CountryView: View {
                             VStack {
                                 ForEach(cities) {city in
                                     NavigationLink {
-                                        CityView(viewModel: CityViewModel(city: city, networkManager: viewModel.networkManager, dataManager: viewModel.dataManager, tESTdataManager: viewModel.tESTdataManager), safeArea: safeArea, size: size)
+                                        CityView(viewModel: CityViewModel(city: city, networkManager: viewModel.networkManager, dataManager: viewModel.dataManager), safeArea: safeArea, size: size)
                                     } label: {
                                         Text(city.name ?? "")
                                             .padding(.horizontal)

@@ -10,14 +10,11 @@ import CoreData
 protocol PlaceDataManagerProtocol {
     func getObject<T: NSManagedObject>(id: NSManagedObjectID, entityName: String) async -> Result<T?, Error>
     func createObject<T: NSManagedObject>() async -> T
-    
     func findPlace(id: Int) async -> Result<Place?, Error>
     func findTag(tag: String) async -> Result<Tag?, Error>
     func findWorkingTime(workingHours: DecodedWorkingHours) async -> Result<WorkingTime?, Error>
-    
     func findPhoto(id: String) async -> Result<Photo?, Error>
     func findComment(id: Int) async -> Result<PlaceComment?, Error>
-    
     func save(complition: @escaping( (Bool) -> Void ))
 }
 
@@ -89,7 +86,6 @@ extension PlaceDataManager: PlaceDataManagerProtocol {
         }
     }
     
-
     func save(complition: @escaping( (Bool) -> Void )) {
         manager.saveData { result in
             if result {
@@ -99,7 +95,6 @@ extension PlaceDataManager: PlaceDataManagerProtocol {
             }
         }
     }
-    
     
     func getObject<T: NSManagedObject>(id: NSManagedObjectID, entityName: String) async -> Result<T?, Error> {
         let request = NSFetchRequest<T>(entityName: entityName)
@@ -111,7 +106,6 @@ extension PlaceDataManager: PlaceDataManagerProtocol {
         }
     }
 
-    
     func createObject<T: NSManagedObject>() async -> T {
         let newObject = T(context: manager.context)
         return newObject

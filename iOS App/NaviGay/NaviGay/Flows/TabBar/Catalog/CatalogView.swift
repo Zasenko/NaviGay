@@ -13,7 +13,8 @@ struct CatalogView: View {
     
     @StateObject var viewModel: CatalogViewModel
     @State private var searchText = ""
-    
+    @EnvironmentObject var viewBuilder: ViewBuilderManager
+
     //MARK: - Body
     
     var body: some View {
@@ -38,7 +39,7 @@ struct CatalogView: View {
             Section {
                 ForEach($viewModel.activeCountries) { country in
                     NavigationLink {
-                        viewModel.cteateCountryView(country: country.wrappedValue)
+                        viewBuilder.buildCountryView(country: country.wrappedValue, safeArea: viewModel.safeArea, size: viewModel.size)
                             .ignoresSafeArea(.container, edges: .top)
                     } label: {
                         CountryCell(country: country)

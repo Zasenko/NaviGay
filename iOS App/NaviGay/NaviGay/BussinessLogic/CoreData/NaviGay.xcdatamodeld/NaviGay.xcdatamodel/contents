@@ -99,9 +99,9 @@
         <attribute name="status" attributeType="String"/>
     </entity>
     <entity name="WorkingTime" representedClassName=".WorkingTime" syncable="YES">
-        <attribute name="close" attributeType="String"/>
-        <attribute name="day" attributeType="String"/>
-        <attribute name="open" attributeType="String"/>
+        <attribute name="close" optional="YES" attributeType="String"/>
+        <attribute name="day" optional="YES" attributeType="String"/>
+        <attribute name="open" optional="YES" attributeType="String"/>
         <relationship name="place" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Place" inverseName="workingTimes" inverseEntity="Place"/>
     </entity>
 </model>

@@ -168,10 +168,10 @@ struct PlaceView: View {
                 Text(viewModel.place.www ?? "")
                 Text(viewModel.place.address ?? "")
             }
-                .font(.body)
-                .lineLimit(nil)
-                .foregroundColor(.secondary)
-                .padding(.horizontal)
+            .font(.body)
+            .lineLimit(nil)
+            .foregroundColor(.secondary)
+            .padding(.horizontal)
             
             if let photos = viewModel.place.photos?.allObjects as? [Photo] {
                 ForEach(photos) { photo in
@@ -188,20 +188,20 @@ struct PlaceView: View {
                 }
             }
             
-                ForEach(viewModel.place.workingTimes?.allObjects as? [WorkingTime] ?? []) { time in
-                    
-                    HStack(spacing: 10) {
-                        Text(time.day ?? "")
-                        Text(time.open ?? "")
-                        Text(time.close ?? "")
-                    }
+            ForEach(viewModel.place.workingTimes?.allObjects as? [WorkingTime] ?? []) { time in
+                
+                HStack(spacing: 10) {
+                    Text(time.day ?? "")
+                    Text(time.open ?? "")
+                    Text(time.close ?? "")
                 }
+            }
             
             ForEach(viewModel.place.tags?.allObjects as? [Tag] ?? []) { tag in
-                    Text(tag.name ?? "")
+                Text(tag.name ?? "")
                     .padding()
                     .background(.yellow)
-        
+                
             }
             
             ForEach(viewModel.place.comments?.allObjects as? [PlaceComment] ?? []) { comment in
@@ -213,42 +213,8 @@ struct PlaceView: View {
                 }
                 .padding()
                 .background(.orange)
-        
-            }
-            
                 
-         
-//            if let regions = viewModel.country.regions?.allObjects as? [Region] {
-//                ForEach(regions) { region in
-//                    VStack {
-//
-//                        Text(region.name ?? "")
-//                            .font(.caption)
-//                            .foregroundColor(.secondary)
-//                            .bold()
-//
-//                        if let cities = region.cities?.allObjects as? [City] {
-//                            VStack {
-//                                ForEach(cities) {city in
-//                                    NavigationLink {
-//                                        CityView(viewModel: CityViewModel(city: city, networkManager: viewModel.networkManager, dataManager: viewModel.dataManager), safeArea: safeArea, size: size)
-//                                    } label: {
-//                                        Text(city.name ?? "")
-//                                            .padding(.horizontal)
-//                                            .padding(.horizontal)
-//                                            .frame(height: 50)
-//                                            .foregroundColor(.white)
-//                                            .background(AppColors.red.gradient)
-//                                            .clipShape(Capsule(style: .continuous))
-//                                    }
-//                                }
-//                            }
-//                            .padding(.bottom, 10)
-//                        }
-//
-//                    }
-//                }
-//            }
+            }
         }
     }
 }

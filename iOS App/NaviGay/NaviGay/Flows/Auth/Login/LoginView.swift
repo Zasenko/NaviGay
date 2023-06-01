@@ -9,15 +9,10 @@ import SwiftUI
 
 struct LoginView: View {
     
-//    private enum Field: Hashable {
-//        case email
-//        case password
-//    }
-    
     // MARK: - Properties
     
     @StateObject var viewModel: LoginViewModel
-    //@FocusState private var focusedField: Field?
+    @EnvironmentObject var viewBuilder: ViewBuilderManager
     
     // MARK: - Body
     
@@ -46,7 +41,7 @@ struct LoginView: View {
             }
         }
         .fullScreenCover(isPresented: $viewModel.isSignUpViewOpen) {
-            SignUpView(viewModel: SignUpViewModel(networkManager: viewModel.networkManager, authManager: viewModel.authManager, userDataManager: viewModel.userDataManager, entryRouter: $viewModel.entryRouter, isUserLogin: $viewModel.isUserLogin, isSignUpViewOpen: $viewModel.isSignUpViewOpen))
+            viewBuilder.buildSignUpView(entryRouter: $viewModel.entryRouter, isUserLogin: $viewModel.isUserLogin, isSignUpViewOpen: $viewModel.isSignUpViewOpen)
         }
     }
     

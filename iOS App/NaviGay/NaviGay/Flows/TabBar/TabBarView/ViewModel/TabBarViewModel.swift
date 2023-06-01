@@ -53,12 +53,3 @@ final class TabBarViewModel: ObservableObject {
         self.dataManager = dataManager
     }
 }
-
-extension TabBarViewModel {
-    
-    // MARK: - Functios
-
-    func cteateCatalogView(safeArea: EdgeInsets, size: CGSize) -> AnyView {
-        AnyView(CatalogView(viewModel: CatalogViewModel(networkManager: self.catalogNetworkManager, dataManager: self.catalogDataManager, safeArea: safeArea, size: size, tESTdataManager: self.dataManager)))
-    }
-}

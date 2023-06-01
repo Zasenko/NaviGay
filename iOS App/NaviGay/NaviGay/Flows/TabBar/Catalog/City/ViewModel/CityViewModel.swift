@@ -24,18 +24,14 @@ final class CityViewModel: ObservableObject {
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
     
-    //TODO!!!
-    let tESTdataManager: CoreDataManagerProtocol
-    
     //MARK: - Inits
     
     init(city: City,
          networkManager: CatalogNetworkManagerProtocol,
-         dataManager: CatalogDataManagerProtocol, tESTdataManager: CoreDataManagerProtocol) {
+         dataManager: CatalogDataManagerProtocol) {
         self.city = city
         self.networkManager = networkManager
         self.dataManager = dataManager
-        self.tESTdataManager = tESTdataManager
         
         if let events = city.events?.allObjects as? [Event] {
             self.events = events

@@ -10,14 +10,9 @@ import CoreData
 protocol EventDataManagerProtocol {
     func getObject<T: NSManagedObject>(id: NSManagedObjectID, entityName: String) async -> Result<T?, Error>
     func createObject<T: NSManagedObject>() async -> T
-    
     func findEvent(id: Int) async -> Result<Event?, Error>
     func findTag(tag: String) async -> Result<Tag?, Error>
-    //func findWorkingTime(workingHours: DecodedWorkingHours) async -> Result<WorkingTime?, Error>
-    
     func findPhoto(id: String) async -> Result<Photo?, Error>
-   // func findComment(id: Int) async -> Result<PlaceComment?, Error>
-    
     func save(complition: @escaping( (Bool) -> Void ))
 }
 
@@ -37,6 +32,7 @@ final class EventDataManager {
 
 //MARK: - PlaceDataManagerProtocol
 extension EventDataManager: EventDataManagerProtocol {
+    
     func findEvent(id: Int) async -> Result<Event?, Error> {
         let request = NSFetchRequest<Event>(entityName: "Event")
         do {
@@ -68,7 +64,6 @@ extension EventDataManager: EventDataManagerProtocol {
         }
     }
     
-
     func save(complition: @escaping( (Bool) -> Void )) {
         manager.saveData { result in
             if result {
@@ -78,7 +73,6 @@ extension EventDataManager: EventDataManagerProtocol {
             }
         }
     }
-    
     
     func getObject<T: NSManagedObject>(id: NSManagedObjectID, entityName: String) async -> Result<T?, Error> {
         let request = NSFetchRequest<T>(entityName: entityName)
@@ -90,7 +84,6 @@ extension EventDataManager: EventDataManagerProtocol {
         }
     }
 
-    
     func createObject<T: NSManagedObject>() async -> T {
         let newObject = T(context: manager.context)
         return newObject

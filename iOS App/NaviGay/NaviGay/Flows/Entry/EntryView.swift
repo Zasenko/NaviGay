@@ -12,27 +12,30 @@ struct EntryView: View {
     
     // MARK: - Properties
     
-    @StateObject var vm: EntryViewModel
+    @StateObject var viewModel: EntryViewModel
+    @EnvironmentObject var viewBuilder: ViewBuilderManager
     
     // MARK: - Body
     
     var body: some View {
         VStack {
-            switch vm.router {
+            switch viewModel.router {
             case .logoView:
                 Image("full-logo")
                     .resizable()
                     .scaledToFit()
                     .frame(height: 50)
             case .loginView:
-                LoginView(viewModel: LoginViewModel(entryRouter: $vm.router, isUserLogin: $vm.isUserLogin, userDataManager: vm.userDataManager))
+                viewBuilder.buildLoginView(entryRouter: $viewModel.router, isUserLogin: $viewModel.isUserLogin)
             case .tabView:
-                TabBarView(viewModel: TabBarViewModel(isUserLogin: $vm.isUserLogin, dataManager: vm.dataManager))
+                viewBuilder.buildTabBarView(isUserLogin: $viewModel.isUserLogin)
             }
         }
+        //TODO - убрать в EntryViewModel
         .onAppear() {
-            vm.checkUser()
+            viewModel.checkUser()
         }
+
     }
 }
 

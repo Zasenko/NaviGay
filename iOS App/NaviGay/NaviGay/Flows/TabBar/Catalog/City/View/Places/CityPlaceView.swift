@@ -12,6 +12,7 @@ struct CityPlaceView: View {
     //MARK: - Proreties
     
     @StateObject var viewModel: CityPlaceViewModel
+    @EnvironmentObject var viewBuilder: ViewBuilderManager
     
     let size: CGSize
     let safeArea: EdgeInsets
@@ -21,7 +22,7 @@ struct CityPlaceView: View {
     var body: some View {
         VStack {
             NavigationLink {
-                PlaceView(viewModel: PlaceViewModel(place: viewModel.place, networkManager: PlaceNetworkManager(), dataManager: PlaceDataManager(manager: viewModel.dataManager)), safeArea: safeArea, size: size)
+                viewBuilder.buildPlaceView(place: viewModel.place, safeArea: safeArea, size: size)
             } label: {
                 HStack(alignment: .center) {
                     viewModel.placeImage

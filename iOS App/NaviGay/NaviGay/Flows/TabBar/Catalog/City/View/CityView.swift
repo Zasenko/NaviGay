@@ -43,7 +43,7 @@ struct CityView: View {
     // MARK: - Header View
     
     @ViewBuilder private var headerView: some View {
-        GeometryReader{ proxy in
+        GeometryReader { proxy in
             let minY = proxy.frame(in: coordinateSpace).minY
             let height = (size.width / 4 ) * 5 ///высота картинки
             
@@ -151,7 +151,7 @@ struct CityView: View {
             ForEach(viewModel.sortedKeys, id: \.self) { key in
                 Section(header: Text(key)) {
                     ForEach(viewModel.sortedDictionary[key] ?? []) { place in
-                        CityPlaceView(viewModel: CityPlaceViewModel(place: place, dataManager: viewModel.tESTdataManager), size: size, safeArea: safeArea)
+                        CityPlaceView(viewModel: CityPlaceViewModel(place: place), size: size, safeArea: safeArea)
                     }
                 }
             }

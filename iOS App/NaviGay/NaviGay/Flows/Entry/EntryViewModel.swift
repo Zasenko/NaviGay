@@ -21,22 +21,15 @@ final class EntryViewModel: ObservableObject {
     @Published var isUserLogin: Bool = false
     @Published var userStatus: UserStatus = .anonim
     
-    let userDataManager: UserDataManagerProtocol
-    let dataManager: CoreDataManagerProtocol
+    // MARK: - Private Proparties
     
-    // MARK: - Private Properties
-    
-//    
-//    lazy var authNetworkManager = AuthNetworkManager(networkMonitor: networkMonitor, api: api)
-//    lazy var catalogNetworkManager = CatalogNetworkManager(networkMonitor: networkMonitor, api: api)
-    
+    private let userDataManager: UserDataManagerProtocol
     private let routerAnimation = Animation.spring()
     
     // MARK: - Inits
     
-    init() {
-        self.dataManager = CoreDataManager()
-        self.userDataManager = UserDataManager(manager: dataManager)
+    init(userDataManager: UserDataManagerProtocol) {
+        self.userDataManager = userDataManager
     }
 }
 

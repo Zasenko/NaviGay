@@ -12,17 +12,17 @@ struct TabBarView: View {
     // MARK: - Properties
     
     @StateObject var viewModel: TabBarViewModel
-    
+    @EnvironmentObject var viewBuilder: ViewBuilderManager
+
     // MARK: - Body
     
     var body: some View {
         GeometryReader {
+            
             let safeArea = $0.safeAreaInsets
             let size = $0.size
             
             VStack {
-                //                Home(safeArea: safeArea, size: size)
-                //                    .ignoresSafeArea(.container, edges: .top)
                 VStack {
                     switch viewModel.selectedPage {
                     case .home:
@@ -33,7 +33,7 @@ struct TabBarView: View {
                         MapView()
                             .ignoresSafeArea()
                     case .catalog:
-                        viewModel.cteateCatalogView(safeArea: safeArea, size: size)
+                        viewBuilder.buildCatalogView(safeArea: safeArea, size: size)
                     }
                     Spacer()
                 }.ignoresSafeArea(.container, edges: .all)
