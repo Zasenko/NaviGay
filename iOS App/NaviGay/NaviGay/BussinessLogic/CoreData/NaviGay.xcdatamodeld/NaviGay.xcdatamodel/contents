@@ -27,7 +27,7 @@
         <attribute name="fb" optional="YES" attributeType="String"/>
         <attribute name="fee" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="feeAbout" optional="YES" attributeType="String"/>
-        <attribute name="finishTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="finishTime" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="insta" optional="YES" attributeType="String"/>
         <attribute name="isActive" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -38,7 +38,7 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="phone" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="placeName" optional="YES" attributeType="String"/>
-        <attribute name="startTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="startTime" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="tickets" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
         <attribute name="www" optional="YES" attributeType="String"/>
@@ -99,9 +99,9 @@
         <attribute name="status" attributeType="String"/>
     </entity>
     <entity name="WorkingTime" representedClassName=".WorkingTime" syncable="YES">
-        <attribute name="close" attributeType="String"/>
-        <attribute name="day" attributeType="String"/>
-        <attribute name="open" attributeType="String"/>
+        <attribute name="close" optional="YES" attributeType="String"/>
+        <attribute name="day" optional="YES" attributeType="String"/>
+        <attribute name="open" optional="YES" attributeType="String"/>
         <relationship name="place" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Place" inverseName="workingTimes" inverseEntity="Place"/>
     </entity>
 </model>

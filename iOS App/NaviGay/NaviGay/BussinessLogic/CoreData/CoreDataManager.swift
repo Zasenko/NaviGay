@@ -9,7 +9,10 @@ import CoreData
 
 protocol CoreDataManagerProtocol {
     var context: NSManagedObjectContext { get }
+    
     func saveData(complition: @escaping( (Bool) -> Void ))
+    func getObject<T: NSManagedObject>(id: NSManagedObjectID, entityName: String) async -> T?
+    func createObject<T: NSManagedObject>() async -> T
 }
 
 final class CoreDataManager: CoreDataManagerProtocol {
@@ -44,14 +47,28 @@ extension CoreDataManager {
         DispatchQueue.main.async {
             do {
                 try self.context.save()
-          //      debugPrint("CoreDataManager  Saving ->>>>>>>>>> OK")
                     complition(true)
             } catch let error {
-                //TODO
-                debugPrint("CoreDataManager Error ->>>>>>>>>> \(error)")
+                debugPrint("CoreDataManager saveData() Error: ", error.localizedDescription)
                 complition(false)
             }
         }
+    }
+    
+    func getObject<T: NSManagedObject>(id: NSManagedObjectID, entityName: String) async -> T? {
+        let request = NSFetchRequest<T>(entityName: entityName)
+        do {
+            let object = try context.fetch(request).first(where: { $0.objectID == id })
+            return object
+        } catch let error {
+            debugPrint("CoreDataManager getObject() Error: ", error.localizedDescription)
+            return nil
+        }
+    }
+
+    func createObject<T: NSManagedObject>() async -> T {
+        let newObject = T(context: context)
+        return newObject
     }
 }
 

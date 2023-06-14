@@ -11,9 +11,7 @@ protocol AuthManagerProtocol {
     func checkEmailPassword(email: String, password: String, complition: @escaping((Result<Bool, AuthManagerErrors>) -> Void))
 }
 
-final class AuthManager {
-    
-}
+final class AuthManager {}
 
 extension AuthManager: AuthManagerProtocol {
     func checkEmailPassword(email: String, password: String, complition: @escaping((Result<Bool, AuthManagerErrors>) -> Void)) {

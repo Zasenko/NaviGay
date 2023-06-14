@@ -1,25 +1,23 @@
 //
-//  PlaceDataManager.swift
+//  EventDataManager.swift
 //  NaviGay
 //
-//  Created by Dmitry Zasenko on 24.05.23.
+//  Created by Dmitry Zasenko on 26.05.23.
 //
 
 import CoreData
 
-protocol PlaceDataManagerProtocol {
+protocol EventDataManagerProtocol {
     func getObject<T: NSManagedObject>(id: NSManagedObjectID, entityName: String) async -> Result<T?, Error>
     func createObject<T: NSManagedObject>() async -> T
-    func findPlace(id: Int) async -> Result<Place?, Error>
+    func findEvent(id: Int) async -> Result<Event?, Error>
     func findTag(tag: String) async -> Result<Tag?, Error>
-    func findWorkingTime(workingHours: DecodedWorkingHours) async -> Result<WorkingTime?, Error>
     func findPhoto(id: String) async -> Result<Photo?, Error>
-    func findComment(id: Int) async -> Result<PlaceComment?, Error>
     func save(complition: @escaping( (Bool) -> Void ))
 }
 
 
-final class PlaceDataManager {
+final class EventDataManager {
     
     // MARK: - Private Properties
     
@@ -33,30 +31,20 @@ final class PlaceDataManager {
 }
 
 //MARK: - PlaceDataManagerProtocol
-extension PlaceDataManager: PlaceDataManagerProtocol {
+extension EventDataManager: EventDataManagerProtocol {
     
-    func findPlace(id: Int) async -> Result<Place?, Error> {
-        let request = Place.fetchRequest()
+    func findEvent(id: Int) async -> Result<Event?, Error> {
+        let request = NSFetchRequest<Event>(entityName: "Event")
         do {
-            let place = try self.manager.context.fetch(request).first(where: { $0.id == Int64(id) })
-            return .success(place)
-        } catch let error {
-            return .failure(error)
-        }
-    }
-    
-    func findComment(id: Int) async -> Result<PlaceComment?, Error> {
-        let request = PlaceComment.fetchRequest()
-        do {
-            let comment = try self.manager.context.fetch(request).first(where: { $0.id == Int64(id) })
-            return .success(comment)
+            let event = try self.manager.context.fetch(request).first(where: { $0.id == Int64(id) })
+            return .success(event)
         } catch let error {
             return .failure(error)
         }
     }
     
     func findPhoto(id: String) async -> Result<Photo?, Error> {
-        let request = Photo.fetchRequest()
+        let request = NSFetchRequest<Photo>(entityName: "Photo")
         do {
             let photo = try self.manager.context.fetch(request).first(where: { $0.url == id })
             return .success(photo)
@@ -64,22 +52,7 @@ extension PlaceDataManager: PlaceDataManagerProtocol {
             return .failure(error)
         }
     }
-    
-    func findWorkingTime(workingHours: DecodedWorkingHours) async -> Result<WorkingTime?, Error> {
-        let request = WorkingTime.fetchRequest()
-        do {
-            let workingTimes = try self.manager.context.fetch(request)
-                
-            let a = workingTimes.first(where: { $0.day == workingHours.day && $0.open == workingHours.opening && $0.close == workingHours.closing })
-            
-            
-            
-            return .success(a)
-        } catch let error {
-            return .failure(error)
-        }
-    }
-    
+
     func findTag(tag: String) async -> Result<Tag?, Error> {
         let request = NSFetchRequest<Tag>(entityName: "Tag")
         
