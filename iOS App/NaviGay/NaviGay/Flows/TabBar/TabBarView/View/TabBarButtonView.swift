@@ -18,9 +18,7 @@ struct TabBarButtonView : View {
     
     var body: some View{
         Button {
-            withAnimation(.spring()) {
-                selectedPage = button.page
-            }
+            selectedPage = button.page
         } label: {
             button.img
                 .resizable()

@@ -12,7 +12,6 @@ struct LoginView: View {
     // MARK: - Properties
     
     @StateObject var viewModel: LoginViewModel
-    @EnvironmentObject var viewBuilder: ViewBuilderManager
     
     // MARK: - Body
     
@@ -20,14 +19,20 @@ struct LoginView: View {
         VStack {
             VStack {
                 Spacer()
+                
                 Text("Login")
                     .font(.largeTitle.bold())
-                LoginTextField(text: $viewModel.email, invalidAttempts: $viewModel.invalidLoginAttempts)
-                PasswordTextField(text: $viewModel.password, invalidAttempts: $viewModel.invalidPasswordAttempts)
+                
+                LoginTextField(text: $viewModel.email,
+                               invalidAttempts: $viewModel.invalidLoginAttempts)
+                PasswordTextField(text: $viewModel.password,
+                                  invalidAttempts: $viewModel.invalidPasswordAttempts)
                 forgetPasswordButton
                 loginButtonView
                 errorView
+                
                 Spacer()
+                
                 signUpView
             }
             .padding()
@@ -41,7 +46,12 @@ struct LoginView: View {
             }
         }
         .fullScreenCover(isPresented: $viewModel.isSignUpViewOpen) {
-            viewBuilder.buildSignUpView(entryRouter: $viewModel.entryRouter, isUserLogin: $viewModel.isUserLogin, isSignUpViewOpen: $viewModel.isSignUpViewOpen)
+            SignUpView(viewModel: SignUpViewModel(networkManager: viewModel.networkManager,
+                                                  authManager: viewModel.authManager,
+                                                  userDataManager: viewModel.userDataManager,
+                                                  entryRouter: $viewModel.entryRouter,
+                                                  isUserLogin: $viewModel.isUserLogin,
+                                                  isSignUpViewOpen: $viewModel.isSignUpViewOpen))
         }
     }
     
@@ -62,8 +72,7 @@ struct LoginView: View {
         HStack(spacing: 10) {
             
             AsyncButton(state: $viewModel.loginButtonState, backgroundColor: AppColors.red) {
-             //   focusedField = nil
-                await viewModel.loginButtonTapped()
+                viewModel.loginButtonTapped()
             } content: {
                 Text("Login")
                     .bold()
@@ -71,7 +80,6 @@ struct LoginView: View {
             }
             
             Button {
-            //    focusedField = nil
                 viewModel.skipButtonTapped()
             } label: {
                 Text("Skip")
@@ -84,7 +92,6 @@ struct LoginView: View {
         HStack {
             Text("Don't have an account?")
             Button {
-             //   focusedField = nil
                 viewModel.signUpButtonTapped()
             } label: {
                 Text("Sign Up")
@@ -106,3 +113,24 @@ struct LoginView: View {
 //        LoginView(viewModel: LoginViewModel(networkManager: AuthNetworkManager(networkMonitor: NetworkMonitor(), api: ApiProperties()), authManager: AuthManager(), userDataManager: UserDataManager(manager: CoreDataManager()), entryRouter: .constant(.loginView)))
 //    }
 //}
+
+struct ColoredCapsule<Content: View>: View {
+    let content: () -> Content
+    let background: Color
+    
+    init(background: Color, @ViewBuilder content: @escaping () -> Content) {
+        self.background = background
+        self.content = content
+    }
+    
+    var body: some View {
+        content()
+            .padding()
+            //.padding(.horizontal)
+            .padding(.horizontal)
+           // .frame(minHeight: 50)
+            .foregroundColor(.white)
+            .background(background.gradient)
+            .clipShape(Capsule(style: .continuous))
+    }
+}

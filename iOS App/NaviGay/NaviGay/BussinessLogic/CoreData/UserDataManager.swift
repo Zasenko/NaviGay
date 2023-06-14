@@ -30,14 +30,14 @@ final class UserDataManager {
 extension UserDataManager: UserDataManagerProtocol {
     
     func checkIsUserLogin() async -> Result<Bool, Error> {
-        let request = NSFetchRequest<User>(entityName: "User")
+        let request = User.fetchRequest()
         do {
             let users = try self.manager.context.fetch(request)
-            if !users.isEmpty {
+            if users.isEmpty {
+                return .success(false)
+            } else {
                 user = users.first
                 return .success(true)
-            } else {
-                return .success(false)
             }
         } catch let error {
             return.failure(error)

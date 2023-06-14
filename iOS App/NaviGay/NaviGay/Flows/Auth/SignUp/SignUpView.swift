@@ -45,7 +45,7 @@ struct SignUpView: View {
         HStack(spacing: 10) {
             AsyncButton(state: $viewModel.loginButtonState, backgroundColor: AppColors.red) {
              //   focusedField = nil
-                await viewModel.signUpButtonTapped()
+                viewModel.signUpButtonTapped()
             } content: {
                 Text("Login")
                     .bold()

@@ -31,27 +31,45 @@ final class SignUpViewModel: ObservableObject {
     
     // MARK: - Inits
     
-    init(networkManager: AuthNetworkManagerProtocol,authManager: AuthManagerProtocol, userDataManager: UserDataManagerProtocol, entryRouter: Binding<EntryViewRouter>, isUserLogin: Binding<Bool>, isSignUpViewOpen: Binding<Bool>) {
+    init(networkManager: AuthNetworkManagerProtocol,
+         authManager: AuthManagerProtocol,
+         userDataManager: UserDataManagerProtocol,
+         entryRouter: Binding<EntryViewRouter>,
+         isUserLogin: Binding<Bool>,
+         isSignUpViewOpen: Binding<Bool>) {
         self.networkManager = networkManager
         self.authManager = authManager
         self.userDataManager = userDataManager
-        self._entryRouter = entryRouter
-        self._isUserLogin = isUserLogin
-        self._isSignUpViewOpen = isSignUpViewOpen
+        _entryRouter = entryRouter
+        _isUserLogin = isUserLogin
+        _isSignUpViewOpen = isSignUpViewOpen
     }
 }
-
 
 extension SignUpViewModel {
     
     // MARK: - Functions
     
-    @MainActor
-    func signUpButtonTapped() async {
+    func signUpButtonTapped() {
         error = ""
         invalidLoginAttempts = 0
         invalidPasswordAttempts = 0
         allViewsDisabled = true
+        Task {
+            await checkEmailPassword()
+        }
+    }
+    
+    func closeButtonTapped() {
+        withAnimation(.spring()) {
+            self.isSignUpViewOpen = false
+        }
+    }
+    
+    // MARK: - Private Functions
+    
+    @MainActor
+    private func checkEmailPassword() async {
         authManager.checkEmailPassword(email: email, password: password) { [weak self] result in
             switch result {
             case .success(_):
@@ -79,14 +97,6 @@ extension SignUpViewModel {
             }
         }
     }
-    
-    func closeButtonTapped() {
-        withAnimation(.spring()) {
-            self.isSignUpViewOpen = false
-        }
-    }
-    
-    // MARK: - Private Functions
     
     @MainActor
     private func login() {

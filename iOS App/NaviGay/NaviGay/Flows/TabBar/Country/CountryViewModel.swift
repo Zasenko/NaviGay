@@ -14,6 +14,11 @@ final class CountryViewModel: ObservableObject {
     @Published var country: Country
     @Published var countryImage: Image = AppImages.appIcon
     
+    let size: CGSize
+    let safeArea: EdgeInsets
+    
+    let imageHeight: CGFloat
+    
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
         
@@ -21,10 +26,13 @@ final class CountryViewModel: ObservableObject {
     
     init(country: Country,
          networkManager: CatalogNetworkManagerProtocol,
-         dataManager: CatalogDataManagerProtocol) {
+         dataManager: CatalogDataManagerProtocol, size: CGSize, safeArea: EdgeInsets) {
         self.country = country
         self.networkManager = networkManager
         self.dataManager = dataManager
+        self.size = size
+        self.safeArea = safeArea
+        self.imageHeight = (size.width / 4 ) * 5
         loadImage()
         getCountry()
     }

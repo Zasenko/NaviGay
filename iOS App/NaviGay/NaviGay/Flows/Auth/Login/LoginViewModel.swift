@@ -24,16 +24,21 @@ final class LoginViewModel: ObservableObject {
     @Binding var isUserLogin: Bool
     
     let userDataManager: UserDataManagerProtocol
-    
-    lazy var networkManager: AuthNetworkManagerProtocol = AuthNetworkManager()
-    lazy var authManager = AuthManager()
+    let networkManager: AuthNetworkManagerProtocol
+    let authManager: AuthManagerProtocol
         
     // MARK: - Inits
     
-    init(entryRouter: Binding<EntryViewRouter>, isUserLogin: Binding<Bool>, userDataManager: UserDataManagerProtocol) {
+    init(entryRouter: Binding<EntryViewRouter>,
+         isUserLogin: Binding<Bool>,
+         userDataManager: UserDataManagerProtocol,
+         networkManager: AuthNetworkManagerProtocol,
+         authManager: AuthManagerProtocol) {
         self.userDataManager = userDataManager
-        self._entryRouter = entryRouter
-        self._isUserLogin = isUserLogin
+        self.networkManager = networkManager
+        self.authManager = authManager
+        _entryRouter = entryRouter
+        _isUserLogin = isUserLogin
     }
 }
 
@@ -41,37 +46,13 @@ extension LoginViewModel {
     
     // MARK: - Functions
     
-    @MainActor
-    func loginButtonTapped() async {
+    func loginButtonTapped() {
         error = ""
         invalidLoginAttempts = 0
         invalidPasswordAttempts = 0
         allViewsDisabled = true
-        authManager.checkEmailPassword(email: email, password: password) { [weak self] result in
-            switch result {
-            case .success(_):
-                withAnimation(.easeInOut(duration: 0.5)) {
-                    self?.loginButtonState = .loading
-                }
-                self?.login()
-            case .failure(let error):
-                self?.loginButtonState = .failure
-                self?.returnToNormalState()
-                switch error {
-                case .wrongEmail, .emptyEmail:
-                    self?.error = "Incorrect email"
-                    self?.shakeLogin()
-                    return
-                case .emptyPassword, .noDigit, .noLowercase, .noMinCharacters:
-                    self?.error = "Wrong password"
-                    self?.shakePassword()
-                    return
-                default:
-                    self?.error = "Wrong email or password"
-                    self?.shakePassword()
-                    return
-                }
-            }
+        Task {
+            await checkEmailPassword()
         }
     }
     
@@ -90,15 +71,40 @@ extension LoginViewModel {
     // MARK: - Private Functions
     
     @MainActor
+    private func checkEmailPassword() async {
+        authManager.checkEmailPassword(email: email, password: password) { [weak self] result in
+            switch result {
+            case .success(_):
+                self?.changeLoginButtonState(state: .loading)
+                self?.login()
+            case .failure(let error):
+                self?.changeLoginButtonState(state: .failure)
+                switch error {
+                case .wrongEmail, .emptyEmail:
+                    self?.error = "Incorrect email"
+                    self?.shakeLogin()
+                    return
+                case .emptyPassword, .noDigit, .noLowercase, .noMinCharacters:
+                    self?.error = "Wrong password"
+                    self?.shakePassword()
+                    return
+                default:
+                    self?.error = "Wrong email or password"
+                    self?.shakePassword()
+                    return
+                }
+            }
+        }
+    }
+    
+    @MainActor
     private func login() {
         Task {
             do {
                 let result = try await self.networkManager.login(email: email, password: password)
-     
                 if let error = result.errorDescription {
                     self.error = error
-                    loginButtonState = .failure
-                    returnToNormalState()
+                    self.changeLoginButtonState(state: .failure)
                 }
                 if let user = result.user {
                     loginButtonState = .success
@@ -106,14 +112,19 @@ extension LoginViewModel {
                     isUserLogin = true
                     toTabView()
                 } else {
-                    self.loginButtonState = .failure
-                    returnToNormalState()
+                    self.changeLoginButtonState(state: .failure)
                 }
             } catch {
-                self.loginButtonState = .failure
-                self.returnToNormalState()
+                self.changeLoginButtonState(state: .failure)
             }
         }
+    }
+    
+    private func changeLoginButtonState(state: LoadState) {
+        withAnimation(.easeInOut(duration: 0.5)) {
+            self.loginButtonState = state
+        }
+        self.returnToNormalState()
     }
     
     private func shakeLogin() {

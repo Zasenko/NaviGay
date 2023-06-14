@@ -58,7 +58,7 @@ extension CatalogDataManager: CatalogDataManagerProtocol {
     }
     
     func getCountries() async -> Result<[Country], Error> {
-        let request = NSFetchRequest<Country>(entityName: "Country")
+        let request = Country.fetchRequest()//NSFetchRequest<Country>(entityName: "Country")
         let sort = NSSortDescriptor(keyPath: \Country.name, ascending: true)
         request.sortDescriptors = [sort]
         do {

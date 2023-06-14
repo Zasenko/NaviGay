@@ -10,12 +10,25 @@ import SwiftUI
 @main
 struct NaviGayApp: App {
     
-    @StateObject var viewBuilder = ViewBuilderManager()
-
+    //MARK: - Properties
+    
+    let dataManager: CoreDataManagerProtocol
+    let userDataManager: UserDataManagerProtocol
+    let authNetworkManager: AuthNetworkManagerProtocol
+    
+    //MARK: - Inits
+    
+    init() {
+        self.dataManager = CoreDataManager()
+        self.userDataManager = UserDataManager(manager: dataManager)
+        self.authNetworkManager = AuthNetworkManager()
+    }
+    
+    //MARK: - Body
+    
     var body: some Scene {
         WindowGroup {
-            viewBuilder.buildEntryView()
-                .environmentObject(viewBuilder)
+            EntryView(viewModel: EntryViewModel(userDataManager: userDataManager, dataManager: dataManager, networkManager: authNetworkManager))
         }
     }
 }

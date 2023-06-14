@@ -13,7 +13,6 @@ struct CatalogView: View {
     
     @StateObject var viewModel: CatalogViewModel
     @State private var searchText = ""
-    @EnvironmentObject var viewBuilder: ViewBuilderManager
 
     //MARK: - Body
     
@@ -34,18 +33,21 @@ struct CatalogView: View {
     
     // MARK: - Views
     
-    @ViewBuilder private var listWithCountries: some View {
+    private var listWithCountries: some View {
         List {
             Section {
                 ForEach($viewModel.activeCountries) { country in
                     NavigationLink {
-                        viewBuilder.buildCountryView(country: country.wrappedValue, safeArea: viewModel.safeArea, size: viewModel.size)
-                            .ignoresSafeArea(.container, edges: .top)
+                        CountryView(viewModel: CountryViewModel(country: country.wrappedValue,
+                                                                networkManager: viewModel.networkManager,
+                                                                dataManager: viewModel.dataManager,
+                                                                size: viewModel.size,
+                                                                safeArea: viewModel.safeArea))
                     } label: {
                         CountryCell(country: country)
+                            .listRowBackground(AppColors.background)
                     }
                 }
-                .listRowBackground(AppColors.background)
             }
         }
         //УБРАТЬ!!!!!

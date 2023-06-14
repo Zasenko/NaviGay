@@ -14,8 +14,6 @@ struct CountryView: View {
     @StateObject var viewModel: CountryViewModel
     @Environment(\.dismiss) private var dismiss
     
-    let safeArea: EdgeInsets
-    let size: CGSize
     let coordinateSpace: CoordinateSpace = .named("CountryViewScroll")
     
     @State private var photoViewTitleSize: CGSize = .zero
@@ -34,11 +32,12 @@ struct CountryView: View {
                 headerView
             }
         }
+        .ignoresSafeArea(.container, edges: .top)
+        .navigationBarHidden(true)
         .onChange(of: viewModel.country, perform: { newValue in
             print(newValue)
         })
         .coordinateSpace(name: coordinateSpace)
-        .navigationBarHidden(true)
     }
     
     // MARK: - Header View
@@ -47,7 +46,6 @@ struct CountryView: View {
         GeometryReader{ proxy in
             
             let minY = proxy.frame(in: coordinateSpace).minY
-            let height = (size.width / 4 ) * 5 ///высота картинки
             
             HStack(spacing: 15) {
                 Button {
@@ -56,9 +54,10 @@ struct CountryView: View {
                     }
                 } label: {
                     Image(systemName: "chevron.left")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 30, height: 30)
+                        .font(.title3)
+                       // .resizable()
+                        //.scaledToFit()
+                       // .frame(width: 30, height: 30)
                         .foregroundColor(.blue)
                         .bold()
                 }
@@ -73,15 +72,15 @@ struct CountryView: View {
                         .font(.title)
                 }
                 .fontWeight(.semibold)
-                .offset(y: -minY > (height - photoViewTitleSize.height) ? 0 : 100)
+                .offset(y: -minY > (viewModel.imageHeight - photoViewTitleSize.height) ? 0 : 100)
                 .clipped()
-                .animation(.easeOut(duration: 0.25), value: -minY > (height - photoViewTitleSize.height))
+                .animation(.easeOut(duration: 0.25), value: -minY > (viewModel.imageHeight - photoViewTitleSize.height))
                 .padding(.horizontal, 40)
             }
-            .padding(.top, safeArea.top)
+            .padding(.top, viewModel.safeArea.top)
             .padding()
             .background(
-                .ultraThinMaterial.opacity( -minY > (height - photoViewTitleSize.height) ? 1 : 0)
+                .ultraThinMaterial.opacity( -minY > (viewModel.imageHeight - photoViewTitleSize.height) ? 1 : 0)
             )
             .offset(y: -minY )
         }
@@ -89,11 +88,10 @@ struct CountryView: View {
     
     // MARK: - Photo View
     @ViewBuilder private var photoView: some View {
-        let height = (size.width / 4 ) * 5
         GeometryReader { proxy in
             let size = proxy.size
             let minY = proxy.frame(in: coordinateSpace).minY
-            let progress = minY / (height * (minY > 0 ? 0.5 : 0.8))
+            let progress = minY / (viewModel.imageHeight * (minY > 0 ? 0.5 : 0.8))
             
             viewModel.countryImage
                 .resizable()
@@ -147,7 +145,7 @@ struct CountryView: View {
                 }
                 .offset(y: -minY)
         }
-        .frame(height: height + safeArea.top )
+        .frame(height: viewModel.imageHeight + viewModel.safeArea.top )
     }
     
     // MARK: - Main View
@@ -181,7 +179,8 @@ struct CountryView: View {
                             VStack {
                                 ForEach(cities) {city in
                                     NavigationLink {
-                                        CityView(viewModel: CityViewModel(city: city, networkManager: viewModel.networkManager, dataManager: viewModel.dataManager), safeArea: safeArea, size: size)
+                                     //   viewBuilder.buildCityView(city: city, safeArea: safeArea, size: size)
+                                        CityView(viewModel: CityViewModel(city: city, networkManager: viewModel.networkManager, dataManager: viewModel.dataManager), safeArea: viewModel.safeArea, size: viewModel.size)
                                     } label: {
                                         Text(city.name ?? "")
                                             .padding(.horizontal)

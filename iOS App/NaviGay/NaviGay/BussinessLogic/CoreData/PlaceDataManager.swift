@@ -36,7 +36,7 @@ final class PlaceDataManager {
 extension PlaceDataManager: PlaceDataManagerProtocol {
     
     func findPlace(id: Int) async -> Result<Place?, Error> {
-        let request = NSFetchRequest<Place>(entityName: "Place")
+        let request = Place.fetchRequest()
         do {
             let place = try self.manager.context.fetch(request).first(where: { $0.id == Int64(id) })
             return .success(place)
@@ -46,7 +46,7 @@ extension PlaceDataManager: PlaceDataManagerProtocol {
     }
     
     func findComment(id: Int) async -> Result<PlaceComment?, Error> {
-        let request = NSFetchRequest<PlaceComment>(entityName: "PlaceComment")
+        let request = PlaceComment.fetchRequest()
         do {
             let comment = try self.manager.context.fetch(request).first(where: { $0.id == Int64(id) })
             return .success(comment)
@@ -56,7 +56,7 @@ extension PlaceDataManager: PlaceDataManagerProtocol {
     }
     
     func findPhoto(id: String) async -> Result<Photo?, Error> {
-        let request = NSFetchRequest<Photo>(entityName: "Photo")
+        let request = Photo.fetchRequest()
         do {
             let photo = try self.manager.context.fetch(request).first(where: { $0.url == id })
             return .success(photo)
@@ -66,10 +66,15 @@ extension PlaceDataManager: PlaceDataManagerProtocol {
     }
     
     func findWorkingTime(workingHours: DecodedWorkingHours) async -> Result<WorkingTime?, Error> {
-        let request = NSFetchRequest<WorkingTime>(entityName: "WorkingTime")
+        let request = WorkingTime.fetchRequest()
         do {
-            let place = try self.manager.context.fetch(request).first(where: { $0.day == workingHours.day && $0.open == workingHours.opening && $0.close == workingHours.closing })
-            return .success(place)
+            let workingTimes = try self.manager.context.fetch(request)
+                
+            let a = workingTimes.first(where: { $0.day == workingHours.day && $0.open == workingHours.opening && $0.close == workingHours.closing })
+            
+            
+            
+            return .success(a)
         } catch let error {
             return .failure(error)
         }

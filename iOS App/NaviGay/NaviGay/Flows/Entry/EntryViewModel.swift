@@ -21,45 +21,54 @@ final class EntryViewModel: ObservableObject {
     @Published var isUserLogin: Bool = false
     @Published var userStatus: UserStatus = .anonim
     
+    let userDataManager: UserDataManagerProtocol
+    let dataManager: CoreDataManagerProtocol
+    
     // MARK: - Private Proparties
     
-    private let userDataManager: UserDataManagerProtocol
     private let routerAnimation = Animation.spring()
+    private let networkManager: AuthNetworkManagerProtocol
     
     // MARK: - Inits
     
-    init(userDataManager: UserDataManagerProtocol) {
+    init(userDataManager: UserDataManagerProtocol, dataManager: CoreDataManagerProtocol, networkManager: AuthNetworkManagerProtocol) {
         self.userDataManager = userDataManager
+        self.networkManager = networkManager
+        self.dataManager = dataManager
+        checkUser()
     }
 }
 
 extension EntryViewModel {
     
-    // MARK: - Functions
+    // MARK: - Private Functions
     
-    @MainActor
-    func checkUser() {
+    private func checkUser() {
         Task {
             let result = await userDataManager.checkIsUserLogin()
-            switch result {
-            case .success(let bool):
-                if bool {
-                    isUserLogin = true
-                    withAnimation(routerAnimation) {
-                        self.router = .tabView
+            await MainActor.run {
+                switch result {
+                case .success(let bool):
+                    if bool {
+                        isUserLogin = true
+                        withAnimation(routerAnimation) {
+                            self.router = .tabView
+                        }
+                        updateUser()
+                    } else {
+                        withAnimation(routerAnimation) {
+                            self.router = .loginView
+                        }
                     }
-                } else {
-                    withAnimation(routerAnimation) {
-                        self.router = .loginView
-                    }
-                }
-            case .failure(let error):
-                //TODO!!!!
-                debugPrint(error)
-                withAnimation(routerAnimation) {
-                    self.router = .logoView
+                case .failure(let error):
+                    //TODO!!!!
+                    debugPrint(error)
                 }
             }
         }
+    }
+    
+    private func updateUser() {
+        //
     }
 }

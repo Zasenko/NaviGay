@@ -13,7 +13,6 @@ struct EntryView: View {
     // MARK: - Properties
     
     @StateObject var viewModel: EntryViewModel
-    @EnvironmentObject var viewBuilder: ViewBuilderManager
     
     // MARK: - Body
     
@@ -26,16 +25,16 @@ struct EntryView: View {
                     .scaledToFit()
                     .frame(height: 50)
             case .loginView:
-                viewBuilder.buildLoginView(entryRouter: $viewModel.router, isUserLogin: $viewModel.isUserLogin)
+                LoginView(viewModel: LoginViewModel(entryRouter: $viewModel.router,
+                                                    isUserLogin: $viewModel.isUserLogin,
+                                                    userDataManager: viewModel.userDataManager,
+                                                    networkManager: AuthNetworkManager(),
+                                                    authManager: AuthManager()))
             case .tabView:
-                viewBuilder.buildTabBarView(isUserLogin: $viewModel.isUserLogin)
+                TabBarView(viewModel: TabBarViewModel(isUserLogin: $viewModel.isUserLogin,
+                                                      dataManager: viewModel.dataManager))
             }
         }
-        //TODO - убрать в EntryViewModel
-        .onAppear() {
-            viewModel.checkUser()
-        }
-
     }
 }
 
