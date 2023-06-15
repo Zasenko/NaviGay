@@ -10,15 +10,22 @@ import MapKit
 
 struct MapView: View {
     
-    @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
-
+    // MARK: - Properties
+    
+    @StateObject var viewModel: MapViewModel
+    
+    // MARK: - Body
+    
     var body: some View {
-        Map(coordinateRegion: $region)
+        ZStack {
+            UIKitMapView(mapViewModel: viewModel)
+            
+        }
     }
 }
 
-struct MapView_Previews: PreviewProvider {
-    static var previews: some View {
-        MapView()
-    }
-}
+//struct MapView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MapView()
+//    }
+//}

@@ -27,9 +27,9 @@ struct TabBarView: View {
                     case .home:
                         Color.red
                     case .user:
-                        Color.red
+                        Color.orange
                     case .map:
-                        MapView()
+                        MapView(viewModel: MapViewModel(locationManager: viewModel.locationManager, dataManager: viewModel.mapDataManager))
                             .ignoresSafeArea()
                     case .catalog:
                         CatalogView(viewModel: CatalogViewModel(networkManager: viewModel.catalogNetworkManager,
@@ -37,7 +37,6 @@ struct TabBarView: View {
                                                                 safeArea: safeArea,
                                                                 size: size))
                     }
-                    Spacer()
                 }
                 .ignoresSafeArea(.container, edges: .all)
                 tabBar

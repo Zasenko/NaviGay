@@ -32,7 +32,7 @@ struct EntryView: View {
                                                     authManager: AuthManager()))
             case .tabView:
                 TabBarView(viewModel: TabBarViewModel(isUserLogin: $viewModel.isUserLogin,
-                                                      dataManager: viewModel.dataManager))
+                                                      dataManager: viewModel.dataManager, locationManager: LocationManager()))
             }
         }
     }
