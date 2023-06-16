@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-struct TabBarButton: Identifiable {
-    let id: Int
+struct TabBarButton {
     let title: String
     let img: Image
     let page: TabBarRouter

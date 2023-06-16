@@ -15,94 +15,60 @@ enum TabBarRouter {
     case user
 }
 
-final class TabBarViewModel: NSObject, ObservableObject {
+final class TabBarViewModel: ObservableObject {
     
     // MARK: - Properties
     
     @Published var selectedPage: TabBarRouter = TabBarRouter.home
-    @Published var userLocation: CLLocation?
     @Published var showLocationAlert: Bool = false
     @Published var isLocationDenied: Bool = false
     
     @Binding var isUserLogin: Bool
     
+    var locationManager: LocationManagerProtocol
+    
     lazy var catalogNetworkManager = CatalogNetworkManager()
     lazy var catalogDataManager = CatalogDataManager(manager: dataManager)
+    lazy var mapDataManager = MapDataManager(manager: dataManager)
     
-    let mapButton = TabBarButton(id: 1,
-                          title: "Map",
-                          img: AppImages.iconMap,
-                          page: .map)
-    let calendarButton = TabBarButton(id: 2,
-                                      title: "Calendar",
-                                      img: AppImages.iconCalendar,
-                                      page: .home)
-    let catalogButton = TabBarButton(id: 3,
-                                     title: "Catalog",
-                                     img: AppImages.iconSearch,
-                                     page: .catalog)
-    let userButton = TabBarButton(id: 4,
-                                  title: "User",
-                                  img: AppImages.iconPerson,
-                                  page: .user)
-
+    let mapButton = TabBarButton(title: "Map", img: AppImages.iconMap, page: .map)
+    let calendarButton = TabBarButton(title: "Calendar", img: AppImages.iconCalendar, page: .home)
+    let catalogButton = TabBarButton(title: "Catalog", img: AppImages.iconSearch, page: .catalog)
+    let userButton = TabBarButton(title: "User", img: AppImages.iconPerson, page: .user)
+    
     // MARK: - Private Properties
     
     private let dataManager: CoreDataManagerProtocol
-    private let locationManager = CLLocationManager()
+    
     
     // MARK: - Inits
     
     init(isUserLogin: Binding<Bool>,
-         dataManager: CoreDataManagerProtocol) {
+         dataManager: CoreDataManagerProtocol, locationManager: LocationManagerProtocol) {
         _isUserLogin = isUserLogin
         self.dataManager = dataManager
-        super.init()
-
-        locationManager.pausesLocationUpdatesAutomatically = true
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-    }
-}
-
-// MARK: - CLLocationManagerDelegate
-extension TabBarViewModel: CLLocationManagerDelegate {
-    
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        DispatchQueue.main.async {
-            switch manager.authorizationStatus {
-            case .authorizedAlways, .authorizedWhenInUse:
-                self.locationManager.requestLocation()
-                self.isLocationDenied = false
-                self.selectedPage = .home
+        self.locationManager = locationManager
+        
+        self.locationManager.authorizationStatus = { [weak self] result in
+            switch result {
+            case .authorized:
+                self?.isLocationDenied = false
+                self?.selectedPage = .home
             case .denied:
-                self.showLocationAlert.toggle()
-            case .notDetermined:
-                manager.requestWhenInUseAuthorization()
-            default: ()
+                self?.showLocationAlert.toggle()
             }
         }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let currentLocation = locations.last else { return }
-        print("--- TabBarViewModel - locationManager didUpdateLocations () ---")
-        self.userLocation = currentLocation
-        print("currentLocation: " , currentLocation)
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        //TODO
-        print("--- TabBarViewModel - locationManager didFailWithError () ---")
-        print(error.localizedDescription)
-        print("---")
-        print(error)
+        
+        self.locationManager.newUserLocation = { [weak self] location in
+            self?.fetchPlacesAroundMe(location: location)
+        }
     }
 }
 
-// MARK: - Functions
 extension TabBarViewModel {
+    
+    // MARK: - Functions
+    
     func settingsButtonTapped() {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         isLocationDenied = true
@@ -112,5 +78,11 @@ extension TabBarViewModel {
     func cancleButtonTapped() {
         isLocationDenied = true
         selectedPage = .catalog
+    }
+    
+    // MARK: - Private Functions
+    
+    private func fetchPlacesAroundMe(location: CLLocation) {
+        
     }
 }
