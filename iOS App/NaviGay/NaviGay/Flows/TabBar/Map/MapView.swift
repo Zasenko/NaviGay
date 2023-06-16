@@ -19,7 +19,13 @@ struct MapView: View {
     var body: some View {
         ZStack {
             UIKitMapView(mapViewModel: viewModel)
-            
+            if let place = viewModel.selectedAnnotation {
+                VStack {
+                    Spacer()
+                    Color.red
+                        .frame(height: 100)
+                }
+            }
         }
     }
 }

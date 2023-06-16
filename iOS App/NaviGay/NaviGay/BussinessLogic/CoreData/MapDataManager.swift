@@ -33,7 +33,7 @@ extension MapDataManager: MapDataManagerProtocol {
     func getPlaces(userLocation: CLLocation) async -> Result<[Place], Error> {
         let fetchRequest: NSFetchRequest<Place> = Place.fetchRequest()
         
-        let searchDistance:Double =  3.90 //float value in KM
+        let searchDistance: Double =  10 //float value in KM
         let minLat = userLocation.coordinate.latitude - (searchDistance / 69)
         let maxLat = userLocation.coordinate.latitude + (searchDistance / 69)
         let minLon = userLocation.coordinate.longitude - searchDistance / fabs(cos(deg2rad(degrees: userLocation.coordinate.latitude))*69)

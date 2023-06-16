@@ -8,7 +8,7 @@
 import SwiftUI
 import MapKit
 
-final class MapViewModel: NSObject, ObservableObject, MKMapViewDelegate {
+final class MapViewModel: NSObject, ObservableObject {
     
     @Published var mapView = MKMapView()
     @Published var mapType: MKMapType = .standard
@@ -27,6 +27,7 @@ final class MapViewModel: NSObject, ObservableObject, MKMapViewDelegate {
         super.init()
         mapView.delegate = self
         mapView.showsUserLocation = true
+        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(PlaceAnnotation.self))//
         
         if let userLocation = locationManager.userLocation {
             self.userLocation = userLocation
@@ -41,110 +42,63 @@ final class MapViewModel: NSObject, ObservableObject, MKMapViewDelegate {
         
         updateAnnotations()
     }
-    
-//    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-//        DispatchQueue.main.async {
-//            self.selectedAnnotation = nil
-//        }
-//        
-//    }
-//    
-//    func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
-//        guard let annotation = annotation as? PlaceAnnotation else {
-//            return
-//        }
-//        DispatchQueue.main.async {
-//            self.selectedAnnotation = annotation
-//        }
-//        
-//        print(annotation.id)
-//    }
-//    
-    func mapView(_ mapView: MKMapView, didDeselect annotation: MKAnnotation) {
-        DispatchQueue.main.async {
-            self.selectedAnnotation = nil
-        }
-    }
-    
+}
+
+extension MapViewModel: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if annotation.isKind(of: MKUserLocation.self) {
+        guard !annotation.isKind(of: MKUserLocation.self) else {
             return nil
         }
-        else {
-            let marker = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "PIN")
-            marker.isDraggable = false
-            marker.animatesWhenAdded = true
-            marker.displayPriority = .required
-            marker.canShowCallout = false // Если ДА, при выборе аннотации будет отображаться стандартная выноска. Для отображения выноски аннотация должна иметь заголовок.
-            marker.titleVisibility = .hidden
-            marker.subtitleVisibility = .hidden
-            
-            if let placeAnnotation = annotation as? PlaceAnnotation {
-                switch placeAnnotation.type {
-                case "bar":
-                    marker.markerTintColor = .blue
-                    marker.glyphImage = AppImages.mapBarIcon
-//                    marker.selectedGlyphImage = AppImages.mapClubIcon
-//                    marker.glyphTintColor = .red
-                case "cafe":
-                    marker.markerTintColor = .magenta
-                    marker.glyphImage = AppImages.mapCafeIcon
-                case "club":
-                    marker.markerTintColor = .yellow
-                    marker.glyphImage = AppImages.mapClubIcon
-                default:
-                    marker.markerTintColor = .orange
-                }
-            }
-            return marker
+        var annotationView: MKAnnotationView?
+        if let annotation = annotation as? PlaceAnnotation {
+            annotationView = setupPlaceAnnotationView(for: annotation, on: mapView)
         }
+        return annotationView
     }
+}
+
+extension MapViewModel {
     
     func updateAnnotations() {
         mapView.removeAnnotations(mapView.annotations) // Удаление всех существующих аннотаций
-        
         for place in places {
             let placeAnnotation = PlaceAnnotation(id: place.objectID,
-                                                  coordinate: CLLocationCoordinate2D(latitude: CLLocationDegrees(place.latitude),
-                                                                                     longitude: CLLocationDegrees(place.longitude)),
+                                                  coordinate: CLLocationCoordinate2D(latitude: CLLocationDegrees(place.latitude), longitude: CLLocationDegrees(place.longitude)),
                                                   title: place.name,
-                                                  subtitle: nil,
+                                                  subtitle: place.about,
                                                   type: place.type ?? "")
             mapView.addAnnotation(placeAnnotation)
         }
-                
         var placesCoordinates = places.map({CLLocationCoordinate2D(latitude: CLLocationDegrees($0.latitude), longitude: CLLocationDegrees($0.longitude))})
-        
         if let userCoor = userLocation?.coordinate {
             placesCoordinates.append(userCoor)
         }
-        
         if !placesCoordinates.isEmpty {
-            mapView.region = regionThatFitsTo(coordinates: placesCoordinates)
+            mapView.setRegion(regionThatFitsTo(coordinates: placesCoordinates), animated: true)
         }
     }
     
-//    func getRegion() -> MKCoordinateRegion {
-//
-//        var placesCoordinates = places.map({CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)})
-//        var userCoor = userLocation?.coordinate
-//
-//        var mapLocations: [CLLocationCoordinate2D] = [userLocation]
-//
-//        guard let celectedLocationCoordinate = celectedLocation?.coordinate else {
-//            if locations.isEmpty {
-//                return MKCoordinateRegion(center: userLocation, latitudinalMeters: 1000, longitudinalMeters: 1000)
-//            } else {
-//                for i in locations {
-//                    mapLocations.append(i.coordinate)
-//                }
-//                return regionThatFitsTo(coordinates: mapLocations)
-//            }
-//        }
-//        mapLocations.append(celectedLocationCoordinate)
-//        return regionThatFitsTo(coordinates: mapLocations)
-//    }
+    //    func getRegion() -> MKCoordinateRegion {
+    //
+    //        var placesCoordinates = places.map({CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)})
+    //        var userCoor = userLocation?.coordinate
+    //
+    //        var mapLocations: [CLLocationCoordinate2D] = [userLocation]
+    //
+    //        guard let celectedLocationCoordinate = celectedLocation?.coordinate else {
+    //            if locations.isEmpty {
+    //                return MKCoordinateRegion(center: userLocation, latitudinalMeters: 1000, longitudinalMeters: 1000)
+    //            } else {
+    //                for i in locations {
+    //                    mapLocations.append(i.coordinate)
+    //                }
+    //                return regionThatFitsTo(coordinates: mapLocations)
+    //            }
+    //        }
+    //        mapLocations.append(celectedLocationCoordinate)
+    //        return regionThatFitsTo(coordinates: mapLocations)
+    //    }
     
     private func getPlaces(userLocation: CLLocation) {
         Task {
@@ -159,7 +113,7 @@ final class MapViewModel: NSObject, ObservableObject, MKMapViewDelegate {
             }
         }
     }
-
+    
     private func regionThatFitsTo(coordinates: [CLLocationCoordinate2D]) -> MKCoordinateRegion {
         var topLeftCoord = CLLocationCoordinate2D(latitude: -90, longitude: 180)
         var bottomRightCoord = CLLocationCoordinate2D(latitude: 90, longitude: -180)
@@ -176,19 +130,62 @@ final class MapViewModel: NSObject, ObservableObject, MKMapViewDelegate {
         region.span.longitudeDelta = fabs(bottomRightCoord.longitude - topLeftCoord.longitude) * 1.4
         return region
     }
-}
-
-//MARK: - UIKit MapView
-
-struct UIKitMapView: UIViewRepresentable {
     
-    @ObservedObject var mapViewModel: MapViewModel
-    
-    func makeUIView(context: Context) -> MKMapView {
-        return mapViewModel.mapView
-    }
-    
-    func updateUIView(_ uiView: MKMapView, context: Context) {
-        mapViewModel.updateAnnotations()
+    private func setupPlaceAnnotationView(for annotation: PlaceAnnotation, on mapView: MKMapView) -> MKAnnotationView {
+        let marker = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "PINPLACE")
+        marker.isDraggable = false
+        marker.animatesWhenAdded = true
+        marker.displayPriority = .required
+        marker.largeContentTitle = annotation.title // ??????
+        marker.canShowCallout = true // Если ДА, при выборе аннотации будет отображаться стандартная выноска. Для отображения выноски аннотация должна иметь заголовок. ?????
+        marker.titleVisibility = .visible
+        marker.subtitleVisibility = .visible
+        
+        switch annotation.type {
+        case "bar":
+            marker.markerTintColor = .cyan
+            marker.glyphImage = AppImages.mapBarIcon
+            //marker.selectedGlyphImage = AppImages.mapClubIcon
+            marker.glyphTintColor = .white
+        case "cafe":
+            marker.markerTintColor = .systemOrange
+            marker.glyphImage = AppImages.mapCafeIcon
+            marker.glyphTintColor = .systemIndigo
+        case "club":
+            marker.markerTintColor = .yellow
+            marker.glyphImage = AppImages.mapClubIcon
+        case "restaurant":
+            marker.markerTintColor = .purple
+            marker.glyphImage = AppImages.mapRestaurantIcon
+        case "hotel":
+            marker.markerTintColor = .purple
+            marker.glyphImage = AppImages.mapHotelIcon
+        case "sauna":
+            marker.markerTintColor = .purple
+            marker.glyphImage = AppImages.mapSaunaIcon
+        case "cruise":
+            marker.markerTintColor = .red
+            marker.glyphImage = AppImages.mapCruiseIcon
+            marker.glyphTintColor = .systemYellow
+        case "beach":
+            marker.markerTintColor = .yellow
+            marker.glyphImage = AppImages.mapBeachIcon
+            marker.glyphTintColor = .systemBlue
+        case "shop":
+            marker.markerTintColor = .purple
+            marker.glyphImage = AppImages.mapShopIcon
+        case "gym":
+            marker.markerTintColor = .purple
+            marker.glyphImage = AppImages.mapGymIcon
+        case "culture":
+            marker.markerTintColor = .purple
+            marker.glyphImage = AppImages.mapCultureIcon
+        case "community":
+            marker.markerTintColor = .purple
+            marker.glyphImage = AppImages.mapCommunityIcon
+        default:
+            marker.markerTintColor = .white
+        }
+        return marker
     }
 }

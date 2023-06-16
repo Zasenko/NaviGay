@@ -8,8 +8,8 @@
 import MapKit
 import CoreData
 
-class PlaceAnnotation: NSObject, MKAnnotation, Identifiable {
-  //  public let identifier = "PlaceAnnotation"
+final class PlaceAnnotation: NSObject, MKAnnotation, Identifiable {
+    public let identifier = "PlaceAnnotation"
     
     let id: NSManagedObjectID
     let coordinate: CLLocationCoordinate2D
