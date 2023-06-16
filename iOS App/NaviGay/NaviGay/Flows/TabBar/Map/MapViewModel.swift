@@ -31,20 +31,25 @@ final class MapViewModel: NSObject, ObservableObject {
         
         if let userLocation = locationManager.userLocation {
             self.userLocation = userLocation
+            updateAnnotations()
             getPlaces(userLocation: userLocation)
         }
-        
         self.locationManager.newUserLocation = { [weak self] location in
             self?.userLocation = location
             self?.getPlaces(userLocation: location)
             self?.updateAnnotations()
         }
-        
-        updateAnnotations()
     }
 }
 
 extension MapViewModel: MKMapViewDelegate {
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(overlay: overlay)
+        renderer.strokeColor = .systemBlue
+        renderer.lineWidth = 5
+        return renderer
+    }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !annotation.isKind(of: MKUserLocation.self) else {
@@ -56,49 +61,89 @@ extension MapViewModel: MKMapViewDelegate {
         }
         return annotationView
     }
+    
+    @MainActor func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
+        if annotation is PlaceAnnotation {
+            Task {
+                selectedAnnotation = annotation
+            }
+
+            let sourceCoordinate = mapView.userLocation.coordinate
+            let destinationCoordinate = annotation.coordinate
+
+            let directions = directions(from: sourceCoordinate, to: destinationCoordinate, transportType: .walking)
+
+            directions.calculate { response, error in
+                guard error == nil, let route = response?.routes.first else {
+                    return
+                }
+                if !mapView.overlays.isEmpty {
+                    mapView.removeOverlays(mapView.overlays)
+                }
+                mapView.addOverlay(route.polyline)
+            }
+            directions.cancel()
+        }
+    }
+
+    @MainActor func mapView(_ mapView: MKMapView, didDeselect annotation: MKAnnotation) {
+        let overlays = mapView.overlays
+        mapView.removeOverlays(overlays)
+        Task {
+            selectedAnnotation = nil
+        }
+    }
 }
 
 extension MapViewModel {
     
     func updateAnnotations() {
-        mapView.removeAnnotations(mapView.annotations) // Удаление всех существующих аннотаций
-        for place in places {
-            let placeAnnotation = PlaceAnnotation(id: place.objectID,
-                                                  coordinate: CLLocationCoordinate2D(latitude: CLLocationDegrees(place.latitude), longitude: CLLocationDegrees(place.longitude)),
-                                                  title: place.name,
-                                                  subtitle: place.about,
-                                                  type: place.type ?? "")
-            mapView.addAnnotation(placeAnnotation)
+        
+        if mapView.annotations.count != places.count + 1 { /// +1 - User location annotation
+            mapView.removeAnnotations(mapView.annotations) // Удаление всех существующих аннотаций
+            for place in places {
+                let placeAnnotation = PlaceAnnotation(id: place.objectID,
+                                                      coordinate: CLLocationCoordinate2D(latitude: CLLocationDegrees(place.latitude), longitude: CLLocationDegrees(place.longitude)),
+                                                      title: place.name,
+                                                      subtitle: place.about,
+                                                      type: place.type ?? "")
+                mapView.addAnnotation(placeAnnotation)
+            }
         }
-        var placesCoordinates = places.map({CLLocationCoordinate2D(latitude: CLLocationDegrees($0.latitude), longitude: CLLocationDegrees($0.longitude))})
-        if let userCoor = userLocation?.coordinate {
-            placesCoordinates.append(userCoor)
-        }
-        if !placesCoordinates.isEmpty {
-            mapView.setRegion(regionThatFitsTo(coordinates: placesCoordinates), animated: true)
+//        let region = viewModel.getRegion(userLocation: uiView.userLocation.coordinate, locations: locations, celectedLocation: celectedLocation)
+//        uiView.setRegion(region, animated: true)
+        
+        
+        
+        if let region = getRegion() {
+            mapView.setRegion(region, animated: true)
         }
     }
     
-    //    func getRegion() -> MKCoordinateRegion {
-    //
-    //        var placesCoordinates = places.map({CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)})
-    //        var userCoor = userLocation?.coordinate
-    //
-    //        var mapLocations: [CLLocationCoordinate2D] = [userLocation]
-    //
-    //        guard let celectedLocationCoordinate = celectedLocation?.coordinate else {
-    //            if locations.isEmpty {
-    //                return MKCoordinateRegion(center: userLocation, latitudinalMeters: 1000, longitudinalMeters: 1000)
-    //            } else {
-    //                for i in locations {
-    //                    mapLocations.append(i.coordinate)
-    //                }
-    //                return regionThatFitsTo(coordinates: mapLocations)
-    //            }
-    //        }
-    //        mapLocations.append(celectedLocationCoordinate)
-    //        return regionThatFitsTo(coordinates: mapLocations)
-    //    }
+        func getRegion() -> MKCoordinateRegion? {
+            let placesCoordinates = places.map({CLLocationCoordinate2D(latitude: CLLocationDegrees($0.latitude), longitude: CLLocationDegrees($0.longitude))})
+            
+            var mapLocations: [CLLocationCoordinate2D] = []
+            
+            guard let userCoordinate = userLocation?.coordinate else {
+                return nil
+            }
+            mapLocations.append(userCoordinate)
+            
+            if let selectedAnnotationCoordinate = selectedAnnotation?.coordinate {
+                mapLocations.append(selectedAnnotationCoordinate)
+                return regionThatFitsTo(coordinates: mapLocations)
+            } else {
+                if places.isEmpty {
+                    return MKCoordinateRegion(center: userCoordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+                } else {
+                    for coordinate in placesCoordinates {
+                        mapLocations.append(coordinate)
+                    }
+                    return regionThatFitsTo(coordinates: mapLocations)
+                }
+            }
+    }
     
     private func getPlaces(userLocation: CLLocation) {
         Task {
@@ -187,5 +232,14 @@ extension MapViewModel {
             marker.markerTintColor = .white
         }
         return marker
+    }
+    
+    private func directions(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D, transportType: MKDirectionsTransportType) -> MKDirections {
+        let request = MKDirections.Request()
+        request.source = MKMapItem(placemark: MKPlacemark(coordinate: from))
+        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: to))
+        request.requestsAlternateRoutes = false
+        request.transportType = .walking
+        return MKDirections(request: request)
     }
 }
