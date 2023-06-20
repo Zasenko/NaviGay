@@ -132,7 +132,7 @@ extension CityViewModel {
                         for decodedPlace in decodedPlaces {
                             if let place = places.first(where: { $0.id == decodedPlace.id } ) {
                                 place.name = decodedPlace.name
-                                place.type = decodedPlace.type
+                                place.type = decodedPlace.type.rawValue
                                 place.photo = decodedPlace.photo
                                 place.address = decodedPlace.address
                                 place.latitude = decodedPlace.latitude
@@ -164,7 +164,7 @@ extension CityViewModel {
                                     if let place = place {
                                         
                                         place.name = decodedPlace.name
-                                        place.type = decodedPlace.type
+                                        place.type = decodedPlace.type.rawValue
                                         place.photo = decodedPlace.photo
                                         place.address = decodedPlace.address
                                         place.latitude = decodedPlace.latitude
@@ -197,7 +197,7 @@ extension CityViewModel {
                                         let place = await dataManager.createPlace(decodedPlace: decodedPlace)
                                         
                                         place.name = decodedPlace.name
-                                        place.type = decodedPlace.type
+                                        place.type = decodedPlace.type.rawValue
                                         place.photo = decodedPlace.photo
                                         place.address = decodedPlace.address
                                         place.latitude = decodedPlace.latitude

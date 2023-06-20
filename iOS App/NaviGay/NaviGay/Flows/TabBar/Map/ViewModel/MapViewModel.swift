@@ -22,6 +22,8 @@ final class MapViewModel: NSObject, ObservableObject {
     @Published var events: [Event] = []
     @Published var showInfoSheet = false
     
+    @Published var locations: [PlaceType:[MKAnnotation]] = [:]
+    
     // MARK: - Private Properties
     
     private var locationManager: LocationManagerProtocol
@@ -46,7 +48,7 @@ final class MapViewModel: NSObject, ObservableObject {
         
         self.locationManager.newUserLocation = { [weak self] location in
             self?.userLocation = location
-           self?.updateAnnotations()
+            self?.updateAnnotations()
             self?.getLocations(userLocation: location)
         }
     }
@@ -119,9 +121,9 @@ extension MapViewModel: MKMapViewDelegate {
         // mapView.removeOverlays(overlays)
         Task {
             withAnimation() {
-                    self.selectedAnnotation = nil
-                    self.showInfoSheet = false
-                    self.selectedAnnotation = nil
+                self.selectedAnnotation = nil
+                self.showInfoSheet = false
+                self.selectedAnnotation = nil
             }
         }
     }
@@ -216,7 +218,7 @@ extension MapViewModel {
         }
         return event
     }
-
+    
     private func regionThatFitsTo(coordinates: [CLLocationCoordinate2D]) -> MKCoordinateRegion {
         var topLeftCoord = CLLocationCoordinate2D(latitude: -90, longitude: 180)
         var bottomRightCoord = CLLocationCoordinate2D(latitude: 90, longitude: -180)
@@ -246,45 +248,45 @@ extension MapViewModel {
         marker.subtitleVisibility = .hidden
         
         switch annotation.type {
-        case "bar":
+        case .bar:
             marker.markerTintColor = .cyan
             marker.glyphImage = AppImages.mapBarIcon
             marker.selectedGlyphImage = AppImages.mapClubIcon
             marker.glyphTintColor = .white
-        case "cafe":
+        case .cafe:
             marker.markerTintColor = .systemOrange
             marker.glyphImage = AppImages.mapCafeIcon
             marker.glyphTintColor = .systemIndigo
-        case "club":
+        case .club:
             marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapClubIcon
-        case "restaurant":
+        case .restaurant:
             marker.markerTintColor = .green
             marker.glyphImage = AppImages.mapRestaurantIcon
-        case "hotel":
+        case .hotel:
             marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapHotelIcon
-        case "sauna":
+        case .sauna:
             marker.markerTintColor = .systemBlue
             marker.glyphImage = AppImages.mapSaunaIcon
-        case "cruise":
+        case .cruise:
             marker.markerTintColor = .black
             marker.glyphImage = AppImages.mapCruiseIcon
             marker.glyphTintColor = .red
-        case "beach":
+        case .beach:
             marker.markerTintColor = .yellow
             marker.glyphImage = AppImages.mapBeachIcon
             marker.glyphTintColor = .systemBlue
-        case "shop":
+        case .shop:
             marker.markerTintColor = .magenta
             marker.glyphImage = AppImages.mapShopIcon
-        case "gym":
+        case .gym:
             marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapGymIcon
-        case "culture":
+        case .culture:
             marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapCultureIcon
-        case "community":
+        case .community:
             marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapCommunityIcon
         default:
@@ -303,25 +305,25 @@ extension MapViewModel {
         
         marker.markerTintColor = .systemPink
         
-      //  marker.detailCalloutAccessoryView = AppImages.mapCultureIcon.map(UIImageView.init)
+        //  marker.detailCalloutAccessoryView = AppImages.mapCultureIcon.map(UIImageView.init)
         ///картинка при клике
         ///
         marker.titleVisibility = .hidden
         marker.subtitleVisibility = .hidden
-
+        
         
         marker.glyphImage = AppImages.mapPartyIcon
         marker.selectedGlyphImage = AppImages.mapHotelIcon
         marker.markerTintColor = .red
         marker.glyphTintColor = .white
         
-//        let rightButton = UIButton(type: .detailDisclosure)
-//        marker.rightCalloutAccessoryView = rightButton
+        //        let rightButton = UIButton(type: .detailDisclosure)
+        //        marker.rightCalloutAccessoryView = rightButton
         ///or marker.leftCalloutAccessoryView = rightButton
         
         //  let offset = CGPoint(x: image.size.width / 2, y: -(image.size.height / 2) )
         //  marker.centerOffset = offset
-          
+        
         return marker
     }
     

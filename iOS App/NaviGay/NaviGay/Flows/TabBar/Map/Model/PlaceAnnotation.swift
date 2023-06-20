@@ -15,7 +15,7 @@ final class PlaceAnnotation: NSObject, MKAnnotation, Identifiable {
     let coordinate: CLLocationCoordinate2D
     let title: String?
     let subtitle: String?
-    let type: String
+    let type: PlaceType
     var img: UIImage? = UIImage(systemName: "heart.fill")
     
     init(place: Place) {
@@ -24,32 +24,32 @@ final class PlaceAnnotation: NSObject, MKAnnotation, Identifiable {
                                                  longitude: CLLocationDegrees(place.longitude))
         self.title = place.name
         self.subtitle = place.type
-        self.type = place.type ?? ""
+        self.type = PlaceType(rawValue: place.type ?? "defaultValue") ?? .defaultValue// place.type ?? ""
 
         switch type {
-        case "bar":
+        case .bar:
             self.img = AppImages.mapBarIcon
-        case "cafe":
+        case .cafe:
             self.img = AppImages.mapCafeIcon
-        case "club":
+        case .club:
             self.img = AppImages.mapClubIcon
-        case "restaurant":
+        case .restaurant:
             self.img = AppImages.mapRestaurantIcon
-        case "hotel":
+        case .hotel:
             self.img = AppImages.mapHotelIcon
-        case "sauna":
+        case .sauna:
             self.img = AppImages.mapSaunaIcon
-        case "cruise":
+        case .cruise:
             self.img = AppImages.mapCruiseIcon
-        case "beach":
+        case .beach:
             self.img = AppImages.mapBeachIcon
-        case "shop":
+        case .shop:
             self.img = AppImages.mapShopIcon
-        case "gym":
+        case .gym:
             self.img = AppImages.mapGymIcon
-        case "culture":
+        case .culture:
             self.img = AppImages.mapCultureIcon
-        case "community":
+        case .community:
             self.img = AppImages.mapCommunityIcon
         default:
             self.img = AppImages.mapCommunityIcon
