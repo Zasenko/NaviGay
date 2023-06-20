@@ -56,39 +56,3 @@ final class PlaceAnnotation: NSObject, MKAnnotation, Identifiable {
         }
     }
 }
-
-//extension PlaceAnnotation {
-//    private func loadImage() {
-//        Task {
-//            await self.loadFromCache()
-//        }
-//    }
-//
-//    @MainActor
-//    private func loadFromCache(url string: String) async {
-//        guard let urlString = string else { return }
-//        do {
-//            self.img = try await ImageLoader.shared.loadImage(urlString: urlString)
-//        }
-//        catch {
-//
-//            //TODO
-//
-//            print(error.localizedDescription)
-//        }
-//    }
-//}
-
-final class EventAnnotation: NSObject, MKAnnotation, Identifiable {
-    public let identifier = "EventAnnotation"
-    
-    let id: NSManagedObjectID
-    let coordinate: CLLocationCoordinate2D
-    let title: String?
-    
-    init(id: NSManagedObjectID, coordinate: CLLocationCoordinate2D, title: String?) {
-        self.id = id
-        self.coordinate = coordinate
-        self.title = title
-    }
-}

@@ -35,7 +35,8 @@ final class MapViewModel: NSObject, ObservableObject {
         super.init()
         mapView.delegate = self
         mapView.showsUserLocation = true
-        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(PlaceAnnotation.self))//
+        mapView.isRotateEnabled = true
+        registerMapAnnotationViews()
         
         if let userLocation = locationManager.userLocation {
             self.userLocation = userLocation
@@ -66,23 +67,13 @@ extension MapViewModel: MKMapViewDelegate {
         guard !annotation.isKind(of: MKUserLocation.self) else {
             return nil
         }
+        
         var annotationView: MKAnnotationView?
-        if let placeAnnotation = annotation as? PlaceAnnotation {
-            if let dequeuedView = mapView.dequeueReusableAnnotationView(
-                withIdentifier: placeAnnotation.identifier) as? MKMarkerAnnotationView {
-                annotationView = setupPlaceAnnotationView(for: dequeuedView, type: placeAnnotation.type)
-            } else {
-                let marker = MKMarkerAnnotationView(annotation: placeAnnotation, reuseIdentifier: placeAnnotation.identifier)
-                annotationView = setupPlaceAnnotationView(for: marker, type: placeAnnotation.type)
-            }
-        } else if let eventAnnotation = annotation as? EventAnnotation {
-            if let dequeuedView = mapView.dequeueReusableAnnotationView(
-                withIdentifier: eventAnnotation.identifier) as? MKMarkerAnnotationView {
-                annotationView = setupEventAnnotationView(for:  dequeuedView)
-            } else {
-                let marker = MKMarkerAnnotationView(annotation: eventAnnotation, reuseIdentifier: eventAnnotation.identifier)
-                annotationView = setupEventAnnotationView(for: marker)
-            }
+        if let annotation = annotation as? PlaceAnnotation {
+            annotationView = setupPlaceAnnotationView(for: annotation, on: mapView)
+        } else if let annotation = annotation as? EventAnnotation {
+            annotationView = setupEventAnnotationView(for: annotation, on: mapView)
+            
         }
         return annotationView
     }
@@ -116,7 +107,7 @@ extension MapViewModel: MKMapViewDelegate {
                     self.showInfoSheet = false
                     self.selectedAnnotation = nil
                     self.selectedAnnotation = annotation
-                    // selectedPlace = getPlace()
+                    self.selectedEvent = getEvent()
                 }
             }
         }
@@ -131,26 +122,14 @@ extension MapViewModel: MKMapViewDelegate {
                     self.selectedAnnotation = nil
                     self.showInfoSheet = false
                     self.selectedAnnotation = nil
-                
             }
         }
-
     }
 }
 
 extension MapViewModel {
     
     // MARK: - Functions
-    
-    private func getPlace() -> Place? {
-        guard let placeAnnotatio = selectedAnnotation as? PlaceAnnotation else {
-            return nil
-        }
-        guard let place = places.first(where: { $0.objectID == placeAnnotatio.objectID}) else {
-            return nil
-        }
-        return place
-    }
     
     func updateAnnotations() {
         //TODO!!!!! проверка аннотаций
@@ -161,9 +140,7 @@ extension MapViewModel {
                 mapView.addAnnotation(placeAnnotation)
             }
             for event in events {
-                let eventAnnotation = EventAnnotation(id: event.objectID,
-                                                      coordinate: CLLocationCoordinate2D(latitude: CLLocationDegrees(event.latitude), longitude: CLLocationDegrees(event.longitude)),
-                                                      title: event.name)
+                let eventAnnotation = EventAnnotation(event: event)
                 mapView.addAnnotation(eventAnnotation)
             }
         }
@@ -174,6 +151,11 @@ extension MapViewModel {
     }
     
     // MARK: - Private Functions
+    
+    private func registerMapAnnotationViews() {
+        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(PlaceAnnotation.self))
+        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(EventAnnotation.self))
+    }
     
     private func getRegion() -> MKCoordinateRegion? {
         let placesCoordinates = places.map({CLLocationCoordinate2D(latitude: CLLocationDegrees($0.latitude), longitude: CLLocationDegrees($0.longitude))})
@@ -209,15 +191,30 @@ extension MapViewModel {
                     self.events = locations.events
                     updateAnnotations()
                 }
-        //    case .success(let places):
-//                DispatchQueue.main.sync {
-//                    self.places = places
-//                    updateAnnotations()
-//                }
             case .failure(let error):
                 print("ERROR MapViewModel getPlaces(userLocation: CLLocation):", error)
             }
         }
+    }
+    
+    private func getPlace() -> Place? {
+        guard let anatation = selectedAnnotation as? PlaceAnnotation else {
+            return nil
+        }
+        guard let place = places.first(where: { $0.objectID == anatation.objectID}) else {
+            return nil
+        }
+        return place
+    }
+    
+    private func getEvent() -> Event? {
+        guard let anatation = selectedAnnotation as? EventAnnotation else {
+            return nil
+        }
+        guard let event = events.first(where: { $0.objectID == anatation.objectID}) else {
+            return nil
+        }
+        return event
     }
 
     private func regionThatFitsTo(coordinates: [CLLocationCoordinate2D]) -> MKCoordinateRegion {
@@ -237,45 +234,49 @@ extension MapViewModel {
         return region
     }
     
-    private func setupPlaceAnnotationView(for marker: MKMarkerAnnotationView, type: String) -> MKAnnotationView {
-        marker.isDraggable = false
+    private func setupPlaceAnnotationView(for annotation: PlaceAnnotation, on mapView: MKMapView) -> MKAnnotationView {
+        let reuseIdentifier = NSStringFromClass(PlaceAnnotation.self)
+        let marker = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier) as? MKMarkerAnnotationView ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        
         marker.animatesWhenAdded = true
         marker.displayPriority = .required
         marker.canShowCallout = false
+        marker.markerTintColor = .gray
         marker.titleVisibility = .hidden
         marker.subtitleVisibility = .hidden
-        switch type {
+        
+        switch annotation.type {
         case "bar":
             marker.markerTintColor = .cyan
             marker.glyphImage = AppImages.mapBarIcon
-            //marker.selectedGlyphImage = AppImages.mapClubIcon
+            marker.selectedGlyphImage = AppImages.mapClubIcon
             marker.glyphTintColor = .white
         case "cafe":
             marker.markerTintColor = .systemOrange
             marker.glyphImage = AppImages.mapCafeIcon
             marker.glyphTintColor = .systemIndigo
         case "club":
-            marker.markerTintColor = .yellow
+            marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapClubIcon
         case "restaurant":
-            marker.markerTintColor = .purple
+            marker.markerTintColor = .green
             marker.glyphImage = AppImages.mapRestaurantIcon
         case "hotel":
             marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapHotelIcon
         case "sauna":
-            marker.markerTintColor = .purple
+            marker.markerTintColor = .systemBlue
             marker.glyphImage = AppImages.mapSaunaIcon
         case "cruise":
-            marker.markerTintColor = .red
+            marker.markerTintColor = .black
             marker.glyphImage = AppImages.mapCruiseIcon
-            marker.glyphTintColor = .systemYellow
+            marker.glyphTintColor = .red
         case "beach":
             marker.markerTintColor = .yellow
             marker.glyphImage = AppImages.mapBeachIcon
             marker.glyphTintColor = .systemBlue
         case "shop":
-            marker.markerTintColor = .purple
+            marker.markerTintColor = .magenta
             marker.glyphImage = AppImages.mapShopIcon
         case "gym":
             marker.markerTintColor = .purple
@@ -287,22 +288,40 @@ extension MapViewModel {
             marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapCommunityIcon
         default:
-            marker.markerTintColor = .white
+            marker.markerTintColor = .gray
         }
         return marker
     }
     
-    private func setupEventAnnotationView(for marker: MKMarkerAnnotationView) -> MKAnnotationView {
-        marker.isDraggable = false
+    private func setupEventAnnotationView(for annotation: EventAnnotation, on mapView: MKMapView) -> MKAnnotationView {
+        let reuseIdentifier = NSStringFromClass(EventAnnotation.self)
+        let marker = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier) as? MKMarkerAnnotationView ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        
         marker.animatesWhenAdded = true
         marker.displayPriority = .required
         marker.canShowCallout = false
+        
+        marker.markerTintColor = .systemPink
+        
+      //  marker.detailCalloutAccessoryView = AppImages.mapCultureIcon.map(UIImageView.init)
+        ///картинка при клике
+        ///
         marker.titleVisibility = .hidden
         marker.subtitleVisibility = .hidden
+
         
-        marker.markerTintColor = .systemYellow
-            marker.glyphImage = AppImages.mapPartyIcon
-            //marker.selectedGlyphImage = AppImages.mapClubIcon
+        marker.glyphImage = AppImages.mapPartyIcon
+        marker.selectedGlyphImage = AppImages.mapHotelIcon
+        marker.markerTintColor = .red
+        marker.glyphTintColor = .white
+        
+//        let rightButton = UIButton(type: .detailDisclosure)
+//        marker.rightCalloutAccessoryView = rightButton
+        ///or marker.leftCalloutAccessoryView = rightButton
+        
+        //  let offset = CGPoint(x: image.size.width / 2, y: -(image.size.height / 2) )
+        //  marker.centerOffset = offset
+          
         return marker
     }
     
@@ -315,3 +334,8 @@ extension MapViewModel {
         return MKDirections(request: request)
     }
 }
+
+
+
+
+

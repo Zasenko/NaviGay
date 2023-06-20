@@ -81,6 +81,7 @@ struct MapPlaceView: View {
             .multilineTextAlignment(.leading)
             .foregroundColor(.black)
             .padding(.leading, 10)
+            Spacer()
         }
 //        .onChange(of: viewModel.place.id, perform: { newValue in
 //            viewModel.loadImage()

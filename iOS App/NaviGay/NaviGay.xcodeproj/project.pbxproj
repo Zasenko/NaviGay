@@ -21,6 +21,7 @@
 		0F37F0382A03F78B00679932 /* DecodedCountries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F37F0372A03F78B00679932 /* DecodedCountries.swift */; };
 		0F37F03A2A03F80700679932 /* CatalogNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F37F0392A03F80700679932 /* CatalogNetworkManager.swift */; };
 		0F41D9B52A39D170003B51DA /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F41D9B42A39D170003B51DA /* LocationManager.swift */; };
+		0F53B3152A41C06A0022D84B /* EventAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F53B3142A41C06A0022D84B /* EventAnnotation.swift */; };
 		0F5B8BE829F83CD90083B81B /* NaviGayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5B8BE729F83CD90083B81B /* NaviGayApp.swift */; };
 		0F5B8BEA29F83CD90083B81B /* EntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5B8BE929F83CD90083B81B /* EntryView.swift */; };
 		0F5B8BEC29F83CDA0083B81B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F5B8BEB29F83CDA0083B81B /* Assets.xcassets */; };
@@ -111,6 +112,7 @@
 		0F37F0372A03F78B00679932 /* DecodedCountries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodedCountries.swift; sourceTree = "<group>"; };
 		0F37F0392A03F80700679932 /* CatalogNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogNetworkManager.swift; sourceTree = "<group>"; };
 		0F41D9B42A39D170003B51DA /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		0F53B3142A41C06A0022D84B /* EventAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAnnotation.swift; sourceTree = "<group>"; };
 		0F5B8BE429F83CD90083B81B /* NaviGay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaviGay.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F5B8BE729F83CD90083B81B /* NaviGayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaviGayApp.swift; sourceTree = "<group>"; };
 		0F5B8BE929F83CD90083B81B /* EntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryView.swift; sourceTree = "<group>"; };
@@ -498,6 +500,7 @@
 			children = (
 				0FBB1E6F2A3B56C200FAEEA4 /* PlaceAnnotation.swift */,
 				0F7DC03E2A3C9012007034CC /* UserAnnotation.swift */,
+				0F53B3142A41C06A0022D84B /* EventAnnotation.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -785,6 +788,7 @@
 				0F7DC0412A3CA751007034CC /* UIKitMapView.swift in Sources */,
 				0FE44CC52A1D2E8D00E6BB3C /* User+CoreDataClass.swift in Sources */,
 				0FE5B4BD2A1E2F7A0018E9E0 /* PlaceViewModel.swift in Sources */,
+				0F53B3152A41C06A0022D84B /* EventAnnotation.swift in Sources */,
 				0FE5B4BB2A1E2EE10018E9E0 /* PlaceComment+CoreDataProperties.swift in Sources */,
 				0F37F0362A03F53D00679932 /* CatalogDataManager.swift in Sources */,
 				0FD8A76A29FAB439004EA3F0 /* LoginTextField.swift in Sources */,
