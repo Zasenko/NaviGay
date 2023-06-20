@@ -12,7 +12,7 @@ final class PlaceViewModel: ObservableObject {
     //MARK: - Properties
     
     @Published var place: Place
-    @Published var placeImage: Image = AppImages.appIcon
+    @Published var placeImage: Image = AppImages.bw
     
     let networkManager: PlaceNetworkManagerProtocol
     let dataManager: PlaceDataManagerProtocol

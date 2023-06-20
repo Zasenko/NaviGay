@@ -12,7 +12,7 @@ final class CityEventViewModel: ObservableObject {
     //MARK: - Properties
     
     @Published var event: Event
-    @Published var eventImage: Image = AppImages.appIcon
+    @Published var eventImage: Image = AppImages.bw
     @Published var startTime: String = "startTime"
     @Published var finishTime: String = "finishTime"
     @Published var isPartyFinished: Bool = false

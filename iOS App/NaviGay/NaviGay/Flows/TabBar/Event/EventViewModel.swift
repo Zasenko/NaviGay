@@ -11,7 +11,7 @@ final class EventViewModel: ObservableObject {
     //MARK: - Properties
     
     @Published var event: Event
-    @Published var eventImage: Image = AppImages.appIcon
+    @Published var eventImage: Image = AppImages.bw
     
     let networkManager: EventNetworkManagerProtocol
     let dataManager: EventDataManagerProtocol

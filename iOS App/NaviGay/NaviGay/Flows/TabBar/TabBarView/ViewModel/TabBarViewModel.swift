@@ -25,6 +25,9 @@ final class TabBarViewModel: ObservableObject {
     
     @Binding var isUserLogin: Bool
     
+    var safeArea: EdgeInsets?
+    var size: CGSize?
+    
     var locationManager: LocationManagerProtocol
     
     lazy var catalogNetworkManager = CatalogNetworkManager()

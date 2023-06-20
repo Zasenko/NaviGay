@@ -54,9 +54,9 @@ struct DecodedCity: Identifiable, Codable {
     let events: [DecodedEvent]?
 }
 
-//enum PlaceType: String, Codable {
-//    case bar, cafe, restaurant, club, hotel, sauna, cruise, beach, shop, gym, culture, community
-//}
+enum PlaceType: String, Codable {
+    case bar, cafe, restaurant, club, hotel, sauna, cruise, beach, shop, gym, culture, community, defaultValue
+}
 
 struct PlaceResult: Codable {
     let error: String?
@@ -66,7 +66,7 @@ struct PlaceResult: Codable {
 struct DecodedPlace: Identifiable, Codable {
     let id: Int
     let name: String
-    let type: String
+    let type: PlaceType
     let latitude: Float
     let longitude: Float
     let address: String

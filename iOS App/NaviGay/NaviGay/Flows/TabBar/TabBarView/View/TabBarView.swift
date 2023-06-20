@@ -22,26 +22,22 @@ struct TabBarView: View {
             let size = $0.size
             
             VStack {
-                VStack {
-                    switch viewModel.selectedPage {
-                    case .home:
-                        Color.red
-                    case .user:
-                        Color.orange
-                    case .map:
-                        MapView(viewModel: MapViewModel(locationManager: viewModel.locationManager, dataManager: viewModel.mapDataManager))
-                            .ignoresSafeArea()
-                    case .catalog:
-                        CatalogView(viewModel: CatalogViewModel(networkManager: viewModel.catalogNetworkManager,
-                                                                dataManager: viewModel.catalogDataManager,
-                                                                safeArea: safeArea,
-                                                                size: size))
-                    }
+                
+                switch viewModel.selectedPage {
+                case .home:
+                    Color.red
+                case .user:
+                    Color.orange
+                case .map:
+                    MapView(viewModel: MapViewModel(locationManager: viewModel.locationManager, dataManager: viewModel.mapDataManager))
+                case .catalog:
+                    CatalogView(viewModel: CatalogViewModel(networkManager: viewModel.catalogNetworkManager,
+                                                            dataManager: viewModel.catalogDataManager,
+                                                            safeArea: safeArea,
+                                                            size: size))
                 }
-                .ignoresSafeArea(.container, edges: .all)
                 tabBar
             }
-            .ignoresSafeArea(.keyboard, edges: .bottom)
             .alert(isPresented: $viewModel.showLocationAlert) {
                 //TODO!!!! текст
                 Alert(title: Text("Camera access required to take photos"),
@@ -63,5 +59,7 @@ struct TabBarView: View {
             TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.catalogButton)
             TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.userButton)
         }
+        .padding(.top, 12)
+        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
 }
