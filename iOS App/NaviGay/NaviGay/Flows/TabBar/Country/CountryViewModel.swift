@@ -12,7 +12,7 @@ final class CountryViewModel: ObservableObject {
     //MARK: - Properties
     
     @Published var country: Country
-    @Published var countryImage: Image = AppImages.appIcon
+    @Published var countryImage: Image = AppImages.bw
     
     let size: CGSize
     let safeArea: EdgeInsets

@@ -11,7 +11,7 @@ final class CachedImageViewModel: ObservableObject {
     
     //MARK: - Properties
     
-    @Published var image: Image = AppImages.appIcon
+    @Published var image: Image = AppImages.bw
     
     let url: String?
     let width: CGFloat

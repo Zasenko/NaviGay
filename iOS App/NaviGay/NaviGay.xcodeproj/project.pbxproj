@@ -31,6 +31,7 @@
 		0F6C167E29FC087800F6D104 /* ApiProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6C167D29FC087800F6D104 /* ApiProperties.swift */; };
 		0F6C168029FC0D2400F6D104 /* AuthNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6C167F29FC0D2400F6D104 /* AuthNetworkManager.swift */; };
 		0F6C168229FC0D4B00F6D104 /* NetworkErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F6C168129FC0D4B00F6D104 /* NetworkErrors.swift */; };
+		0F7388412A409F6E00EE20D3 /* MapPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7388402A409F6E00EE20D3 /* MapPlaceView.swift */; };
 		0F7DC03F2A3C9012007034CC /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7DC03E2A3C9012007034CC /* UserAnnotation.swift */; };
 		0F7DC0412A3CA751007034CC /* UIKitMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7DC0402A3CA751007034CC /* UIKitMapView.swift */; };
 		0FB281012A0154DE00E79982 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB281002A0154DE00E79982 /* AuthManager.swift */; };
@@ -121,6 +122,7 @@
 		0F6C167D29FC087800F6D104 /* ApiProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiProperties.swift; sourceTree = "<group>"; };
 		0F6C167F29FC0D2400F6D104 /* AuthNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthNetworkManager.swift; sourceTree = "<group>"; };
 		0F6C168129FC0D4B00F6D104 /* NetworkErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrors.swift; sourceTree = "<group>"; };
+		0F7388402A409F6E00EE20D3 /* MapPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPlaceView.swift; sourceTree = "<group>"; };
 		0F7DC03E2A3C9012007034CC /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
 		0F7DC0402A3CA751007034CC /* UIKitMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitMapView.swift; sourceTree = "<group>"; };
 		0FB281002A0154DE00E79982 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
@@ -465,11 +467,9 @@
 		0F5B8C3C29F97BC20083B81B /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				0FBB1E6F2A3B56C200FAEEA4 /* PlaceAnnotation.swift */,
-				0F7DC03E2A3C9012007034CC /* UserAnnotation.swift */,
-				0FBB1E6D2A3B2AB300FAEEA4 /* MapViewModel.swift */,
-				0FBD1F882A16263B00B11CCE /* MapView.swift */,
-				0F7DC0402A3CA751007034CC /* UIKitMapView.swift */,
+				0F73883D2A40696200EE20D3 /* Model */,
+				0F73883E2A40696700EE20D3 /* ViewModel */,
+				0F73883F2A40696E00EE20D3 /* View */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -491,6 +491,33 @@
 				0FB281022A0296CB00E79982 /* Entity */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		0F73883D2A40696200EE20D3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0FBB1E6F2A3B56C200FAEEA4 /* PlaceAnnotation.swift */,
+				0F7DC03E2A3C9012007034CC /* UserAnnotation.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		0F73883E2A40696700EE20D3 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				0FBB1E6D2A3B2AB300FAEEA4 /* MapViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		0F73883F2A40696E00EE20D3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				0FBD1F882A16263B00B11CCE /* MapView.swift */,
+				0F7DC0402A3CA751007034CC /* UIKitMapView.swift */,
+				0F7388402A409F6E00EE20D3 /* MapPlaceView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		0FB280FE2A0149C000E79982 /* NetworkManagers */ = {
@@ -715,6 +742,7 @@
 				0FBB1E702A3B56C200FAEEA4 /* PlaceAnnotation.swift in Sources */,
 				0FD8A77529FAC3BB004EA3F0 /* ShakeEffect.swift in Sources */,
 				0FD8A76629FAB2A0004EA3F0 /* AppColors.swift in Sources */,
+				0F7388412A409F6E00EE20D3 /* MapPlaceView.swift in Sources */,
 				0FE5B4C12A1E31370018E9E0 /* PlaceNetworkManager.swift in Sources */,
 				0FB2810D2A02B6DD00E79982 /* SignUpViewModel.swift in Sources */,
 				0F5B8BFB29F857750083B81B /* CoreDataManager.swift in Sources */,

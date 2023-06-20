@@ -14,7 +14,7 @@ final class CityViewModel: ObservableObject {
     //MARK: - Properties
     
     @Published var city: City
-    @Published var cityImage: Image = AppImages.appIcon
+    @Published var cityImage: Image = AppImages.bw
 
     @Published var sortedDictionary: [String: [Place]] = [:]
     @Published var sortedKeys: [String] = []

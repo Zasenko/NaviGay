@@ -34,7 +34,7 @@ final class LocationManager: NSObject, LocationManagerProtocol {
     override init() {
         super.init()
         manager.pausesLocationUpdatesAutomatically = true
-        manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         manager.delegate = self
         manager.requestWhenInUseAuthorization()
     }
