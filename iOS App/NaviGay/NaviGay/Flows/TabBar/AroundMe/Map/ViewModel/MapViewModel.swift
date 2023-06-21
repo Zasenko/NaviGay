@@ -14,12 +14,16 @@ final class MapViewModel: NSObject, ObservableObject {
     
     @Published var mapView = MKMapView()
     @Published var mapType: MKMapType = .standard //TODO!
+    
     @Published var userLocation: CLLocation?
     @Published var selectedAnnotation: MKAnnotation?
+    
     @Published var selectedPlace: Place?
     @Published var selectedEvent: Event?
+    
     @Published var places: [Place] = []
     @Published var events: [Event] = []
+    
     @Published var showInfoSheet = false
     
     @Published var locations: [PlaceType:[MKAnnotation]] = [:]
@@ -243,23 +247,25 @@ extension MapViewModel {
         marker.animatesWhenAdded = true
         marker.displayPriority = .required
         marker.canShowCallout = false
-        marker.markerTintColor = .gray
         marker.titleVisibility = .hidden
         marker.subtitleVisibility = .hidden
         
         switch annotation.type {
         case .bar:
+            marker.glyphText = "🍷"
             marker.markerTintColor = .cyan
-            marker.glyphImage = AppImages.mapBarIcon
-            marker.selectedGlyphImage = AppImages.mapClubIcon
-            marker.glyphTintColor = .white
+         //   marker.glyphImage = AppImages.mapBarIcon
+          //  marker.selectedGlyphImage = AppImages.mapClubIcon
+            marker.glyphTintColor = .systemYellow
         case .cafe:
+            marker.glyphText = "☕️"
             marker.markerTintColor = .systemOrange
-            marker.glyphImage = AppImages.mapCafeIcon
-            marker.glyphTintColor = .systemIndigo
+          //  marker.glyphImage = AppImages.mapCafeIcon
+            marker.glyphTintColor = .black
         case .club:
-            marker.markerTintColor = .purple
-            marker.glyphImage = AppImages.mapClubIcon
+          //  marker.markerTintColor = .purple
+            marker.glyphText = "💃"
+         //   marker.glyphImage = AppImages.mapClubIcon
         case .restaurant:
             marker.markerTintColor = .green
             marker.glyphImage = AppImages.mapRestaurantIcon
@@ -267,11 +273,13 @@ extension MapViewModel {
             marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapHotelIcon
         case .sauna:
-            marker.markerTintColor = .systemBlue
-            marker.glyphImage = AppImages.mapSaunaIcon
+            marker.glyphText = "🧖‍♂️"
+         //   marker.markerTintColor = .systemBlue
+        //    marker.glyphImage = AppImages.mapSaunaIcon
         case .cruise:
+            marker.glyphText = "🍆"
             marker.markerTintColor = .black
-            marker.glyphImage = AppImages.mapCruiseIcon
+         //   marker.glyphImage = AppImages.mapCruiseIcon
             marker.glyphTintColor = .red
         case .beach:
             marker.markerTintColor = .yellow
@@ -284,13 +292,16 @@ extension MapViewModel {
             marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapGymIcon
         case .culture:
+            
             marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapCultureIcon
         case .community:
             marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapCommunityIcon
-        default:
-            marker.markerTintColor = .gray
+       // default:
+        //    marker.markerTintColor = .gray
+        case .defaultValue:
+            marker.glyphImage = AppImages.mapCommunityIcon
         }
         return marker
     }
@@ -311,9 +322,9 @@ extension MapViewModel {
         marker.titleVisibility = .hidden
         marker.subtitleVisibility = .hidden
         
-        
-        marker.glyphImage = AppImages.mapPartyIcon
-        marker.selectedGlyphImage = AppImages.mapHotelIcon
+        marker.glyphText = "🎉"
+        //marker.glyphImage = AppImages.mapPartyIcon
+       // marker.selectedGlyphImage = AppImages.mapHotelIcon
         marker.markerTintColor = .red
         marker.glyphTintColor = .white
         

@@ -97,6 +97,10 @@
 		0FE5B4C12A1E31370018E9E0 /* PlaceNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE5B4C02A1E31370018E9E0 /* PlaceNetworkManager.swift */; };
 		0FE5B4C32A1E31690018E9E0 /* PlaceDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE5B4C22A1E31690018E9E0 /* PlaceDataManager.swift */; };
 		0FF389722A0541F600830A96 /* AuthManagerErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF389712A0541F600830A96 /* AuthManagerErrors.swift */; };
+		0FF483162A43092200D209AA /* AroundMeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483152A43092200D209AA /* AroundMeView.swift */; };
+		0FF483182A430C4100D209AA /* TabBarAroundMeButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483172A430C4100D209AA /* TabBarAroundMeButtonView.swift */; };
+		0FF4831A2A4310EF00D209AA /* AroundMeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483192A4310EF00D209AA /* AroundMeViewModel.swift */; };
+		0FF4831C2A4311E600D209AA /* TabBarAroundMeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF4831B2A4311E600D209AA /* TabBarAroundMeButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -191,6 +195,10 @@
 		0FE5B4C02A1E31370018E9E0 /* PlaceNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceNetworkManager.swift; sourceTree = "<group>"; };
 		0FE5B4C22A1E31690018E9E0 /* PlaceDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDataManager.swift; sourceTree = "<group>"; };
 		0FF389712A0541F600830A96 /* AuthManagerErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManagerErrors.swift; sourceTree = "<group>"; };
+		0FF483152A43092200D209AA /* AroundMeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AroundMeView.swift; sourceTree = "<group>"; };
+		0FF483172A430C4100D209AA /* TabBarAroundMeButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarAroundMeButtonView.swift; sourceTree = "<group>"; };
+		0FF483192A4310EF00D209AA /* AroundMeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AroundMeViewModel.swift; sourceTree = "<group>"; };
+		0FF4831B2A4311E600D209AA /* TabBarAroundMeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarAroundMeButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,8 +216,7 @@
 			isa = PBXGroup;
 			children = (
 				0F5B8C3A29F97B390083B81B /* TabBarView */,
-				0F5B8C3D29F97BCC0083B81B /* Home */,
-				0F5B8C3C29F97BC20083B81B /* Map */,
+				0FF483142A43091100D209AA /* AroundMe */,
 				0F5B8C3429F97AB80083B81B /* Catalog */,
 				0F5B8C3529F97AC90083B81B /* Country */,
 				0F5B8C3629F97AD40083B81B /* City */,
@@ -269,6 +276,7 @@
 			isa = PBXGroup;
 			children = (
 				0FB281052A02AA3B00E79982 /* TabBarButton.swift */,
+				0FF4831B2A4311E600D209AA /* TabBarAroundMeButton.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -278,6 +286,7 @@
 			children = (
 				0FD8A75729FA8929004EA3F0 /* TabBarView.swift */,
 				0FBD1F8A2A1632F900B11CCE /* TabBarButtonView.swift */,
+				0FF483172A430C4100D209AA /* TabBarAroundMeButtonView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -653,6 +662,17 @@
 			path = Places;
 			sourceTree = "<group>";
 		};
+		0FF483142A43091100D209AA /* AroundMe */ = {
+			isa = PBXGroup;
+			children = (
+				0FF483192A4310EF00D209AA /* AroundMeViewModel.swift */,
+				0FF483152A43092200D209AA /* AroundMeView.swift */,
+				0F5B8C3D29F97BCC0083B81B /* Home */,
+				0F5B8C3C29F97BC20083B81B /* Map */,
+			);
+			path = AroundMe;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -724,6 +744,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FF4831C2A4311E600D209AA /* TabBarAroundMeButton.swift in Sources */,
 				0FE44CC92A1D2E8D00E6BB3C /* Place+CoreDataClass.swift in Sources */,
 				0F5B8BEA29F83CD90083B81B /* EntryView.swift in Sources */,
 				0F37F0382A03F78B00679932 /* DecodedCountries.swift in Sources */,
@@ -731,6 +752,8 @@
 				0FE5B4BA2A1E2EE10018E9E0 /* PlaceComment+CoreDataClass.swift in Sources */,
 				0FDA20232A092B13008D40D2 /* CountryView.swift in Sources */,
 				0FDA20252A092B32008D40D2 /* CountryViewModel.swift in Sources */,
+				0FF4831A2A4310EF00D209AA /* AroundMeViewModel.swift in Sources */,
+				0FF483182A430C4100D209AA /* TabBarAroundMeButtonView.swift in Sources */,
 				0FB2810B2A02B2C400E79982 /* UserView.swift in Sources */,
 				0FE44CBE2A1D2E8D00E6BB3C /* Photo+CoreDataProperties.swift in Sources */,
 				0F17FCA62A20D44E00527735 /* EventDataManager.swift in Sources */,
@@ -807,6 +830,7 @@
 				0F53B3152A41C06A0022D84B /* EventAnnotation.swift in Sources */,
 				0FE5B4BB2A1E2EE10018E9E0 /* PlaceComment+CoreDataProperties.swift in Sources */,
 				0F37F0362A03F53D00679932 /* CatalogDataManager.swift in Sources */,
+				0FF483162A43092200D209AA /* AroundMeView.swift in Sources */,
 				0FD8A76A29FAB439004EA3F0 /* LoginTextField.swift in Sources */,
 				0F07AE862A0CEABC0029A940 /* CityView.swift in Sources */,
 				0FD8A76329FAA772004EA3F0 /* LoginViewModel.swift in Sources */,
