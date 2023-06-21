@@ -24,9 +24,7 @@ struct TabBarView: View {
             VStack {
                 switch viewModel.selectedPage {
                 case .aroundMe:
-                    AroundMeView(viewModel: AroundMeViewModel(locationManager: viewModel.locationManager,
-                                                              dataManager: viewModel.mapDataManager),
-                                 selectedPage: $viewModel.aroundMeSelectedPage)
+                    aroundMeView
                 case .search:
                     CatalogView(viewModel: CatalogViewModel(networkManager: viewModel.catalogNetworkManager,
                                                             dataManager: viewModel.catalogDataManager,
@@ -59,5 +57,15 @@ struct TabBarView: View {
         }
         .padding(.top, 12)
         .ignoresSafeArea(.keyboard, edges: .bottom)
+    }
+    
+    @ViewBuilder private var aroundMeView: some View {
+        switch viewModel.aroundMeSelectedPage {
+        case .home:
+            Color.brown
+        case .map:
+            MapView(viewModel: MapViewModel(locationManager: viewModel.locationManager,
+                                            dataManager: viewModel.mapDataManager))
+        }
     }
 }

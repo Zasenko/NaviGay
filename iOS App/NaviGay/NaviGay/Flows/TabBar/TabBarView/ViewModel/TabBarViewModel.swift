@@ -9,9 +9,10 @@ import SwiftUI
 import CoreLocation
 
 enum TabBarRouter {
-    case aroundMe
-    case search
-    case user
+    case aroundMe, search, user
+}
+enum AroundMeRouter {
+    case map, home
 }
 
 final class TabBarViewModel: ObservableObject {
@@ -23,9 +24,6 @@ final class TabBarViewModel: ObservableObject {
     
     @Published var showLocationAlert: Bool = false
     @Published var isLocationDenied: Bool = false
-    
-    @Published var places: [Place] = []
-    @Published var events: [Event] = []
     
     @Binding var isUserLogin: Bool
     
@@ -66,7 +64,7 @@ final class TabBarViewModel: ObservableObject {
         }
         
         self.locationManager.newUserLocation = { [weak self] location in
-            self?.getLocationsAround(userLocation: location)
+            self?.fetchLocationsAroundMe(userLocation: location)
         }
     }
 }
@@ -88,17 +86,7 @@ extension TabBarViewModel {
     
     // MARK: - Private Functions
     
-    private func getLocationsAround(userLocation: CLLocation) {
-        Task {
-            switch await mapDataManager.getLocations(userLocation: userLocation) {
-            case .success(let locations):
-                DispatchQueue.main.sync {
-                    self.places = locations.places
-                    self.events = locations.events
-                }
-            case .failure(let error):
-                print("ERROR MapViewModel getPlaces(userLocation: CLLocation):", error)
-            }
-        }
+    private func fetchLocationsAroundMe(userLocation: CLLocation) {
+        // запрос локаций из сети!!! и обновление Care DATA
     }
 }
