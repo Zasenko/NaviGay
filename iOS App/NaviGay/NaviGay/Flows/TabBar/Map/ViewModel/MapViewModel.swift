@@ -14,15 +14,24 @@ final class MapViewModel: NSObject, ObservableObject {
     
     @Published var mapView = MKMapView()
     @Published var mapType: MKMapType = .standard //TODO!
+    
     @Published var userLocation: CLLocation?
+    
+    @Published var showInfoSheet = false
     @Published var selectedAnnotation: MKAnnotation?
     @Published var selectedPlace: Place?
     @Published var selectedEvent: Event?
-    @Published var places: [Place] = []
-    @Published var events: [Event] = []
-    @Published var showInfoSheet = false
     
-    @Published var locations: [PlaceType:[MKAnnotation]] = [:]
+    var places: [Place] = []
+    var events: [Event] = []
+    
+    var placesAnnotations: [PlaceAnnotation] = []
+    var eventsAnnotations: [EventAnnotation] = []
+    
+    @Published var filteredAnnotations: [MKAnnotation] = []
+    
+    @Published var sortingCategories: [SortingMenuCategories] = []
+    @Published var selectedSortingCategory: SortingMenuCategories = .all
     
     // MARK: - Private Properties
     
@@ -35,9 +44,11 @@ final class MapViewModel: NSObject, ObservableObject {
         self.locationManager = locationManager
         self.dataManager = dataManager
         super.init()
+        
         mapView.delegate = self
         mapView.showsUserLocation = true
         mapView.isRotateEnabled = true
+        
         registerMapAnnotationViews()
         
         if let userLocation = locationManager.userLocation {
@@ -54,6 +65,72 @@ final class MapViewModel: NSObject, ObservableObject {
     }
 }
 
+extension MapViewModel {
+    
+    // MARK: - Functions
+    
+    func updateAnnotations() {
+        if let region = getRegion() {
+            mapView.setRegion(region, animated: true)
+        }
+        let existingAnnotations = mapView.annotations
+        let annotationsToRemove = existingAnnotations.filter { annotation in
+            return !filteredAnnotations.contains { filteredAnnotation in
+                return annotation.coordinate == filteredAnnotation.coordinate
+            }
+        }
+        
+        let annotationsToAdd = filteredAnnotations.filter { filteredAnnotation in
+            return !existingAnnotations.contains { annotation in
+                return annotation.coordinate == filteredAnnotation.coordinate
+            }
+        }
+        mapView.removeAnnotations(annotationsToRemove)
+        mapView.addAnnotations(annotationsToAdd)
+    }
+    
+    func sortingButtonTapped(category: SortingMenuCategories) {
+        withAnimation {
+            selectedAnnotation = nil
+            selectedPlace = nil
+            selectedEvent = nil
+            selectedSortingCategory = category
+        }
+        switch category {
+        case .bar:
+            filteredAnnotations = placesAnnotations.filter( { $0.type == .bar } )
+        case .cafe:
+            filteredAnnotations = placesAnnotations.filter( { $0.type == .cafe } )
+        case .restaurant:
+            filteredAnnotations = placesAnnotations.filter( { $0.type == .restaurant } )
+        case .club:
+            filteredAnnotations = placesAnnotations.filter( { $0.type == .club } )
+        case .hotel:
+            filteredAnnotations = placesAnnotations.filter( { $0.type == .hotel } )
+        case .sauna:
+            filteredAnnotations = placesAnnotations.filter( { $0.type == .sauna } )
+        case .cruise:
+            filteredAnnotations = placesAnnotations.filter( { $0.type == .cruise } )
+        case .beach:
+            filteredAnnotations = placesAnnotations.filter( { $0.type == .beach } )
+        case .shop:
+            filteredAnnotations = placesAnnotations.filter( { $0.type == .shop } )
+        case .gym:
+            filteredAnnotations = placesAnnotations.filter( { $0.type == .gym } )
+        case .culture:
+            filteredAnnotations = placesAnnotations.filter( { $0.type == .culture } )
+        case .community:
+            filteredAnnotations = placesAnnotations.filter( { $0.type == .community } )
+        case .events:
+            filteredAnnotations = eventsAnnotations
+        case .other:
+            filteredAnnotations = eventsAnnotations + placesAnnotations
+        case .all:
+            filteredAnnotations = eventsAnnotations + placesAnnotations
+        }
+    }
+}
+
 extension MapViewModel: MKMapViewDelegate {
     
     // MARK: - MKMapViewDelegate
@@ -66,17 +143,16 @@ extension MapViewModel: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard !annotation.isKind(of: MKUserLocation.self) else {
-            return nil
-        }
-        
+        guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
         var annotationView: MKAnnotationView?
         if let annotation = annotation as? PlaceAnnotation {
             annotationView = setupPlaceAnnotationView(for: annotation, on: mapView)
         } else if let annotation = annotation as? EventAnnotation {
             annotationView = setupEventAnnotationView(for: annotation, on: mapView)
-            
         }
+//        else if let cluster = annotation as? MKClusterAnnotation {
+//            annotationView = setupClusterAnnotationView(for: cluster, on: mapView)
+//        }
         return annotationView
     }
     
@@ -89,25 +165,9 @@ extension MapViewModel: MKMapViewDelegate {
                     self.selectedAnnotation = annotation
                     self.selectedPlace = self.getPlace()
                 }
-                //            let sourceCoordinate = mapView.userLocation.coordinate
-                //            let destinationCoordinate = annotation.coordinate
-                //
-                //            let directions = directions(from: sourceCoordinate, to: destinationCoordinate, transportType: .walking)
-                //
-                //            directions.calculate { response, error in
-                //                guard error == nil, let route = response?.routes.first else {
-                //                    return
-                //                }
-                //                if !mapView.overlays.isEmpty {
-                //                    mapView.removeOverlays(mapView.overlays)
-                //                }
-                //                mapView.addOverlay(route.polyline)
-                //            }
-                //            directions.cancel()
             } else if annotation is EventAnnotation {
                 withAnimation(.spring()) {
                     self.showInfoSheet = false
-                    self.selectedAnnotation = nil
                     self.selectedAnnotation = annotation
                     self.selectedEvent = getEvent()
                 }
@@ -121,7 +181,6 @@ extension MapViewModel: MKMapViewDelegate {
         // mapView.removeOverlays(overlays)
         Task {
             withAnimation() {
-                self.selectedAnnotation = nil
                 self.showInfoSheet = false
                 self.selectedAnnotation = nil
             }
@@ -131,56 +190,50 @@ extension MapViewModel: MKMapViewDelegate {
 
 extension MapViewModel {
     
-    // MARK: - Functions
-    
-    func updateAnnotations() {
-        //TODO!!!!! проверка аннотаций
-        if mapView.annotations.count != (places.count + events.count + 1) { /// +1 - User location annotation
-            mapView.removeAnnotations(mapView.annotations) // Удаление всех существующих аннотаций
-            for place in places {
-                let placeAnnotation = PlaceAnnotation(place: place)
-                mapView.addAnnotation(placeAnnotation)
-            }
-            for event in events {
-                let eventAnnotation = EventAnnotation(event: event)
-                mapView.addAnnotation(eventAnnotation)
-            }
-        }
-        
-        if let region = getRegion() {
-            mapView.setRegion(region, animated: true)
-        }
-    }
-    
     // MARK: - Private Functions
     
     private func registerMapAnnotationViews() {
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(PlaceAnnotation.self))
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(EventAnnotation.self))
+     //   mapView.register(ClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(ClusterAnnotationView.self))
+    }
+    
+    private func updateSortingCategories() {
+        
+        var categories: [SortingMenuCategories] = []
+        
+        let stringPlacesTypes = places.compactMap( { $0.type} ).uniqued()
+        let placesTypes = stringPlacesTypes.compactMap { stringType in
+            guard let category = SortingMenuCategories(rawValue: stringType) else {
+                return SortingMenuCategories.other
+            }
+            return category
+        }
+        placesTypes.forEach { categories.append($0) }
+        if !events.isEmpty {
+            categories.append(.events)
+        }
+        if categories.count > 1 {
+            categories.append(.all)
+        }
+        self.sortingCategories = categories
     }
     
     private func getRegion() -> MKCoordinateRegion? {
-        let placesCoordinates = places.map({CLLocationCoordinate2D(latitude: CLLocationDegrees($0.latitude), longitude: CLLocationDegrees($0.longitude))})
+        let annotationsCoordinates = filteredAnnotations.map { $0.coordinate }
         
         var mapLocations: [CLLocationCoordinate2D] = []
-        
-        guard let userCoordinate = userLocation?.coordinate else {
-            return nil
-        }
+        guard let userCoordinate = userLocation?.coordinate else { return nil }
         mapLocations.append(userCoordinate)
-        
         if let selectedAnnotationCoordinate = selectedAnnotation?.coordinate {
             mapLocations.append(selectedAnnotationCoordinate)
             return regionThatFitsTo(coordinates: mapLocations)
         } else {
-            if places.isEmpty {
+            guard !places.isEmpty else {
                 return MKCoordinateRegion(center: userCoordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
-            } else {
-                for coordinate in placesCoordinates {
-                    mapLocations.append(coordinate)
-                }
-                return regionThatFitsTo(coordinates: mapLocations)
             }
+            annotationsCoordinates.forEach( { mapLocations.append($0) } )
+            return regionThatFitsTo(coordinates: mapLocations)
         }
     }
     
@@ -188,10 +241,24 @@ extension MapViewModel {
         Task {
             switch await dataManager.getLocations(userLocation: userLocation) {
             case .success(let locations):
-                DispatchQueue.main.sync {
+                DispatchQueue.main.async {
+                    self.places = []
+                    self.events = []
+                    self.placesAnnotations = []
+                    self.eventsAnnotations = []
+                    self.filteredAnnotations = []
+                    
                     self.places = locations.places
                     self.events = locations.events
-                    updateAnnotations()
+                    
+                    locations.places.forEach { self.placesAnnotations.append(PlaceAnnotation(place: $0)) }
+                    locations.events.forEach { self.eventsAnnotations.append(EventAnnotation(event: $0)) }
+                    
+                    locations.places.forEach { self.filteredAnnotations.append(PlaceAnnotation(place: $0)) }
+                    locations.events.forEach { self.filteredAnnotations.append(EventAnnotation(event: $0)) }
+                    
+                    self.updateAnnotations()
+                    self.updateSortingCategories()
                 }
             case .failure(let error):
                 print("ERROR MapViewModel getPlaces(userLocation: CLLocation):", error)
@@ -239,44 +306,34 @@ extension MapViewModel {
     private func setupPlaceAnnotationView(for annotation: PlaceAnnotation, on mapView: MKMapView) -> MKAnnotationView {
         let reuseIdentifier = NSStringFromClass(PlaceAnnotation.self)
         let marker = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier) as? MKMarkerAnnotationView ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        
+       // marker.clusteringIdentifier = String(describing: ClusterAnnotationView.self)
         marker.animatesWhenAdded = true
         marker.displayPriority = .required
         marker.canShowCallout = false
-        marker.markerTintColor = .gray
         marker.titleVisibility = .hidden
         marker.subtitleVisibility = .hidden
-        
         switch annotation.type {
         case .bar:
+            marker.glyphText = "🍷"
             marker.markerTintColor = .cyan
-            marker.glyphImage = AppImages.mapBarIcon
-            marker.selectedGlyphImage = AppImages.mapClubIcon
-            marker.glyphTintColor = .white
         case .cafe:
+            marker.glyphText = "☕️"
             marker.markerTintColor = .systemOrange
-            marker.glyphImage = AppImages.mapCafeIcon
-            marker.glyphTintColor = .systemIndigo
         case .club:
-            marker.markerTintColor = .purple
-            marker.glyphImage = AppImages.mapClubIcon
+            marker.glyphText = "💃"
         case .restaurant:
             marker.markerTintColor = .green
-            marker.glyphImage = AppImages.mapRestaurantIcon
         case .hotel:
             marker.markerTintColor = .purple
-            marker.glyphImage = AppImages.mapHotelIcon
         case .sauna:
-            marker.markerTintColor = .systemBlue
-            marker.glyphImage = AppImages.mapSaunaIcon
+            marker.glyphText = "🧖‍♂️"
         case .cruise:
+            marker.glyphText = "🍆"
             marker.markerTintColor = .black
-            marker.glyphImage = AppImages.mapCruiseIcon
             marker.glyphTintColor = .red
         case .beach:
-            marker.markerTintColor = .yellow
-            marker.glyphImage = AppImages.mapBeachIcon
-            marker.glyphTintColor = .systemBlue
+            marker.glyphText = "⛱️"
+            marker.markerTintColor = .green
         case .shop:
             marker.markerTintColor = .magenta
             marker.glyphImage = AppImages.mapShopIcon
@@ -289,8 +346,8 @@ extension MapViewModel {
         case .community:
             marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapCommunityIcon
-        default:
-            marker.markerTintColor = .gray
+        case .defaultValue:
+            marker.glyphImage = AppImages.mapCommunityIcon
         }
         return marker
     }
@@ -298,46 +355,40 @@ extension MapViewModel {
     private func setupEventAnnotationView(for annotation: EventAnnotation, on mapView: MKMapView) -> MKAnnotationView {
         let reuseIdentifier = NSStringFromClass(EventAnnotation.self)
         let marker = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier) as? MKMarkerAnnotationView ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        
         marker.animatesWhenAdded = true
         marker.displayPriority = .required
         marker.canShowCallout = false
-        
         marker.markerTintColor = .systemPink
-        
         //  marker.detailCalloutAccessoryView = AppImages.mapCultureIcon.map(UIImageView.init)
         ///картинка при клике
-        ///
         marker.titleVisibility = .hidden
         marker.subtitleVisibility = .hidden
-        
-        
-        marker.glyphImage = AppImages.mapPartyIcon
-        marker.selectedGlyphImage = AppImages.mapHotelIcon
+        marker.glyphText = "🎉"
+        //marker.glyphImage = AppImages.mapPartyIcon
+        // marker.selectedGlyphImage = AppImages.mapHotelIcon
         marker.markerTintColor = .red
         marker.glyphTintColor = .white
-        
         //        let rightButton = UIButton(type: .detailDisclosure)
         //        marker.rightCalloutAccessoryView = rightButton
         ///or marker.leftCalloutAccessoryView = rightButton
-        
         //  let offset = CGPoint(x: image.size.width / 2, y: -(image.size.height / 2) )
         //  marker.centerOffset = offset
         
         return marker
     }
     
-    private func directions(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D, transportType: MKDirectionsTransportType) -> MKDirections {
-        let request = MKDirections.Request()
-        request.source = MKMapItem(placemark: MKPlacemark(coordinate: from))
-        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: to))
-        request.requestsAlternateRoutes = false
-        request.transportType = .walking
-        return MKDirections(request: request)
-    }
+//    private func setupClusterAnnotationView(for annotation: MKClusterAnnotation, on mapView: MKMapView) -> MKAnnotationView {
+//        let reuseIdentifier = NSStringFromClass(ClusterAnnotationView.self)
+//        let marker = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier) as? ClusterAnnotationView ?? ClusterAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
+//        return marker
+//    }
+    
+    //    private func directions(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D, transportType: MKDirectionsTransportType) -> MKDirections {
+    //        let request = MKDirections.Request()
+    //        request.source = MKMapItem(placemark: MKPlacemark(coordinate: from))
+    //        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: to))
+    //        request.requestsAlternateRoutes = false
+    //        request.transportType = .walking
+    //        return MKDirections(request: request)
+    //    }
 }
-
-
-
-
-

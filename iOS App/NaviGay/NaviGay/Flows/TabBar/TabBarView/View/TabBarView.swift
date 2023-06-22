@@ -11,7 +11,7 @@ struct TabBarView: View {
     
     // MARK: - Properties
     
-    @StateObject var viewModel: TabBarViewModel
+    @ObservedObject var viewModel: TabBarViewModel
     
     // MARK: - Body
     
@@ -22,19 +22,16 @@ struct TabBarView: View {
             let size = $0.size
             
             VStack {
-                
                 switch viewModel.selectedPage {
-                case .home:
-                    Color.red
-                case .user:
-                    Color.orange
-                case .map:
-                    MapView(viewModel: MapViewModel(locationManager: viewModel.locationManager, dataManager: viewModel.mapDataManager))
-                case .catalog:
+                case .aroundMe:
+                    aroundMeView
+                case .search:
                     CatalogView(viewModel: CatalogViewModel(networkManager: viewModel.catalogNetworkManager,
                                                             dataManager: viewModel.catalogDataManager,
                                                             safeArea: safeArea,
                                                             size: size))
+                case .user:
+                    Color.orange
                 }
                 tabBar
             }
@@ -53,13 +50,23 @@ struct TabBarView: View {
     private var tabBar: some View {
         HStack {
             if !viewModel.isLocationDenied {
-                TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.mapButton)
-                TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.calendarButton)
+                TabBarAroundMeButtonView(tabBarButton: viewModel.aroundMeButton, selectedPage: $viewModel.selectedPage, aroundMeSelectedPage: $viewModel.aroundMeSelectedPage)
+                
             }
             TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.catalogButton)
             TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.userButton)
         }
         .padding(.top, 12)
         .ignoresSafeArea(.keyboard, edges: .bottom)
+    }
+    
+    @ViewBuilder private var aroundMeView: some View {
+        switch viewModel.aroundMeSelectedPage {
+        case .home:
+            Color.brown
+        case .map:
+            MapView(viewModel: MapViewModel(locationManager: viewModel.locationManager,
+                                            dataManager: viewModel.mapDataManager))
+        }
     }
 }

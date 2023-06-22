@@ -9,17 +9,19 @@ import SwiftUI
 import CoreLocation
 
 enum TabBarRouter {
-    case catalog
-    case map
-    case home
-    case user
+    case aroundMe, search, user
+}
+enum AroundMeRouter {
+    case map, home
 }
 
 final class TabBarViewModel: ObservableObject {
     
     // MARK: - Properties
     
-    @Published var selectedPage: TabBarRouter = TabBarRouter.home
+    @Published var selectedPage: TabBarRouter = TabBarRouter.aroundMe
+    @Published var aroundMeSelectedPage: AroundMeRouter = .map
+    
     @Published var showLocationAlert: Bool = false
     @Published var isLocationDenied: Bool = false
     
@@ -30,13 +32,12 @@ final class TabBarViewModel: ObservableObject {
     
     var locationManager: LocationManagerProtocol
     
-    lazy var catalogNetworkManager = CatalogNetworkManager()
-    lazy var catalogDataManager = CatalogDataManager(manager: dataManager)
-    lazy var mapDataManager = MapDataManager(manager: dataManager)
+    lazy var catalogNetworkManager: CatalogNetworkManagerProtocol = CatalogNetworkManager()
+    lazy var catalogDataManager: CatalogDataManagerProtocol = CatalogDataManager(manager: dataManager)
+    lazy var mapDataManager: MapDataManagerProtocol = MapDataManager(manager: dataManager)
     
-    let mapButton = TabBarButton(title: "Map", img: AppImages.iconMap, page: .map)
-    let calendarButton = TabBarButton(title: "Calendar", img: AppImages.iconCalendar, page: .home)
-    let catalogButton = TabBarButton(title: "Catalog", img: AppImages.iconSearch, page: .catalog)
+    let aroundMeButton = TabBarButton(title: "Around Me", img: AppImages.iconCalendar, page: .aroundMe)
+    let catalogButton = TabBarButton(title: "Catalog", img: AppImages.iconSearch, page: .search)
     let userButton = TabBarButton(title: "User", img: AppImages.iconPerson, page: .user)
     
     // MARK: - Private Properties
@@ -56,14 +57,14 @@ final class TabBarViewModel: ObservableObject {
             switch result {
             case .authorized:
                 self?.isLocationDenied = false
-                self?.selectedPage = .home
+                self?.selectedPage = .aroundMe
             case .denied:
                 self?.showLocationAlert.toggle()
             }
         }
         
         self.locationManager.newUserLocation = { [weak self] location in
-            self?.fetchPlacesAroundMe(location: location)
+            self?.fetchLocationsAroundMe(userLocation: location)
         }
     }
 }
@@ -75,17 +76,17 @@ extension TabBarViewModel {
     func settingsButtonTapped() {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         isLocationDenied = true
-        selectedPage = .catalog
+        selectedPage = .search
     }
     
     func cancleButtonTapped() {
         isLocationDenied = true
-        selectedPage = .catalog
+        selectedPage = .search
     }
     
     // MARK: - Private Functions
     
-    private func fetchPlacesAroundMe(location: CLLocation) {
-        
+    private func fetchLocationsAroundMe(userLocation: CLLocation) {
+        // запрос локаций из сети!!! и обновление Care DATA
     }
 }
