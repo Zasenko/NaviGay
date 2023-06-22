@@ -195,12 +195,19 @@ extension MapViewModel {
     }
     
     private func updateSortingCategories() {
-        let stringTypes = places.compactMap( { $0.type} ).uniqued()
-        var categories = stringTypes.compactMap { stringType in
+        
+        var categories: [SortingMenuCategories] = []
+        
+        let stringPlacesTypes = places.compactMap( { $0.type} ).uniqued()
+        let placesTypes = stringPlacesTypes.compactMap { stringType in
             guard let category = SortingMenuCategories(rawValue: stringType) else {
                 return SortingMenuCategories.other
             }
             return category
+        }
+        placesTypes.forEach { categories.append($0) }
+        if !events.isEmpty {
+            categories.append(.events)
         }
         if categories.count > 1 {
             categories.append(.all)
@@ -211,7 +218,6 @@ extension MapViewModel {
     private func getRegion() -> MKCoordinateRegion? {
         let annotationsCoordinates = filteredAnnotations.map { $0.coordinate }
         
-        // places.map { CLLocationCoordinate2D(latitude: CLLocationDegrees($0.latitude), longitude: CLLocationDegrees($0.longitude)) }
         var mapLocations: [CLLocationCoordinate2D] = []
         guard let userCoordinate = userLocation?.coordinate else { return nil }
         mapLocations.append(userCoordinate)
