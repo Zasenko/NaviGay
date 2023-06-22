@@ -11,7 +11,7 @@ struct TabBarView: View {
     
     // MARK: - Properties
     
-    @StateObject var viewModel: TabBarViewModel
+    @ObservedObject var viewModel: TabBarViewModel
     
     // MARK: - Body
     
@@ -51,6 +51,7 @@ struct TabBarView: View {
         HStack {
             if !viewModel.isLocationDenied {
                 TabBarAroundMeButtonView(tabBarButton: viewModel.aroundMeButton, selectedPage: $viewModel.selectedPage, aroundMeSelectedPage: $viewModel.aroundMeSelectedPage)
+                
             }
             TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.catalogButton)
             TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.userButton)

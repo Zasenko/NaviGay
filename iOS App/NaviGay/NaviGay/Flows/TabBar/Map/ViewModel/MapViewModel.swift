@@ -150,6 +150,9 @@ extension MapViewModel: MKMapViewDelegate {
         } else if let annotation = annotation as? EventAnnotation {
             annotationView = setupEventAnnotationView(for: annotation, on: mapView)
         }
+//        else if let cluster = annotation as? MKClusterAnnotation {
+//            annotationView = setupClusterAnnotationView(for: cluster, on: mapView)
+//        }
         return annotationView
     }
     
@@ -192,6 +195,7 @@ extension MapViewModel {
     private func registerMapAnnotationViews() {
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(PlaceAnnotation.self))
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(EventAnnotation.self))
+     //   mapView.register(ClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: NSStringFromClass(ClusterAnnotationView.self))
     }
     
     private func updateSortingCategories() {
@@ -302,6 +306,7 @@ extension MapViewModel {
     private func setupPlaceAnnotationView(for annotation: PlaceAnnotation, on mapView: MKMapView) -> MKAnnotationView {
         let reuseIdentifier = NSStringFromClass(PlaceAnnotation.self)
         let marker = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier) as? MKMarkerAnnotationView ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
+       // marker.clusteringIdentifier = String(describing: ClusterAnnotationView.self)
         marker.animatesWhenAdded = true
         marker.displayPriority = .required
         marker.canShowCallout = false
@@ -371,6 +376,12 @@ extension MapViewModel {
         
         return marker
     }
+    
+//    private func setupClusterAnnotationView(for annotation: MKClusterAnnotation, on mapView: MKMapView) -> MKAnnotationView {
+//        let reuseIdentifier = NSStringFromClass(ClusterAnnotationView.self)
+//        let marker = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier) as? ClusterAnnotationView ?? ClusterAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
+//        return marker
+//    }
     
     //    private func directions(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D, transportType: MKDirectionsTransportType) -> MKDirections {
     //        let request = MKDirections.Request()

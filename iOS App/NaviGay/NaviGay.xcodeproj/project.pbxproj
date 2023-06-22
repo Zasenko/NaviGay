@@ -103,6 +103,7 @@
 		0FF483202A43322B00D209AA /* SortingMenuCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF4831F2A43322B00D209AA /* SortingMenuCategories.swift */; };
 		0FF483222A43355F00D209AA /* SequenceExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483212A43355F00D209AA /* SequenceExtention.swift */; };
 		0FF483242A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483232A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift */; };
+		0FF483262A44651500D209AA /* ClusterAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483252A44651500D209AA /* ClusterAnnotationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -203,6 +204,7 @@
 		0FF4831F2A43322B00D209AA /* SortingMenuCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingMenuCategories.swift; sourceTree = "<group>"; };
 		0FF483212A43355F00D209AA /* SequenceExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceExtention.swift; sourceTree = "<group>"; };
 		0FF483232A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DExtention.swift.swift; sourceTree = "<group>"; };
+		0FF483252A44651500D209AA /* ClusterAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterAnnotationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -550,6 +552,7 @@
 				0FBD1F882A16263B00B11CCE /* MapView.swift */,
 				0FF4831D2A43238000D209AA /* MapSortingMenuView.swift */,
 				0F7DC0402A3CA751007034CC /* UIKitMapView.swift */,
+				0FF483252A44651500D209AA /* ClusterAnnotationView.swift */,
 				0F7388402A409F6E00EE20D3 /* MapPlaceView.swift */,
 			);
 			path = View;
@@ -835,6 +838,7 @@
 				0F07AE862A0CEABC0029A940 /* CityView.swift in Sources */,
 				0FD8A76329FAA772004EA3F0 /* LoginViewModel.swift in Sources */,
 				0F5B8C2F29F977CE0083B81B /* NaviGay.xcdatamodeld in Sources */,
+				0FF483262A44651500D209AA /* ClusterAnnotationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
