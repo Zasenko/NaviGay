@@ -102,6 +102,7 @@
 		0FF4831E2A43238000D209AA /* MapSortingMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF4831D2A43238000D209AA /* MapSortingMenuView.swift */; };
 		0FF483202A43322B00D209AA /* SortingMenuCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF4831F2A43322B00D209AA /* SortingMenuCategories.swift */; };
 		0FF483222A43355F00D209AA /* SequenceExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483212A43355F00D209AA /* SequenceExtention.swift */; };
+		0FF483242A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483232A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -201,6 +202,7 @@
 		0FF4831D2A43238000D209AA /* MapSortingMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSortingMenuView.swift; sourceTree = "<group>"; };
 		0FF4831F2A43322B00D209AA /* SortingMenuCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingMenuCategories.swift; sourceTree = "<group>"; };
 		0FF483212A43355F00D209AA /* SequenceExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceExtention.swift; sourceTree = "<group>"; };
+		0FF483232A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DExtention.swift.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -306,6 +308,7 @@
 			isa = PBXGroup;
 			children = (
 				0F37F02D2A03D48600679932 /* DictionaryExtension.swift */,
+				0FF483232A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift */,
 				0FF483212A43355F00D209AA /* SequenceExtention.swift */,
 			);
 			path = Extensions;
@@ -778,6 +781,7 @@
 				0FBB1E702A3B56C200FAEEA4 /* PlaceAnnotation.swift in Sources */,
 				0FD8A77529FAC3BB004EA3F0 /* ShakeEffect.swift in Sources */,
 				0FD8A76629FAB2A0004EA3F0 /* AppColors.swift in Sources */,
+				0FF483242A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift in Sources */,
 				0FF483202A43322B00D209AA /* SortingMenuCategories.swift in Sources */,
 				0F7388412A409F6E00EE20D3 /* MapPlaceView.swift in Sources */,
 				0FE5B4C12A1E31370018E9E0 /* PlaceNetworkManager.swift in Sources */,

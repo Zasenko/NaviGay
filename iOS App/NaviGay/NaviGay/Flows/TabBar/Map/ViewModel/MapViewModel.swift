@@ -32,7 +32,7 @@ final class MapViewModel: NSObject, ObservableObject {
     
     @Published var sortingCategories: [SortingMenuCategories] = []
     @Published var selectedSortingCategory: SortingMenuCategories = .all
-
+    
     // MARK: - Private Properties
     
     private var locationManager: LocationManagerProtocol
@@ -44,9 +44,11 @@ final class MapViewModel: NSObject, ObservableObject {
         self.locationManager = locationManager
         self.dataManager = dataManager
         super.init()
+        
         mapView.delegate = self
         mapView.showsUserLocation = true
         mapView.isRotateEnabled = true
+        
         registerMapAnnotationViews()
         
         if let userLocation = locationManager.userLocation {
@@ -71,10 +73,20 @@ extension MapViewModel {
         if let region = getRegion() {
             mapView.setRegion(region, animated: true)
         }
-        if mapView.annotations.count != (filteredAnnotations.count + 1) { /// +1 - User location annotation
-            mapView.removeAnnotations(mapView.annotations)
-            filteredAnnotations.forEach { mapView.addAnnotation($0) }
+        let existingAnnotations = mapView.annotations
+        let annotationsToRemove = existingAnnotations.filter { annotation in
+            return !filteredAnnotations.contains { filteredAnnotation in
+                return annotation.coordinate == filteredAnnotation.coordinate
+            }
         }
+        
+        let annotationsToAdd = filteredAnnotations.filter { filteredAnnotation in
+            return !existingAnnotations.contains { annotation in
+                return annotation.coordinate == filteredAnnotation.coordinate
+            }
+        }
+        mapView.removeAnnotations(annotationsToRemove)
+        mapView.addAnnotations(annotationsToAdd)
     }
     
     func sortingButtonTapped(category: SortingMenuCategories) {
@@ -84,11 +96,10 @@ extension MapViewModel {
             selectedEvent = nil
             selectedSortingCategory = category
         }
-        switch selectedSortingCategory {
+        switch category {
         case .bar:
             filteredAnnotations = placesAnnotations.filter( { $0.type == .bar } )
         case .cafe:
-            let a = placesAnnotations.filter( { $0.type == .cafe } )
             filteredAnnotations = placesAnnotations.filter( { $0.type == .cafe } )
         case .restaurant:
             filteredAnnotations = placesAnnotations.filter( { $0.type == .restaurant } )
@@ -200,7 +211,7 @@ extension MapViewModel {
     private func getRegion() -> MKCoordinateRegion? {
         let annotationsCoordinates = filteredAnnotations.map { $0.coordinate }
         
-       // places.map { CLLocationCoordinate2D(latitude: CLLocationDegrees($0.latitude), longitude: CLLocationDegrees($0.longitude)) }
+        // places.map { CLLocationCoordinate2D(latitude: CLLocationDegrees($0.latitude), longitude: CLLocationDegrees($0.longitude)) }
         var mapLocations: [CLLocationCoordinate2D] = []
         guard let userCoordinate = userLocation?.coordinate else { return nil }
         mapLocations.append(userCoordinate)
@@ -343,7 +354,7 @@ extension MapViewModel {
         marker.subtitleVisibility = .hidden
         marker.glyphText = "🎉"
         //marker.glyphImage = AppImages.mapPartyIcon
-       // marker.selectedGlyphImage = AppImages.mapHotelIcon
+        // marker.selectedGlyphImage = AppImages.mapHotelIcon
         marker.markerTintColor = .red
         marker.glyphTintColor = .white
         //        let rightButton = UIButton(type: .detailDisclosure)
@@ -355,12 +366,12 @@ extension MapViewModel {
         return marker
     }
     
-//    private func directions(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D, transportType: MKDirectionsTransportType) -> MKDirections {
-//        let request = MKDirections.Request()
-//        request.source = MKMapItem(placemark: MKPlacemark(coordinate: from))
-//        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: to))
-//        request.requestsAlternateRoutes = false
-//        request.transportType = .walking
-//        return MKDirections(request: request)
-//    }
+    //    private func directions(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D, transportType: MKDirectionsTransportType) -> MKDirections {
+    //        let request = MKDirections.Request()
+    //        request.source = MKMapItem(placemark: MKPlacemark(coordinate: from))
+    //        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: to))
+    //        request.requestsAlternateRoutes = false
+    //        request.transportType = .walking
+    //        return MKDirections(request: request)
+    //    }
 }
