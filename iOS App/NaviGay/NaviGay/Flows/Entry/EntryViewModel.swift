@@ -19,7 +19,6 @@ final class EntryViewModel: ObservableObject {
     
     @Published var router: EntryViewRouter = .logoView
     @Published var isUserLogin: Bool = false
-    @Published var userStatus: UserStatus = .anonim
     
     let userDataManager: UserDataManagerProtocol
     let dataManager: CoreDataManagerProtocol
@@ -54,7 +53,6 @@ extension EntryViewModel {
                         withAnimation(routerAnimation) {
                             self.router = .tabView
                         }
-                        updateUser()
                     } else {
                         withAnimation(routerAnimation) {
                             self.router = .loginView
@@ -66,9 +64,5 @@ extension EntryViewModel {
                 }
             }
         }
-    }
-    
-    private func updateUser() {
-        //
     }
 }

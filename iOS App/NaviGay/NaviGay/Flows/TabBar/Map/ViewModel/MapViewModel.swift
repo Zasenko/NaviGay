@@ -70,9 +70,6 @@ extension MapViewModel {
     // MARK: - Functions
     
     func updateAnnotations() {
-        if let region = getRegion() {
-            mapView.setRegion(region, animated: true)
-        }
         let existingAnnotations = mapView.annotations
         let annotationsToRemove = existingAnnotations.filter { annotation in
             return !filteredAnnotations.contains { filteredAnnotation in
@@ -87,6 +84,11 @@ extension MapViewModel {
         }
         mapView.removeAnnotations(annotationsToRemove)
         mapView.addAnnotations(annotationsToAdd)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            if let region = self.getRegion() {
+                self.mapView.setRegion(region, animated: true)
+            }
+        }
     }
     
     func sortingButtonTapped(category: SortingMenuCategories) {
@@ -123,8 +125,6 @@ extension MapViewModel {
             filteredAnnotations = placesAnnotations.filter( { $0.type == .community } )
         case .events:
             filteredAnnotations = eventsAnnotations
-        case .other:
-            filteredAnnotations = eventsAnnotations + placesAnnotations
         case .all:
             filteredAnnotations = eventsAnnotations + placesAnnotations
         }
@@ -203,12 +203,7 @@ extension MapViewModel {
         var categories: [SortingMenuCategories] = []
         
         let stringPlacesTypes = places.compactMap( { $0.type} ).uniqued()
-        let placesTypes = stringPlacesTypes.compactMap { stringType in
-            guard let category = SortingMenuCategories(rawValue: stringType) else {
-                return SortingMenuCategories.other
-            }
-            return category
-        }
+        let placesTypes = stringPlacesTypes.compactMap { SortingMenuCategories(rawValue: $0) }
         placesTypes.forEach { categories.append($0) }
         if !events.isEmpty {
             categories.append(.events)
@@ -287,8 +282,8 @@ extension MapViewModel {
     }
     
     private func regionThatFitsTo(coordinates: [CLLocationCoordinate2D]) -> MKCoordinateRegion {
-        var topLeftCoord = CLLocationCoordinate2D(latitude: -90, longitude: 180)
-        var bottomRightCoord = CLLocationCoordinate2D(latitude: 90, longitude: -180)
+        var topLeftCoord = CLLocationCoordinate2D(latitude: -180, longitude: 180)
+        var bottomRightCoord = CLLocationCoordinate2D(latitude: 180, longitude: -180)
         for coordinate in coordinates {
             topLeftCoord.longitude = fmin(topLeftCoord.longitude, coordinate.longitude)
             topLeftCoord.latitude = fmax(topLeftCoord.latitude, coordinate.latitude)
@@ -298,8 +293,8 @@ extension MapViewModel {
         var region: MKCoordinateRegion = MKCoordinateRegion()
         region.center.latitude = topLeftCoord.latitude - (topLeftCoord.latitude - bottomRightCoord.latitude) * 0.5
         region.center.longitude = topLeftCoord.longitude + (bottomRightCoord.longitude - topLeftCoord.longitude) * 0.5
-        region.span.latitudeDelta = fabs(topLeftCoord.latitude - bottomRightCoord.latitude) * 1.4
-        region.span.longitudeDelta = fabs(bottomRightCoord.longitude - topLeftCoord.longitude) * 1.4
+        region.span.latitudeDelta = fabs(topLeftCoord.latitude - bottomRightCoord.latitude) * 1.45
+        region.span.longitudeDelta = fabs(bottomRightCoord.longitude - topLeftCoord.longitude) * 1.45
         return region
     }
     
@@ -321,16 +316,17 @@ extension MapViewModel {
             marker.markerTintColor = .systemOrange
         case .club:
             marker.glyphText = "💃"
+            marker.markerTintColor = .red
         case .restaurant:
             marker.markerTintColor = .green
         case .hotel:
             marker.markerTintColor = .purple
         case .sauna:
             marker.glyphText = "🧖‍♂️"
+            marker.markerTintColor = .systemBlue
         case .cruise:
-            marker.glyphText = "🍆"
+            marker.glyphText = "😈"
             marker.markerTintColor = .black
-            marker.glyphTintColor = .red
         case .beach:
             marker.glyphText = "⛱️"
             marker.markerTintColor = .green

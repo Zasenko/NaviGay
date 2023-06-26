@@ -37,6 +37,7 @@
 		0F7388412A409F6E00EE20D3 /* MapPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7388402A409F6E00EE20D3 /* MapPlaceView.swift */; };
 		0F7DC03F2A3C9012007034CC /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7DC03E2A3C9012007034CC /* UserAnnotation.swift */; };
 		0F7DC0412A3CA751007034CC /* UIKitMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7DC0402A3CA751007034CC /* UIKitMapView.swift */; };
+		0F8014872A4995BB007530D0 /* ColoredCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8014862A4995BB007530D0 /* ColoredCapsule.swift */; };
 		0FB281012A0154DE00E79982 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB281002A0154DE00E79982 /* AuthManager.swift */; };
 		0FB281042A02970800E79982 /* DecodedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB281032A02970800E79982 /* DecodedUser.swift */; };
 		0FB281062A02AA3B00E79982 /* TabBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB281052A02AA3B00E79982 /* TabBarButton.swift */; };
@@ -104,6 +105,7 @@
 		0FF483222A43355F00D209AA /* SequenceExtention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483212A43355F00D209AA /* SequenceExtention.swift */; };
 		0FF483242A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483232A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift */; };
 		0FF483262A44651500D209AA /* ClusterAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483252A44651500D209AA /* ClusterAnnotationView.swift */; };
+		0FF483282A447C1600D209AA /* AroundNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483272A447C1600D209AA /* AroundNetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -138,6 +140,7 @@
 		0F7388402A409F6E00EE20D3 /* MapPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPlaceView.swift; sourceTree = "<group>"; };
 		0F7DC03E2A3C9012007034CC /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
 		0F7DC0402A3CA751007034CC /* UIKitMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitMapView.swift; sourceTree = "<group>"; };
+		0F8014862A4995BB007530D0 /* ColoredCapsule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredCapsule.swift; sourceTree = "<group>"; };
 		0FB281002A0154DE00E79982 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		0FB281032A02970800E79982 /* DecodedUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodedUser.swift; sourceTree = "<group>"; };
 		0FB281052A02AA3B00E79982 /* TabBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarButton.swift; sourceTree = "<group>"; };
@@ -205,6 +208,7 @@
 		0FF483212A43355F00D209AA /* SequenceExtention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceExtention.swift; sourceTree = "<group>"; };
 		0FF483232A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DExtention.swift.swift; sourceTree = "<group>"; };
 		0FF483252A44651500D209AA /* ClusterAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterAnnotationView.swift; sourceTree = "<group>"; };
+		0FF483272A447C1600D209AA /* AroundNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AroundNetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -558,6 +562,15 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		0F8014852A4995A1007530D0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0FD8A77029FAC292004EA3F0 /* Buttons */,
+				0F8014862A4995BB007530D0 /* ColoredCapsule.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		0FB280FE2A0149C000E79982 /* NetworkManagers */ = {
 			isa = PBXGroup;
 			children = (
@@ -565,6 +578,7 @@
 				0F37F0392A03F80700679932 /* CatalogNetworkManager.swift */,
 				0FE5B4C02A1E31370018E9E0 /* PlaceNetworkManager.swift */,
 				0F17FCA32A20D33900527735 /* EventNetworkManager.swift */,
+				0FF483272A447C1600D209AA /* AroundNetworkManager.swift */,
 			);
 			path = NetworkManagers;
 			sourceTree = "<group>";
@@ -603,7 +617,7 @@
 			children = (
 				0F37F02C2A03D44600679932 /* Extensions */,
 				0FD8A77329FAC39C004EA3F0 /* GeometryEffects */,
-				0FD8A77029FAC292004EA3F0 /* Buttons */,
+				0F8014852A4995A1007530D0 /* Views */,
 				0FD8A76529FAB2A0004EA3F0 /* AppColors.swift */,
 				0FD8A76B29FAB45D004EA3F0 /* AppImages.swift */,
 			);
@@ -758,6 +772,7 @@
 				0FE44CBE2A1D2E8D00E6BB3C /* Photo+CoreDataProperties.swift in Sources */,
 				0F17FCA62A20D44E00527735 /* EventDataManager.swift in Sources */,
 				0F53B31F2A41F7090022D84B /* AddPlaceViewModel.swift in Sources */,
+				0FF483282A447C1600D209AA /* AroundNetworkManager.swift in Sources */,
 				0FB281012A0154DE00E79982 /* AuthManager.swift in Sources */,
 				0FBD1F942A1651B600B11CCE /* CachedImageView.swift in Sources */,
 				0FB281062A02AA3B00E79982 /* TabBarButton.swift in Sources */,
@@ -812,6 +827,7 @@
 				0F37F02E2A03D48600679932 /* DictionaryExtension.swift in Sources */,
 				0F6C168029FC0D2400F6D104 /* AuthNetworkManager.swift in Sources */,
 				0FE44CC02A1D2E8D00E6BB3C /* Region+CoreDataProperties.swift in Sources */,
+				0F8014872A4995BB007530D0 /* ColoredCapsule.swift in Sources */,
 				0FBB1E722A3B59E700FAEEA4 /* MapDataManager.swift in Sources */,
 				0FE44CB92A1D2E8D00E6BB3C /* Event+CoreDataClass.swift in Sources */,
 				0FE44CC32A1D2E8D00E6BB3C /* City+CoreDataClass.swift in Sources */,

@@ -76,7 +76,7 @@ extension SignUpViewModel {
                 withAnimation(.easeInOut(duration: 0.5)) {
                     self?.loginButtonState = .loading
                 }
-                self?.login()
+                self?.registration()
             case .failure(let error):
                 self?.loginButtonState = .failure
                 self?.returnToNormalState()
@@ -99,7 +99,7 @@ extension SignUpViewModel {
     }
     
     @MainActor
-    private func login() {
+    private func registration() {
         Task {
             do {
                 let result = try await self.networkManager.registration(email: email, password: password)

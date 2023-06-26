@@ -10,7 +10,6 @@ import Foundation
 enum SortingMenuCategories: String {
     case bar, cafe, restaurant, club, hotel, sauna, cruise, beach, shop, gym, culture, community
     case events
-    case other
     case all
     
     func getName() -> String {
@@ -43,8 +42,6 @@ enum SortingMenuCategories: String {
             return "events"
         case .all:
             return "all locations"
-        case .other:
-            return "other"
         }
     }
 }

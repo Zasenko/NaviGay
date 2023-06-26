@@ -143,3 +143,9 @@ struct DecodedEvent: Identifiable, Codable {
 
     let tags: [String]
 }
+
+struct LocationsAroundResult: Codable {
+    let error: String?
+    let events: [DecodedEvent]?
+    let places: [DecodedPlace]?
+}
