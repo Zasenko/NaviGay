@@ -28,7 +28,7 @@ struct LoginTextField: View {
 //                    focusedField = .password
 //                }
         }
-        .padding()
+        .padding(10)
         .background(AppColors.lightGray6)
         .cornerRadius(8)
         .overlay {

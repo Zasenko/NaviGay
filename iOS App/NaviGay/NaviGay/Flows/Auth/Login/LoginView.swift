@@ -113,24 +113,3 @@ struct LoginView: View {
 //        LoginView(viewModel: LoginViewModel(networkManager: AuthNetworkManager(networkMonitor: NetworkMonitor(), api: ApiProperties()), authManager: AuthManager(), userDataManager: UserDataManager(manager: CoreDataManager()), entryRouter: .constant(.loginView)))
 //    }
 //}
-
-struct ColoredCapsule<Content: View>: View {
-    let content: () -> Content
-    let background: Color
-    
-    init(background: Color, @ViewBuilder content: @escaping () -> Content) {
-        self.background = background
-        self.content = content
-    }
-    
-    var body: some View {
-        content()
-            .padding()
-            //.padding(.horizontal)
-            .padding(.horizontal)
-           // .frame(minHeight: 50)
-            .foregroundColor(.white)
-            .background(background.gradient)
-            .clipShape(Capsule(style: .continuous))
-    }
-}

@@ -70,6 +70,7 @@ extension LocationManager: CLLocationManagerDelegate {
         guard let currentLocation = locations.last else { return }
         userLocation = currentLocation
         newUserLocation?(currentLocation)
+        manager.stopUpdatingLocation()
     }
 }
 

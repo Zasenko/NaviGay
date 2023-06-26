@@ -27,7 +27,7 @@ struct PasswordTextField: View {
                //     focusedField = nil
                 }
         }
-        .padding()
+        .padding(10)
         .background(AppColors.lightGray6)
         .cornerRadius(8)
         .overlay {
