@@ -12,12 +12,7 @@ protocol AuthNetworkManagerProtocol {
     func registration(email: String, password: String) async throws -> LoginResult
 }
 
-final class AuthNetworkManager {
-    
-    //MARK: - Private properties
-    
-    //MARK: - Inits
-}
+final class AuthNetworkManager {}
 
 // MARK: - AuthNetworkManagerProtocol
 extension AuthNetworkManager: AuthNetworkManagerProtocol {

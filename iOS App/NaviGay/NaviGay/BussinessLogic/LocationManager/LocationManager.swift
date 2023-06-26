@@ -17,6 +17,7 @@ protocol LocationManagerProtocol {
 enum LocationStatus {
     case authorized, denied
 }
+
 final class LocationManager: NSObject, LocationManagerProtocol {
     
     //MARK: - Properties
@@ -59,10 +60,10 @@ extension LocationManager: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         //TODO
-        print("--- TabBarViewModel - locationManager didFailWithError () ---")
+        print(" ---ERROR TabBarViewModel - locationManager didFailWithError () ---")
         print(error.localizedDescription)
-        print("---")
         print(error)
+        print("---")
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

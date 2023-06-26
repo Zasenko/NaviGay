@@ -13,8 +13,7 @@ protocol CatalogNetworkManagerProtocol {
     func fetchCity(id: Int) async throws -> CityResult
 }
 
-final class CatalogNetworkManager {
-}
+final class CatalogNetworkManager {}
 
 // MARK: - CatalogNetworkManagerProtocol
 

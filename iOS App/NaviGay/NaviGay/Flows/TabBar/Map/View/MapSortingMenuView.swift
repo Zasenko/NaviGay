@@ -14,8 +14,6 @@ struct MapSortingMenuView: View {
     @Binding var categories: [SortingMenuCategories]
     @Binding var selectedCategory: SortingMenuCategories
     let action: (SortingMenuCategories) -> Void
-//    var categories: [SortingMenuCategories] = [.all, .bar, .cafe, .club]
-//    @State var selectedCategory: SortingMenuCategories = .all
 
     //MARK: - Body
     
@@ -34,16 +32,16 @@ struct MapSortingMenuView: View {
                 HStack {
                     Text(selectedCategory.getName())
                         .font(.title2)
-                        .bold()
                     Image(systemName: "chevron.down")
                         .bold()
                         .foregroundColor(.black)
                         
                 }
-                .padding()
+                .padding(.vertical, 5)
                 .padding(.horizontal)
-                .background(.thickMaterial)
+                .background(.ultraThinMaterial)
                 .clipShape(Capsule(style: .continuous))
+                .padding(.horizontal)
             }
         }
     }
