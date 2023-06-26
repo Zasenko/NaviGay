@@ -31,6 +31,7 @@ final class TabBarViewModel: ObservableObject {
     var size: CGSize?
     
     var locationManager: LocationManagerProtocol
+    let userDataManager: UserDataManagerProtocol
     
     lazy var catalogNetworkManager: CatalogNetworkManagerProtocol = CatalogNetworkManager()
     lazy var catalogDataManager: CatalogDataManagerProtocol = CatalogDataManager(manager: dataManager)
@@ -48,10 +49,11 @@ final class TabBarViewModel: ObservableObject {
     // MARK: - Inits
     
     init(isUserLogin: Binding<Bool>,
-         dataManager: CoreDataManagerProtocol, locationManager: LocationManagerProtocol) {
+         dataManager: CoreDataManagerProtocol, locationManager: LocationManagerProtocol, userDataManager: UserDataManagerProtocol) {
         _isUserLogin = isUserLogin
         self.dataManager = dataManager
         self.locationManager = locationManager
+        self.userDataManager = userDataManager
         
         self.locationManager.authorizationStatus = { [weak self] result in
             switch result {

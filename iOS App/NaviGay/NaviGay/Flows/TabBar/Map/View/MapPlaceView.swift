@@ -65,12 +65,12 @@ struct MapPlaceView: View {
                 .shadow(radius: 5)
             VStack(alignment: .leading) {
                 HStack(alignment: .top) {
-//                    if viewModel.place {
-//                        Image(systemName: "heart.fill")
-//                            .resizable()
-//                            .frame(width: 20, height: 20)
-//                            .foregroundColor(.red)
-//                    }
+                    if viewModel.place.isLiked {
+                        Image(systemName: "heart.fill")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(.red)
+                    }
                     Text(viewModel.place.name ?? "")
                         .font(.headline)
                 }

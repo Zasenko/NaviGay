@@ -63,6 +63,11 @@ struct PlaceResult: Codable {
     let place: DecodedPlace?
 }
 
+struct PlacesResult: Codable {
+    let error: String?
+    let places: [DecodedPlace]?
+}
+
 struct DecodedPlace: Identifiable, Codable {
     let id: Int
     let name: String

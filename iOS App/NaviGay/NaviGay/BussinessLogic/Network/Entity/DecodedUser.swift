@@ -24,4 +24,5 @@ struct DecodedUser: Codable, Identifiable {
     let instagram: String?
     let status: UserStatus
     let lastUpdate: String
+    let likedPlacesId: [Int]
 }

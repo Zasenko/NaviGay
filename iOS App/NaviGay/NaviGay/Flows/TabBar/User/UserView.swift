@@ -10,18 +10,25 @@ import SwiftUI
 struct UserView: View {
     
     let vm: UserViewModel
+    @Binding var isUserLogin: Bool
     
     var body: some View {
-        if vm.isUserLogin {
-            Color.green
+        if isUserLogin {
+            Button {
+                vm.logOutButtonTapped()
+                isUserLogin = false
+            } label: {
+                Text("Log Out")
+            }
+
         } else {
             Color.red
         }
     }
 }
 
-struct UserView_Previews: PreviewProvider {
-    static var previews: some View {
-        UserView(vm: UserViewModel(isUserLogin: .constant(false)))
-    }
-}
+//struct UserView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        UserView(vm: UserViewModel(isUserLogin: .constant(false)))
+//    }
+//}

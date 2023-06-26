@@ -9,9 +9,26 @@ import SwiftUI
 
 final class UserViewModel {
     
-    @Binding var isUserLogin: Bool
+    // MARK: - Properties
     
-    init(isUserLogin: Binding<Bool>) {
-        self._isUserLogin = isUserLogin
+    let userDataManager: UserDataManagerProtocol
+    
+    // MARK: - Inits
+    
+    init(userDataManager: UserDataManagerProtocol) {
+        self.userDataManager = userDataManager
+    }
+}
+
+extension UserViewModel {
+    
+    // MARK: - Functions
+    
+    func logOutButtonTapped() {
+        
+        Task {
+            await userDataManager.deleteUser()
+        }
+        
     }
 }

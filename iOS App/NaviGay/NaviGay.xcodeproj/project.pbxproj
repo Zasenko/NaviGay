@@ -38,6 +38,7 @@
 		0F7DC03F2A3C9012007034CC /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7DC03E2A3C9012007034CC /* UserAnnotation.swift */; };
 		0F7DC0412A3CA751007034CC /* UIKitMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7DC0402A3CA751007034CC /* UIKitMapView.swift */; };
 		0F8014872A4995BB007530D0 /* ColoredCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8014862A4995BB007530D0 /* ColoredCapsule.swift */; };
+		0F80148D2A49D4F0007530D0 /* UserDataNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F80148C2A49D4F0007530D0 /* UserDataNetworkManager.swift */; };
 		0FB281012A0154DE00E79982 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB281002A0154DE00E79982 /* AuthManager.swift */; };
 		0FB281042A02970800E79982 /* DecodedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB281032A02970800E79982 /* DecodedUser.swift */; };
 		0FB281062A02AA3B00E79982 /* TabBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB281052A02AA3B00E79982 /* TabBarButton.swift */; };
@@ -141,6 +142,7 @@
 		0F7DC03E2A3C9012007034CC /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
 		0F7DC0402A3CA751007034CC /* UIKitMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitMapView.swift; sourceTree = "<group>"; };
 		0F8014862A4995BB007530D0 /* ColoredCapsule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredCapsule.swift; sourceTree = "<group>"; };
+		0F80148C2A49D4F0007530D0 /* UserDataNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataNetworkManager.swift; sourceTree = "<group>"; };
 		0FB281002A0154DE00E79982 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		0FB281032A02970800E79982 /* DecodedUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodedUser.swift; sourceTree = "<group>"; };
 		0FB281052A02AA3B00E79982 /* TabBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarButton.swift; sourceTree = "<group>"; };
@@ -575,6 +577,7 @@
 			isa = PBXGroup;
 			children = (
 				0F6C167F29FC0D2400F6D104 /* AuthNetworkManager.swift */,
+				0F80148C2A49D4F0007530D0 /* UserDataNetworkManager.swift */,
 				0F37F0392A03F80700679932 /* CatalogNetworkManager.swift */,
 				0FE5B4C02A1E31370018E9E0 /* PlaceNetworkManager.swift */,
 				0F17FCA32A20D33900527735 /* EventNetworkManager.swift */,
@@ -795,6 +798,7 @@
 				0FBD1F892A16263B00B11CCE /* MapView.swift in Sources */,
 				0FD8A76129FAA755004EA3F0 /* LoginView.swift in Sources */,
 				0F217B332A1BC84F0009B3F9 /* CityPlaceView.swift in Sources */,
+				0F80148D2A49D4F0007530D0 /* UserDataNetworkManager.swift in Sources */,
 				0F37F0342A03F41B00679932 /* CountryCell.swift in Sources */,
 				0FBB1E702A3B56C200FAEEA4 /* PlaceAnnotation.swift in Sources */,
 				0FD8A77529FAC3BB004EA3F0 /* ShakeEffect.swift in Sources */,

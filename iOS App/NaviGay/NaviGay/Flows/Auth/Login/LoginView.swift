@@ -9,10 +9,15 @@ import SwiftUI
 
 struct LoginView: View {
     
+    private enum LoginViewFields {
+        case email, password
+    }
+    
     // MARK: - Properties
     
     @StateObject var viewModel: LoginViewModel
-    
+    @FocusState private var focusedField: LoginViewFields?
+
     // MARK: - Body
     
     var body: some View {
@@ -25,21 +30,21 @@ struct LoginView: View {
                 
                 LoginTextField(text: $viewModel.email,
                                invalidAttempts: $viewModel.invalidLoginAttempts)
+                
                 PasswordTextField(text: $viewModel.password,
                                   invalidAttempts: $viewModel.invalidPasswordAttempts)
                 forgetPasswordButton
                 loginButtonView
                 errorView
-                
                 Spacer()
-                
                 signUpView
             }
             .padding()
-            .frame(maxWidth: 400)
+            .frame(maxWidth: .infinity)
             .disabled(viewModel.allViewsDisabled)
         }
         .frame(maxWidth: .infinity)
+        .ignoresSafeArea(.keyboard)
         .onTapGesture {
             withAnimation {
               //  focusedField = nil

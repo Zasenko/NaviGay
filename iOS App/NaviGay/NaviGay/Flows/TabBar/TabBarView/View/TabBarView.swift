@@ -31,7 +31,7 @@ struct TabBarView: View {
                                                             safeArea: safeArea,
                                                             size: size))
                 case .user:
-                    Color.orange
+                    UserView(vm: UserViewModel(userDataManager: viewModel.userDataManager), isUserLogin: $viewModel.isUserLogin)
                 }
                 tabBar
             }
