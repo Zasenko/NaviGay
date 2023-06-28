@@ -16,6 +16,7 @@ struct AppImages {
     static let envelope = Image(systemName: "envelope")
     static let bw = Image("bw")
     
+    static let iconRight = Image(systemName: "chevron.right")
     
     static let mapBarIcon = UIImage(named: "barIcon")
     static let mapCafeIcon = UIImage(named: "cafeIcon")

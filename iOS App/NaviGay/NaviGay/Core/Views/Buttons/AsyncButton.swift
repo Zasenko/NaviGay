@@ -44,7 +44,6 @@ struct AsyncButton<Content>: View where Content: View {
                             .foregroundColor(.white)
                     }
                 }
-                .clipped()
             }
             .disabled(state == .loading || state == .success || state == .failure)
         }

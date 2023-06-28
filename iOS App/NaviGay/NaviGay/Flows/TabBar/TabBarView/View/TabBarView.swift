@@ -28,10 +28,14 @@ struct TabBarView: View {
                 case .search:
                     CatalogView(viewModel: CatalogViewModel(networkManager: viewModel.catalogNetworkManager,
                                                             dataManager: viewModel.catalogDataManager,
+                                                            placeNetworkManager: viewModel.placeNetworkManager,
+                                                            placeDataManager: viewModel.placeDataManager,
                                                             safeArea: safeArea,
                                                             size: size))
                 case .user:
-                    UserView(vm: UserViewModel(userDataManager: viewModel.userDataManager), isUserLogin: $viewModel.isUserLogin)
+                    UserView(viewModel: UserViewModel(userDataManager: viewModel.userDataManager,
+                                                      entryRouter: $viewModel.entryRouter,
+                                                      isUserLogin: $viewModel.isUserLogin))
                 }
                 tabBar
             }

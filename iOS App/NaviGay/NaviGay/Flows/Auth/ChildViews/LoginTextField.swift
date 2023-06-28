@@ -24,9 +24,6 @@ struct LoginTextField: View {
                 .autocorrectionDisabled(true)
                 .textInputAutocapitalization(.never)
                 .lineLimit(1)
-//                .onSubmit {
-//                    focusedField = .password
-//                }
         }
         .padding(10)
         .background(AppColors.lightGray6)

@@ -127,6 +127,8 @@ extension MapViewModel {
             filteredAnnotations = eventsAnnotations
         case .all:
             filteredAnnotations = eventsAnnotations + placesAnnotations
+        case .other:
+            filteredAnnotations = placesAnnotations.filter( { $0.type ==  .other } )
         }
     }
 }
@@ -342,7 +344,7 @@ extension MapViewModel {
         case .community:
             marker.markerTintColor = .purple
             marker.glyphImage = AppImages.mapCommunityIcon
-        case .defaultValue:
+        case .other:
             marker.glyphImage = AppImages.mapCommunityIcon
         }
         return marker

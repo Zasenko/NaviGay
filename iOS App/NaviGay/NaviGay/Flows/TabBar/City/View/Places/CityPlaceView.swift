@@ -11,41 +11,37 @@ struct CityPlaceView: View {
     
     //MARK: - Proreties
     
-    @StateObject var viewModel: CityPlaceViewModel
-    
-    let size: CGSize
-    let safeArea: EdgeInsets
+    let place: Place
     
     //MARK: - Body
     
     var body: some View {
         VStack {
-            NavigationLink {
-                //viewBuilder.buildPlaceView(place: viewModel.place, safeArea: safeArea, size: size)
-            } label: {
-                HStack(alignment: .center) {
-                    viewModel.placeImage
+            HStack(alignment: .center) {
+                CachedImageView(viewModel: CachedImageViewModel(url: place.photo)) {
+                    AppImages.iconPerson
                         .resizable()
-                        .scaledToFill()
-                        .background(.regularMaterial)
-                        .frame(width: 50, height: 50)
-                        .mask(Circle())
-                        .shadow(color: AppColors.shadow.opacity(0.3), radius: 8, x: 0, y: 3)
-                    Text(viewModel.place.name ?? "")
-                        .font(.body)
-                        .bold()
-                        .foregroundColor(.primary)
-                        .padding()
+                        .scaledToFit()
+                        .padding(10)
                 }
-                .padding()
-                .background(Color.white)
+                .background(.regularMaterial)
+                .frame(width: 40, height: 40)
+                .mask(Circle())
+                .shadow(color: AppColors.shadow.opacity(0.3), radius: 3, x: 0, y: 1)
+                .padding(10)
+                
+                Text(place.name ?? "")
+                    .font(.body)
+                    .bold()
+                    .foregroundColor(.primary)
+                    .padding()
+                Spacer()
+                AppImages.iconRight
+                    .font(.title3)
+                    .foregroundColor(AppColors.lightGray5)
             }
+            Divider()
         }
+        .padding(.horizontal)
     }
 }
-
-//struct CityPlaceView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CityPlaceView()
-//    }
-//}

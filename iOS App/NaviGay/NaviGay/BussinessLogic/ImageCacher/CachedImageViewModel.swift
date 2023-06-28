@@ -11,18 +11,13 @@ final class CachedImageViewModel: ObservableObject {
     
     //MARK: - Properties
     
-    @Published var image: Image = AppImages.bw
-    
-    let url: String?
-    let width: CGFloat
-    let height: CGFloat
+    @Published var image: Image? = nil
+    let urlString: String?
     
     //MARK: - Initialization
     
-    init(url: String?, width: CGFloat, height: CGFloat) {
-        self.url = url
-        self.width = width
-        self.height = height
+    init(url: String?) {
+        self.urlString = url
         load()
     }
 }
@@ -39,15 +34,15 @@ extension CachedImageViewModel {
     
     @MainActor
     func loadFromCache() async {
-        guard let url = url else { return }
+        guard let url = urlString, !url.isEmpty else {
+            return
+        }
         do {
             self.image = try await ImageLoader.shared.loadImage(urlString: url)
         }
         catch {
-            
             //TODO
-            
-            print(error.localizedDescription)
+            print("CachedImageViewModel - >loadFromCache()", error)
         }
     }
     

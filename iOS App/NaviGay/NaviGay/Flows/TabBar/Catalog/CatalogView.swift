@@ -13,7 +13,7 @@ struct CatalogView: View {
     
     @StateObject var viewModel: CatalogViewModel
     @State private var searchText = ""
-
+    
     //MARK: - Body
     
     var body: some View {
@@ -41,6 +41,8 @@ struct CatalogView: View {
                         CountryView(viewModel: CountryViewModel(country: country.wrappedValue,
                                                                 networkManager: viewModel.networkManager,
                                                                 dataManager: viewModel.dataManager,
+                                                                placeNetworkManager: viewModel.placeNetworkManager,
+                                                                placeDataManager: viewModel.placeDataManager,
                                                                 size: viewModel.size,
                                                                 safeArea: viewModel.safeArea))
                     } label: {

@@ -7,39 +7,43 @@
 
 import SwiftUI
 
+enum RetriverError: Error {
+    case invalidUrl
+    case invalidData
+    case invalidCacheData
+}
+
 final class ImageLoader {
     
     //MARK: - Properties
     
     static let shared = ImageLoader()
-
-    //MARK: - Initialization
-    
-    private init() {}
     
     //MARK: - Private Properties
     
     private let cache: ImageCache = .shared
+    
+    //MARK: - Initialization
+    
+    private init() {}
 }
 
 extension ImageLoader {
     
-    private enum RetriverError: Error {
-        case invalidUrl
-        case invalidData
-        case invalidCacheData
-    }
-    
     //MARK: - Functions
     
-    func loadImage(urlString: String) async throws -> Image {
-        if let imageData = cache.object(forKey: urlString as NSString) {
+    func loadImage(urlString: String) async throws -> Image? {
+        if let imageData = cache.object(forKey: urlString) {
             return try await makeImageFromData(data: imageData)
         }
-        let data = try await fetch(stringUrl: urlString)
-        cache.set(object: data as NSData, forKey: urlString as NSString)
-        return try await makeImageFromData(data: data)
         
+        do {
+            let data = try await fetch(stringUrl: urlString)
+            cache.set(object: data, forKey: urlString)
+            return try await makeImageFromData(data: data)
+        } catch {
+            return nil
+        }
     }
     
     //MARK: - Private functions
@@ -50,7 +54,7 @@ extension ImageLoader {
         }
         return Image(uiImage: uiImage)
     }
-
+    
     private func fetch(stringUrl: String) async throws -> Data {
         guard let url = URL(string: stringUrl) else {
             throw RetriverError.invalidUrl
@@ -59,8 +63,8 @@ extension ImageLoader {
         return data
     }
     
-    private func loadDataFromCache(cache: ImageCache, for key: String) async throws -> Data {
-        guard let imageData = cache.object(forKey: key as NSString) else {
+    private func loadDataFromCache(for key: String) async throws -> Data {
+        guard let imageData = cache.object(forKey: key) else {
             throw RetriverError.invalidCacheData
         }
         return imageData

@@ -19,14 +19,19 @@ final class CatalogViewModel: ObservableObject {
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
     
+    let placeNetworkManager: PlaceNetworkManagerProtocol
+    let placeDataManager: PlaceDataManagerProtocol
+    
     let safeArea: EdgeInsets
     let size: CGSize
     
     //MARK: - Inits
     
-    init(networkManager: CatalogNetworkManagerProtocol, dataManager: CatalogDataManagerProtocol, safeArea: EdgeInsets, size: CGSize) {
+    init(networkManager: CatalogNetworkManagerProtocol, dataManager: CatalogDataManagerProtocol, placeNetworkManager: PlaceNetworkManagerProtocol, placeDataManager: PlaceDataManagerProtocol, safeArea: EdgeInsets, size: CGSize) {
         self.networkManager = networkManager
         self.dataManager = dataManager
+        self.placeNetworkManager = placeNetworkManager
+        self.placeDataManager = placeDataManager
         self.safeArea = safeArea
         self.size = size
         getCountries()

@@ -14,30 +14,29 @@ final class CityViewModel: ObservableObject {
     //MARK: - Properties
     
     @Published var city: City
-    @Published var cityImage: Image = AppImages.bw
-
     @Published var sortedDictionary: [String: [Place]] = [:]
     @Published var sortedKeys: [String] = []
-    
     @Published var events: [Event] = []
     
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
     
+    let placeNetworkManager: PlaceNetworkManagerProtocol
+    let placeDataManager: PlaceDataManagerProtocol
+    
     //MARK: - Inits
     
     init(city: City,
          networkManager: CatalogNetworkManagerProtocol,
-         dataManager: CatalogDataManagerProtocol) {
+         dataManager: CatalogDataManagerProtocol, placeNetworkManager: PlaceNetworkManagerProtocol, placeDataManager: PlaceDataManagerProtocol) {
         self.city = city
         self.networkManager = networkManager
         self.dataManager = dataManager
+        self.placeNetworkManager = placeNetworkManager
+        self.placeDataManager = placeDataManager
         
         if let events = city.events?.allObjects as? [Event] {
             self.events = events
-//            print("------------")
-//            print(events)
-//            print("------------")
         }
         if let places = city.places?.allObjects as? [Place] {
             Task {
@@ -45,7 +44,6 @@ final class CityViewModel: ObservableObject {
             }
         }
         
-        loadImage()
         getCity()
     }
 }
@@ -54,33 +52,21 @@ extension CityViewModel {
     
     @MainActor
     private func updateSortedDictionary(with places: [Place]) {
-        sortedDictionary = Dictionary(grouping: places, by: { $0.type ?? "all places" })
+        sortedDictionary = Dictionary(grouping: places, by: { place in
+            let key: SortingMenuCategories = .other
+            guard let placeKey = place.type.flatMap({ SortingMenuCategories(rawValue: $0)}) else {
+                return key.getName()
+            }
+            return placeKey.getName()
+        })
         sortedKeys = sortedDictionary.keys.sorted()
     }
     
     //MARK: - Private Functions
     
-    private func loadImage() {
-        Task {
-            await self.loadFromCache()
-        }
-    }
-    
     private func getCity() {
         Task {
             await fetchCity()
-        }
-    }
-    
-    @MainActor
-    private func loadFromCache() async {
-        guard let urlString = city.photo else { return }
-        do {
-            self.cityImage = try await ImageLoader.shared.loadImage(urlString: urlString)
-        }
-        catch {
-            //TODO
-            print(error.localizedDescription)
         }
     }
     
@@ -94,9 +80,6 @@ extension CityViewModel {
                     self.city = city
                     if let events = city.events?.allObjects as? [Event] {
                         self.events = events
-//                        print("------------")
-//                        print(events)
-//                        print("------------")
                     }
                     if let places = city.places?.allObjects as? [Place] {
                              updateSortedDictionary(with: places)

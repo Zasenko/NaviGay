@@ -7,27 +7,22 @@
 
 import SwiftUI
 
-struct CachedImageView: View {
+struct CachedImageView<Content>: View where Content: View {
     
     //MARK: - Properties
     
     @StateObject var viewModel: CachedImageViewModel
+    let content: () -> Content
     
     //MARK: - Body
     
     var body: some View {
-                viewModel.image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: viewModel.width, height: viewModel.height)
-                                .clipped()
-        
+        if let image = viewModel.image {
+            image
+                .resizable()
+                .scaledToFill()
+        } else {
+            content()
+        }
     }
 }
-
-//
-//struct CachedImageView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CachedImageView()
-//    }
-//}

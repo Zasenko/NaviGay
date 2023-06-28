@@ -8,18 +8,22 @@
 import CoreData
 
 protocol UserDataManagerProtocol {
+    var user: User? { get }
     func checkIsUserLogin() async -> Result<Bool, Error>
     func saveNewUser(decodedUser: DecodedUser) async
-    func deleteUser() async
+    func deleteUser(complition: @escaping( (Bool) -> Void ))
 }
 
 final class UserDataManager {
+    
+    // MARK: - Properties
+    
+    var user: User? = nil
     
     // MARK: - Private Properties
 
     private let dataManager: CoreDataManagerProtocol
     private let networkManager: UserDataNetworkManagerProtocol
-    private var user: User? = nil
     
     // MARK: - Inits
     
@@ -61,16 +65,32 @@ extension UserDataManager: UserDataManagerProtocol {
         reloadLikedPlases(ids: decodedUser.likedPlacesId)
     }
     
-    func deleteUser() async {
+    func deleteUser(complition: @escaping( (Bool) -> Void )) {
         let request = User.fetchRequest()
         do {
             let users = try self.dataManager.context.fetch(request)
             users.forEach { self.dataManager.context.delete($0) }
-            dataManager.saveData { _ in
-                
+            dataManager.saveData { [weak self] result in
+                DispatchQueue.main.async {
+                    if result {
+                        self?.deleteLikesAfterLogOut { [weak self] result in
+                            if result {
+                                complition(true)
+                            } else {
+                                complition(false)
+                            }
+                        }
+                        
+                    } else {
+                        complition(false)
+                    }
+                }
             }
         } catch let error {
             print("UserDataManager ERROR deleteUser(): ", error)
+            DispatchQueue.main.async {
+                complition(false)
+            }
         }
     }
 }
@@ -79,9 +99,26 @@ extension UserDataManager {
     
     // MARK: - Private Functions
     
+    func deleteLikesAfterLogOut(complition: @escaping( (Bool) -> Void )) {
+            let request = Place.fetchRequest()
+            do {
+                let likedPlaces = try self.dataManager.context.fetch(request).filter( { $0.isLiked == true } )
+                likedPlaces.forEach { $0.isLiked = false }
+                dataManager.saveData { [weak self] result in
+                    if result {
+                        complition(true)
+                    } else {
+                        complition(false)
+                    }
+                }
+            } catch {
+                complition(false)
+            }
+    }
+    
     private func reloadLikedPlases(ids: [Int]) {
         Task(priority: .background) {
-            var emptyPlaces: [Int] = []
+            var emptyPlacesIds: [Int] = []
             
             for id in ids {
                 switch await findPlace(id: id) {
@@ -91,18 +128,18 @@ extension UserDataManager {
                         dataManager.saveData { _ in
                         }
                     } else {
-                        emptyPlaces.append(id)
+                        emptyPlacesIds.append(id)
                     }
                 case .failure(let error):
                     print("UserDataManager ERROR switch PLACE - reloadLikedPlases(plasesId: [Int]): ", error)
                 }
             }
-            guard !emptyPlaces.isEmpty else {
+            guard !emptyPlacesIds.isEmpty else {
                 return
             }
             
             do {
-                let result = try await networkManager.fetchPlaces(ids: ids)
+                let result = try await networkManager.fetchPlaces(ids: emptyPlacesIds)
                 
                 if let error = result.error {
                     //TODO

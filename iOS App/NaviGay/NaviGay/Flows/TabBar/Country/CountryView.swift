@@ -55,9 +55,9 @@ struct CountryView: View {
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.title3)
-                       // .resizable()
-                        //.scaledToFit()
-                       // .frame(width: 30, height: 30)
+                    // .resizable()
+                    //.scaledToFit()
+                    // .frame(width: 30, height: 30)
                         .foregroundColor(.blue)
                         .bold()
                 }
@@ -93,57 +93,57 @@ struct CountryView: View {
             let minY = proxy.frame(in: coordinateSpace).minY
             let progress = minY / (viewModel.imageHeight * (minY > 0 ? 0.5 : 0.8))
             
-            viewModel.countryImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: size.width, height: size.height + (minY > 0 ? minY : 0 ))
-                .clipped()
-                .overlay() {
-                    ZStack(alignment: .bottom) {
-                        
-                        // MARK: - Gradient Overlay
-                        Rectangle()
-                            .fill(
-                                .linearGradient(colors: [
-                                    AppColors.background.opacity(0 - progress),
-                                    AppColors.background.opacity(0.1 - progress),
-                                    AppColors.background.opacity(0.3 - progress),
-                                    AppColors.background.opacity(0.5 - progress),
-                                    AppColors.background.opacity(0.8 - progress),
-                                    AppColors.background.opacity(1),
-                                ], startPoint: .top, endPoint: .bottom)
-                            )
-                        
-                        // MARK: - Info
-                        VStack(spacing: 0) {
-                            Text(viewModel.country.name ?? "")
-                                .font(.system(size: 45))
-                                .fontWeight(.bold)
-                                .multilineTextAlignment(.center)
-                            Text("710,329 monthly listeners".uppercased())
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .foregroundColor(.gray)
-                                .padding(.top, 15)
-                                .padding(.bottom, 50)
-                        }
-                        .opacity(1 + (progress > 0 ? -progress : progress))
-                        .offset(y: minY < 0 ? minY : 0 )
-                        .background(
-                            GeometryReader { proxy in
-                                Color.clear
-                                    .preference(
-                                        key: SizePreferenceKey.self,
-                                        value: proxy.size
-                                    )
-                            }
+            CachedImageView(viewModel: CachedImageViewModel(url: viewModel.country.photo)) {
+                AppColors.background
+            }
+            .frame(width: size.width, height: size.height + (minY > 0 ? minY : 0 ))
+            .clipped()
+            .overlay() {
+                ZStack(alignment: .bottom) {
+                    
+                    // MARK: - Gradient Overlay
+                    Rectangle()
+                        .fill(
+                            .linearGradient(colors: [
+                                AppColors.background.opacity(0 - progress),
+                                AppColors.background.opacity(0.1 - progress),
+                                AppColors.background.opacity(0.3 - progress),
+                                AppColors.background.opacity(0.5 - progress),
+                                AppColors.background.opacity(0.8 - progress),
+                                AppColors.background.opacity(1),
+                            ], startPoint: .top, endPoint: .bottom)
                         )
+                    
+                    // MARK: - Info
+                    VStack(spacing: 0) {
+                        Text(viewModel.country.name ?? "")
+                            .font(.system(size: 45))
+                            .fontWeight(.bold)
+                            .multilineTextAlignment(.center)
+                        Text("710,329 monthly listeners".uppercased())
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .foregroundColor(.gray)
+                            .padding(.top, 15)
+                            .padding(.bottom, 50)
                     }
-                    .onPreferenceChange(SizePreferenceKey.self) { preferences in
-                        self.photoViewTitleSize = preferences
-                    }
+                    .opacity(1 + (progress > 0 ? -progress : progress))
+                    .offset(y: minY < 0 ? minY : 0 )
+                    .background(
+                        GeometryReader { proxy in
+                            Color.clear
+                                .preference(
+                                    key: SizePreferenceKey.self,
+                                    value: proxy.size
+                                )
+                        }
+                    )
                 }
-                .offset(y: -minY)
+                .onPreferenceChange(SizePreferenceKey.self) { preferences in
+                    self.photoViewTitleSize = preferences
+                }
+            }
+            .offset(y: -minY)
         }
         .frame(height: viewModel.imageHeight + viewModel.safeArea.top )
     }
@@ -154,7 +154,7 @@ struct CountryView: View {
         VStack(spacing:  25) {
             Text(viewModel.country.about ?? "")
                 .font(.body)
-                //.lineSpacing(10)
+            //.lineSpacing(10)
                 .lineLimit(showAbout ? nil : 4)
                 .foregroundColor(.secondary)
                 .padding(.horizontal)
@@ -179,8 +179,7 @@ struct CountryView: View {
                             VStack {
                                 ForEach(cities) {city in
                                     NavigationLink {
-                                     //   viewBuilder.buildCityView(city: city, safeArea: safeArea, size: size)
-                                        CityView(viewModel: CityViewModel(city: city, networkManager: viewModel.networkManager, dataManager: viewModel.dataManager), safeArea: viewModel.safeArea, size: viewModel.size)
+                                        CityView(viewModel: CityViewModel(city: city, networkManager: viewModel.networkManager, dataManager: viewModel.dataManager, placeNetworkManager: viewModel.placeNetworkManager, placeDataManager: viewModel.placeDataManager), safeArea: viewModel.safeArea, size: viewModel.size)
                                     } label: {
                                         Text(city.name ?? "")
                                             .padding(.horizontal)
@@ -200,7 +199,7 @@ struct CountryView: View {
             }
             
             
-          //  Text(viewModel.country.lastUpdate?.formatted(date: .complete, time: .complete) ?? "")
+            //  Text(viewModel.country.lastUpdate?.formatted(date: .complete, time: .complete) ?? "")
             
         }
     }

@@ -12,7 +12,7 @@ final class CountryViewModel: ObservableObject {
     //MARK: - Properties
     
     @Published var country: Country
-    @Published var countryImage: Image = AppImages.bw
+   // @Published var countryImage: Image = AppImages.bw
     
     let size: CGSize
     let safeArea: EdgeInsets
@@ -21,19 +21,24 @@ final class CountryViewModel: ObservableObject {
     
     let networkManager: CatalogNetworkManagerProtocol
     let dataManager: CatalogDataManagerProtocol
-        
+    
+    let placeNetworkManager: PlaceNetworkManagerProtocol
+    let placeDataManager: PlaceDataManagerProtocol
+    
     //MARK: - Inits
     
     init(country: Country,
          networkManager: CatalogNetworkManagerProtocol,
-         dataManager: CatalogDataManagerProtocol, size: CGSize, safeArea: EdgeInsets) {
+         dataManager: CatalogDataManagerProtocol, placeNetworkManager: PlaceNetworkManagerProtocol, placeDataManager: PlaceDataManagerProtocol, size: CGSize, safeArea: EdgeInsets) {
         self.country = country
         self.networkManager = networkManager
         self.dataManager = dataManager
+        self.placeNetworkManager = placeNetworkManager
+        self.placeDataManager = placeDataManager
         self.size = size
         self.safeArea = safeArea
         self.imageHeight = (size.width / 4 ) * 5
-        loadImage()
+      //  loadImage()
         getCountry()
     }
 }
@@ -48,25 +53,25 @@ extension CountryViewModel {
         }
     }
     
-    private func loadImage() {
-        Task {
-            await self.loadFromCache()
-        }
-    }
-    
-    @MainActor
-    private func loadFromCache() async {
-        guard let urlString = country.photo else { return }
-        do {
-            self.countryImage = try await ImageLoader.shared.loadImage(urlString: urlString)
-        }
-        catch {
-            
-            //TODO
-            
-            print(error.localizedDescription)
-        }
-    }
+//    private func loadImage() {
+//        Task {
+//            await self.loadFromCache()
+//        }
+//    }
+//    
+//    @MainActor
+//    private func loadFromCache() async {
+//        guard let urlString = country.photo else { return }
+//        do {
+//            self.countryImage = try await ImageLoader.shared.loadImage(urlString: urlString) ?? AppImages.bw
+//        }
+//        catch {
+//            
+//            //TODO
+//            
+//            print(error.localizedDescription)
+//        }
+//    }
     
     @MainActor
     private func reloadCountry() async {

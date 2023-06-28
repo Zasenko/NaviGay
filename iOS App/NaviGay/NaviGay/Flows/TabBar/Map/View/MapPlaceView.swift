@@ -35,7 +35,7 @@ extension MapPlaceViewModel {
     private func loadFromCache() async {
         guard let urlString = place.photo else { return }
         do {
-            self.placeImage = try await ImageLoader.shared.loadImage(urlString: urlString)
+            self.placeImage = try await ImageLoader.shared.loadImage(urlString: urlString) ?? AppImages.bw
         }
         catch {
             //TODO

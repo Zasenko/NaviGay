@@ -99,9 +99,9 @@ struct PlaceView: View {
             let minY = proxy.frame(in: coordinateSpace).minY
             let progress = minY / (height * (minY > 0 ? 0.5 : 0.8))
             
-            viewModel.placeImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
+            CachedImageView(viewModel: CachedImageViewModel(url: viewModel.place.photo)) {
+                AppColors.background
+            }
                 .frame(width: size.width, height: size.height + (minY > 0 ? minY : 0 ))
                 .clipped()
                 .overlay() {
