@@ -19,20 +19,20 @@ struct CityEventView: View {
     
     var body: some View {
         VStack {
-                viewModel.eventImage
-                    .resizable()
-                    .scaledToFill()
-                    .background(.regularMaterial)
-                    .frame(width: (size.width / 2.5), height: ((size.width / 2.5) / 4) * 5)
-                    .mask(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                    .background(Color.white)
-                    .shadow(color: AppColors.shadow.opacity(0.3), radius: 8, x: 0, y: 3)
+            CachedImageView(viewModel: CachedImageViewModel(url: viewModel.event.cover)) {
+                AppColors.background
+            }
+            .background(.regularMaterial)
+            .frame(width: (size.width / 2.5), height: ((size.width / 2.5) / 4) * 5)
+            .mask(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .background(Color.white)
+            .shadow(color: AppColors.shadow.opacity(0.3), radius: 8, x: 0, y: 3)
             if viewModel.isPartyFinished {
                 AppColors.red
                     .frame(width: 100, height: 100)
             }
-               
-                                
+            
+            
             Text(viewModel.event.type ?? "")
                 .font(.system(size: 30))
                 .fontWeight(.heavy)
@@ -42,7 +42,7 @@ struct CityEventView: View {
                 .font(.system(size: 17))
                 .fontWeight(.heavy)
                 .foregroundColor(.primary)
-
+            
             Text(viewModel.startTime)
                 .font(.system(size: 15))
                 .fontWeight(.medium)

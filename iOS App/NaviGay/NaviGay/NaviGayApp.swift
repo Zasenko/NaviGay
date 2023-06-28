@@ -20,7 +20,7 @@ struct NaviGayApp: App {
     
     init() {
         self.dataManager = CoreDataManager()
-        self.userDataManager = UserDataManager(manager: dataManager)
+        self.userDataManager = UserDataManager(manager: dataManager, networkManager: UserDataNetworkManager())
         self.authNetworkManager = AuthNetworkManager()
     }
     

@@ -89,56 +89,57 @@ struct CityView: View {
             let size = proxy.size
             let minY = proxy.frame(in: coordinateSpace).minY
             let progress = minY / (height * (minY > 0 ? 0.5 : 0.8))
-            viewModel.cityImage
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: size.width, height: size.height + (minY > 0 ? minY : 0 ))
-                .clipped()
-                .overlay() {
-                    ZStack(alignment: .bottom) {
-                        
-                        // MARK: - Gradient Overlay
-                        Rectangle()
-                            .fill(
-                                .linearGradient(colors: [
-                                    AppColors.background.opacity(0 - progress),
-                                    AppColors.background.opacity(0.1 - progress),
-                                    AppColors.background.opacity(0.3 - progress),
-                                    AppColors.background.opacity(0.5 - progress),
-                                    AppColors.background.opacity(0.8 - progress),
-                                    AppColors.background.opacity(1),
-                                ], startPoint: .top, endPoint: .bottom)
-                            )
-                        
-                        // MARK: - Info
-                        VStack(spacing: 0) {
-                            Text(viewModel.city.name ?? "")
-                                .font(.system(size: 45))
-                                .fontWeight(.bold)
-                                .multilineTextAlignment(.center)
-                            Text("710,329 monthly listeners".uppercased())
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .foregroundColor(.gray)
-                                .padding(.top, 15)
-                        }
-                        .opacity(1 + (progress > 0 ? -progress : progress))
-                        .offset(y: minY < 0 ? minY : 0 )
-                        .background(
-                            GeometryReader { proxy in
-                                Color.clear
-                                    .preference(
-                                        key: SizePreferenceKey.self,
-                                        value: proxy.size
-                                    )
-                            }
+            
+            CachedImageView(viewModel: CachedImageViewModel(url: viewModel.city.photo)) {
+                AppColors.background
+            }
+            .frame(width: size.width, height: size.height + (minY > 0 ? minY : 0 ))
+            .clipped()
+            .overlay() {
+                ZStack(alignment: .bottom) {
+                    
+                    // MARK: - Gradient Overlay
+                    Rectangle()
+                        .fill(
+                            .linearGradient(colors: [
+                                AppColors.background.opacity(0 - progress),
+                                AppColors.background.opacity(0.1 - progress),
+                                AppColors.background.opacity(0.3 - progress),
+                                AppColors.background.opacity(0.5 - progress),
+                                AppColors.background.opacity(0.8 - progress),
+                                AppColors.background.opacity(1),
+                            ], startPoint: .top, endPoint: .bottom)
                         )
+                    
+                    // MARK: - Info
+                    VStack(spacing: 0) {
+                        Text(viewModel.city.name ?? "")
+                            .font(.system(size: 45))
+                            .fontWeight(.bold)
+                            .multilineTextAlignment(.center)
+                        Text("710,329 monthly listeners".uppercased())
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .foregroundColor(.gray)
+                            .padding(.top, 15)
                     }
-                    .onPreferenceChange(SizePreferenceKey.self) { preferences in
-                        self.photoViewTitleSize = preferences
-                    }
+                    .opacity(1 + (progress > 0 ? -progress : progress))
+                    .offset(y: minY < 0 ? minY : 0 )
+                    .background(
+                        GeometryReader { proxy in
+                            Color.clear
+                                .preference(
+                                    key: SizePreferenceKey.self,
+                                    value: proxy.size
+                                )
+                        }
+                    )
                 }
-                .offset(y: -minY)
+                .onPreferenceChange(SizePreferenceKey.self) { preferences in
+                    self.photoViewTitleSize = preferences
+                }
+            }
+            .offset(y: -minY)
         }
         .frame(height: height + safeArea.top )
     }
@@ -149,11 +150,23 @@ struct CityView: View {
         
         VStack(alignment: .leading) {
             ForEach(viewModel.sortedKeys, id: \.self) { key in
-                Section(header: Text(key)) {
+                Section {
                     ForEach(viewModel.sortedDictionary[key] ?? []) { place in
-                        CityPlaceView(viewModel: CityPlaceViewModel(place: place), size: size, safeArea: safeArea)
+                        NavigationLink {
+                            PlaceView(viewModel: PlaceViewModel(place: place, networkManager: viewModel.placeNetworkManager, dataManager: viewModel.placeDataManager), safeArea: safeArea, size: size)
+                        } label: {
+                            CityPlaceView(place: place)
+                        }
                     }
-                }
+                } header: {
+                    Text(key.uppercased())
+                        .foregroundColor(.secondary)
+                        .fontWeight(.light)
+                        .bold()
+                        .padding(.horizontal)
+                        .padding(.top)
+                        .padding(.top)
+                } footer: {}
             }
         }
         Text(viewModel.city.about ?? "")

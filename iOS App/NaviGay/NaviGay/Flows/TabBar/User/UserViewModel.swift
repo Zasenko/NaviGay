@@ -7,11 +7,43 @@
 
 import SwiftUI
 
-final class UserViewModel {
+final class UserViewModel: ObservableObject {
     
+    // MARK: - Properties
+    @Binding var entryRouter: EntryViewRouter
     @Binding var isUserLogin: Bool
     
-    init(isUserLogin: Binding<Bool>) {
-        self._isUserLogin = isUserLogin
+    @Published var userImage: Image = AppImages.logoFull
+    
+    let userDataManager: UserDataManagerProtocol
+    
+    // MARK: - Inits
+    
+    init(userDataManager: UserDataManagerProtocol, entryRouter: Binding<EntryViewRouter>, isUserLogin: Binding<Bool>) {
+        self.userDataManager = userDataManager
+        _entryRouter = entryRouter
+        _isUserLogin = isUserLogin
+    }
+}
+
+extension UserViewModel {
+    
+    // MARK: - Functions
+    
+    func logOutButtonTapped() {
+        userDataManager.deleteUser { [weak self] result in
+            if result {
+                withAnimation(.spring()) {
+                    self?.isUserLogin = false
+                }
+            }
+        }
+        
+    }
+    
+    func loginButtonTapped() {
+        withAnimation(.spring()) {
+            entryRouter = .loginView
+        }
     }
 }

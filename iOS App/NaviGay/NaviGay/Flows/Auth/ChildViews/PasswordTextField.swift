@@ -20,12 +20,9 @@ struct PasswordTextField: View {
                 .foregroundColor(.secondary)
                 .frame(width: 20, height: 20)
             SecureField("Password", text: $text)
-               // .focused($focusedField, equals: .password)
                 .lineLimit(1)
                 .autocorrectionDisabled(true)
-                .onSubmit {
-               //     focusedField = nil
-                }
+
         }
         .padding(10)
         .background(AppColors.lightGray6)

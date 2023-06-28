@@ -24,7 +24,7 @@ final class PlaceAnnotation: NSObject, MKAnnotation, Identifiable {
                                                  longitude: CLLocationDegrees(place.longitude))
         self.title = place.name
         self.subtitle = place.type
-        self.type = PlaceType(rawValue: place.type ?? "defaultValue") ?? .defaultValue// place.type ?? ""
+        self.type = PlaceType(rawValue: place.type ?? "other") ?? .other// place.type ?? ""
 
         switch type {
         case .bar:

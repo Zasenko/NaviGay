@@ -26,14 +26,18 @@ final class TabBarViewModel: ObservableObject {
     @Published var isLocationDenied: Bool = false
     
     @Binding var isUserLogin: Bool
+    @Binding var entryRouter: EntryViewRouter
     
     var safeArea: EdgeInsets?
     var size: CGSize?
     
     var locationManager: LocationManagerProtocol
+    let userDataManager: UserDataManagerProtocol
     
     lazy var catalogNetworkManager: CatalogNetworkManagerProtocol = CatalogNetworkManager()
     lazy var catalogDataManager: CatalogDataManagerProtocol = CatalogDataManager(manager: dataManager)
+    lazy var placeNetworkManager: PlaceNetworkManagerProtocol = PlaceNetworkManager()
+    lazy var placeDataManager: PlaceDataManagerProtocol = PlaceDataManager(manager: dataManager)
     lazy var mapDataManager: MapDataManagerProtocol = MapDataManager(manager: dataManager)
     
     let aroundMeButton = TabBarButton(title: "Around Me", img: AppImages.iconCalendar, page: .aroundMe)
@@ -48,10 +52,12 @@ final class TabBarViewModel: ObservableObject {
     // MARK: - Inits
     
     init(isUserLogin: Binding<Bool>,
-         dataManager: CoreDataManagerProtocol, locationManager: LocationManagerProtocol) {
+         dataManager: CoreDataManagerProtocol, locationManager: LocationManagerProtocol, userDataManager: UserDataManagerProtocol, entryRouter: Binding<EntryViewRouter>) {
         _isUserLogin = isUserLogin
+        _entryRouter = entryRouter
         self.dataManager = dataManager
         self.locationManager = locationManager
+        self.userDataManager = userDataManager
         
         self.locationManager.authorizationStatus = { [weak self] result in
             switch result {

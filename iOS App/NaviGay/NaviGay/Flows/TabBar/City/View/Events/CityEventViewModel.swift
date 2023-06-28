@@ -12,7 +12,7 @@ final class CityEventViewModel: ObservableObject {
     //MARK: - Properties
     
     @Published var event: Event
-    @Published var eventImage: Image = AppImages.bw
+ //   @Published var eventImage: Image = AppImages.bw
     @Published var startTime: String = "startTime"
     @Published var finishTime: String = "finishTime"
     @Published var isPartyFinished: Bool = false
@@ -20,7 +20,7 @@ final class CityEventViewModel: ObservableObject {
     
     init(event: Event) {
         self.event = event
-        loadImage()
+     //   loadImage()
         
 //        //TODO!!!!!
         let dateFormatter = DateFormatter()
@@ -81,23 +81,23 @@ extension CityEventViewModel {
     
     //MARK: - Functions
     
-    private func loadImage() {
-        Task {
-            await self.loadFromCache()
-        }
-    }
-    
-    @MainActor
-    private func loadFromCache() async {
-        guard let urlString = event.cover else { return }
-        do {
-            self.eventImage = try await ImageLoader.shared.loadImage(urlString: urlString)
-        }
-        catch {
-            
-            //TODO
-            
-            print(error.localizedDescription)
-        }
-    }
+//    private func loadImage() {
+//        Task {
+//            await self.loadFromCache()
+//        }
+//    }
+//
+//    @MainActor
+//    private func loadFromCache() async {
+//        guard let urlString = event.cover else { return }
+//        do {
+//            self.eventImage = try await ImageLoader.shared.loadImage(urlString: urlString) ?? AppImages.bw
+//        }
+//        catch {
+//
+//            //TODO
+//
+//            print(error.localizedDescription)
+//        }
+//    }
 }

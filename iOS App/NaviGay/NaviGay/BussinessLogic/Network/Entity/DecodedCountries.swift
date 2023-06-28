@@ -55,12 +55,17 @@ struct DecodedCity: Identifiable, Codable {
 }
 
 enum PlaceType: String, Codable {
-    case bar, cafe, restaurant, club, hotel, sauna, cruise, beach, shop, gym, culture, community, defaultValue
+    case bar, cafe, restaurant, club, hotel, sauna, cruise, beach, shop, gym, culture, community, other
 }
 
 struct PlaceResult: Codable {
     let error: String?
     let place: DecodedPlace?
+}
+
+struct PlacesResult: Codable {
+    let error: String?
+    let places: [DecodedPlace]?
 }
 
 struct DecodedPlace: Identifiable, Codable {

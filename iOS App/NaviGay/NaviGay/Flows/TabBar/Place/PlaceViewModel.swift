@@ -12,7 +12,6 @@ final class PlaceViewModel: ObservableObject {
     //MARK: - Properties
     
     @Published var place: Place
-    @Published var placeImage: Image = AppImages.bw
     
     let networkManager: PlaceNetworkManagerProtocol
     let dataManager: PlaceDataManagerProtocol
@@ -25,7 +24,6 @@ final class PlaceViewModel: ObservableObject {
         self.place = place
         self.networkManager = networkManager
         self.dataManager = dataManager
-        loadImage()
         getPlace()
     }
 }
@@ -37,24 +35,6 @@ extension PlaceViewModel {
     private func getPlace() {
         Task {
             await fetchPlace()
-        }
-    }
-    
-    private func loadImage() {
-        Task {
-            await self.loadFromCache()
-        }
-    }
-    
-    @MainActor
-    private func loadFromCache() async {
-        guard let urlString = place.photo else { return }
-        do {
-            self.placeImage = try await ImageLoader.shared.loadImage(urlString: urlString)
-        }
-        catch {
-            //TODO
-            print(error.localizedDescription)
         }
     }
     

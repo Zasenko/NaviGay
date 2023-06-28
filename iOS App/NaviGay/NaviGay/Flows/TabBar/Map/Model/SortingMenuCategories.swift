@@ -11,37 +11,40 @@ enum SortingMenuCategories: String {
     case bar, cafe, restaurant, club, hotel, sauna, cruise, beach, shop, gym, culture, community
     case events
     case all
+    case other
     
     func getName() -> String {
         switch self {
         case .bar:
-            return "bars"
+            return "Bars"
         case .cafe:
-            return "cafes"
+            return "Cafes"
         case .restaurant:
-            return "restaurants"
+            return "Restaurants"
         case .club:
-            return "clubs"
+            return "Clubs"
         case .hotel:
-            return "hotels"
+            return "Hotels"
         case .sauna:
-            return "saunas"
+            return "Saunas"
         case .cruise:
-            return "cruises"
+            return "Cruises"
         case .beach:
-            return "beaches"
+            return "Beaches"
         case .shop:
-            return "shops"
+            return "Shops"
         case .gym:
-            return "gyms"
+            return "Gyms"
         case .culture:
-            return "culture"
+            return "Culture"
         case .community:
-            return "communities"
+            return "Communities"
         case .events:
-            return "events"
+            return "Events"
         case .all:
-            return "all locations"
+            return "All locations"
+        case .other:
+            return "Other"
         }
     }
 }

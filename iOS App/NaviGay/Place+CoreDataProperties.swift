@@ -2,7 +2,7 @@
 //  Place+CoreDataProperties.swift
 //  NaviGay
 //
-//  Created by Dmitry Zasenko on 24.05.23.
+//  Created by Dmitry Zasenko on 26.06.23.
 //
 //
 
@@ -16,25 +16,43 @@ extension Place {
         return NSFetchRequest<Place>(entityName: "Place")
     }
 
+    @NSManaged public var about: String?
     @NSManaged public var address: String?
+    @NSManaged public var fb: String?
     @NSManaged public var id: Int64
+    @NSManaged public var insta: String?
     @NSManaged public var isActive: Bool
     @NSManaged public var isChecked: Bool
+    @NSManaged public var isLiked: Bool
     @NSManaged public var latitude: Float
     @NSManaged public var longitude: Float
     @NSManaged public var name: String?
     @NSManaged public var phone: String?
     @NSManaged public var photo: String?
     @NSManaged public var type: String?
-    @NSManaged public var about: String?
-    @NSManaged public var fb: String?
-    @NSManaged public var insta: String?
     @NSManaged public var www: String?
     @NSManaged public var city: City?
+    @NSManaged public var comments: NSSet?
     @NSManaged public var photos: NSSet?
     @NSManaged public var tags: NSSet?
     @NSManaged public var workingTimes: NSSet?
-    @NSManaged public var comments: NSSet?
+
+}
+
+// MARK: Generated accessors for comments
+extension Place {
+
+    @objc(addCommentsObject:)
+    @NSManaged public func addToComments(_ value: PlaceComment)
+
+    @objc(removeCommentsObject:)
+    @NSManaged public func removeFromComments(_ value: PlaceComment)
+
+    @objc(addComments:)
+    @NSManaged public func addToComments(_ values: NSSet)
+
+    @objc(removeComments:)
+    @NSManaged public func removeFromComments(_ values: NSSet)
 
 }
 
@@ -86,23 +104,6 @@ extension Place {
 
     @objc(removeWorkingTimes:)
     @NSManaged public func removeFromWorkingTimes(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for comments
-extension Place {
-
-    @objc(addCommentsObject:)
-    @NSManaged public func addToComments(_ value: PlaceComment)
-
-    @objc(removeCommentsObject:)
-    @NSManaged public func removeFromComments(_ value: PlaceComment)
-
-    @objc(addComments:)
-    @NSManaged public func addToComments(_ values: NSSet)
-
-    @objc(removeComments:)
-    @NSManaged public func removeFromComments(_ values: NSSet)
 
 }
 

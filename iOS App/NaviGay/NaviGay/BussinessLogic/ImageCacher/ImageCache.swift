@@ -15,10 +15,6 @@ final class ImageCache {
     
     static let shared = ImageCache()
     
-    //MARK: - Initialization
-    
-    private init() {}
-    
     //MARK: - Private properties
     
     private lazy var cache: CacheType = {
@@ -27,17 +23,21 @@ final class ImageCache {
         cache.totalCostLimit = 50 * 1024 * 1024 // 5242800 Bytes > 50MB
         return cache
     }()
+    
+    //MARK: - Initialization
+    
+    private init() {}
 }
 
 extension ImageCache {
-
+    
     //MARK: - Functions
     
-    func object(forKey key: NSString) -> Data? {
-        return cache.object(forKey: key) as? Data
+    func object(forKey key: String) -> Data? {
+        return cache.object(forKey: key as NSString) as Data?
     }
     
-    func set(object: NSData, forKey key: NSString) {
-        cache.setObject(object, forKey: key)
+    func set(object: Data, forKey key: String) {
+        cache.setObject(object as NSData, forKey: key as NSString)
     }
 }
