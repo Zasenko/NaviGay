@@ -83,16 +83,14 @@ extension LoginViewModel {
                 case .wrongEmail, .emptyEmail:
                     self?.error = "Incorrect email"
                     self?.shakeLogin()
-                    return
                 case .emptyPassword, .noDigit, .noLowercase, .noMinCharacters:
                     self?.error = "Wrong password"
                     self?.shakePassword()
-                    return
                 default:
                     self?.error = "Wrong email or password"
                     self?.shakePassword()
-                    return
                 }
+                self?.returnToNormalState()
             }
         }
     }
@@ -105,6 +103,7 @@ extension LoginViewModel {
                 if let error = result.errorDescription {
                     self.error = error
                     self.changeLoginButtonState(state: .failure)
+                    self.returnToNormalState()
                 }
                 if let user = result.user {
                     loginButtonState = .success
@@ -113,18 +112,19 @@ extension LoginViewModel {
                     toTabView()
                 } else {
                     self.changeLoginButtonState(state: .failure)
+                    self.returnToNormalState()
                 }
             } catch {
                 self.changeLoginButtonState(state: .failure)
+                self.returnToNormalState()
             }
         }
     }
     
     private func changeLoginButtonState(state: LoadState) {
-        withAnimation(.easeInOut(duration: 0.5)) {
+        withAnimation(.spring()) {
             self.loginButtonState = state
         }
-        self.returnToNormalState()
     }
     
     private func shakeLogin() {
@@ -140,7 +140,7 @@ extension LoginViewModel {
     }
     
     private func returnToNormalState() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             withAnimation(.easeInOut(duration: 0.5)) {
                 self.loginButtonState = .normal
                 self.allViewsDisabled = false

@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-struct LoginView: View {
-    
-    private enum LoginViewFields {
+enum FocusField: Hashable, CaseIterable {
         case email, password
     }
+
+struct LoginView: View {
     
     // MARK: - Properties
     
     @StateObject var viewModel: LoginViewModel
-    @FocusState private var focusedField: LoginViewFields?
+    @FocusState private var focusedField: FocusField?
 
     // MARK: - Body
     
@@ -30,9 +30,12 @@ struct LoginView: View {
                 
                 LoginTextField(text: $viewModel.email,
                                invalidAttempts: $viewModel.invalidLoginAttempts)
+                .focused($focusedField, equals: .email)
                 
                 PasswordTextField(text: $viewModel.password,
                                   invalidAttempts: $viewModel.invalidPasswordAttempts)
+                .focused($focusedField, equals: .password)
+                
                 forgetPasswordButton
                 loginButtonView
                 errorView
@@ -44,7 +47,7 @@ struct LoginView: View {
             .disabled(viewModel.allViewsDisabled)
         }
         .frame(maxWidth: .infinity)
-        .ignoresSafeArea(.keyboard)
+        .ignoresSafeArea(.container)
         .onTapGesture {
             withAnimation {
               //  focusedField = nil
