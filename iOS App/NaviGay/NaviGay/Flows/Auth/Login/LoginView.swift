@@ -7,51 +7,46 @@
 
 import SwiftUI
 
-enum FocusField: Hashable, CaseIterable {
+struct LoginView: View {
+    
+    private enum FocusField: Hashable, CaseIterable {
         case email, password
     }
-
-struct LoginView: View {
     
     // MARK: - Properties
     
     @StateObject var viewModel: LoginViewModel
     @FocusState private var focusedField: FocusField?
-
+    
     // MARK: - Body
     
     var body: some View {
         VStack {
-            VStack {
-                Spacer()
-                
-                Text("Login")
-                    .font(.largeTitle.bold())
-                
-                LoginTextField(text: $viewModel.email,
-                               invalidAttempts: $viewModel.invalidLoginAttempts)
-                .focused($focusedField, equals: .email)
-                
-                PasswordTextField(text: $viewModel.password,
-                                  invalidAttempts: $viewModel.invalidPasswordAttempts)
-                .focused($focusedField, equals: .password)
-                
-                forgetPasswordButton
-                loginButtonView
-                errorView
-                Spacer()
-                signUpView
+            ZStack {
+                AppColors.background
+                VStack {
+                    Spacer()
+                    Text("Login")
+                        .font(.largeTitle.bold())
+                    
+                    loginTextField
+                    passwordTextField
+                        .padding(.bottom)
+                    loginButtonView
+                        .padding(.bottom)
+                    errorView
+                    Spacer()
+                    signUpView
+                }
+                .padding()
+                .frame(maxWidth: 400)
+                .disabled(viewModel.allViewsDisabled)
+                .onSubmit(focusNextField)
             }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .disabled(viewModel.allViewsDisabled)
         }
         .frame(maxWidth: .infinity)
-        .ignoresSafeArea(.container)
         .onTapGesture {
-            withAnimation {
-              //  focusedField = nil
-            }
+            focusedField = nil
         }
         .fullScreenCover(isPresented: $viewModel.isSignUpViewOpen) {
             SignUpView(viewModel: SignUpViewModel(networkManager: viewModel.networkManager,
@@ -65,34 +60,82 @@ struct LoginView: View {
     
     // MARK: - Private properties / Views
     
+    var loginTextField: some View {
+        HStack {
+            AppImages.envelope
+                .resizable()
+                .scaledToFit()
+                .foregroundColor(.secondary)
+                .frame(width: 20, height: 20)
+            TextField("Email", text: $viewModel.email)
+                .keyboardType(.emailAddress)
+                .autocorrectionDisabled(true)
+                .textInputAutocapitalization(.never)
+                .lineLimit(1)
+                .focused($focusedField, equals: .email)
+        }
+        .padding(10)
+        .background(AppColors.lightGray6  )
+        .cornerRadius(8)
+        .overlay {
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(lineWidth: 2)
+                .foregroundColor(viewModel.invalidLoginAttempts == 0 ? .clear : AppColors.red)
+        }
+        .modifier(ShakeEffect(animatableData: CGFloat(viewModel.invalidLoginAttempts)))
+    }
+    
+    var passwordTextField: some View {
+        HStack {
+            Image(systemName: "lock")
+                .resizable()
+                .scaledToFit()
+                .foregroundColor(.secondary)
+                .frame(width: 20, height: 20)
+                SecureField("Password", text: $viewModel.password)
+                    .lineLimit(1)
+                    .autocorrectionDisabled(true)
+                    .focused($focusedField, equals: .password)
+        }
+        .padding(10)
+        .background(AppColors.lightGray6)
+        .cornerRadius(8)
+        .overlay {
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(lineWidth: 1)
+                .foregroundColor(viewModel.invalidPasswordAttempts == 0 ? .clear : .red)
+        }
+        .modifier(ShakeEffect(animatableData: CGFloat(viewModel.invalidPasswordAttempts)))
+    }
+    
     private var forgetPasswordButton: some View {
         Button {
-           // focusedField = nil
-         //   viewModel.skipButtonTapped()
+            focusedField = nil
+            viewModel.cleanFields()
         } label: {
             Text("Forget password?")
         }
-        .padding(.bottom)
-        .padding(.bottom)
     }
     
     private var loginButtonView: some View {
-        HStack(spacing: 10) {
-            
-            AsyncButton(state: $viewModel.loginButtonState, backgroundColor: AppColors.red) {
-                viewModel.loginButtonTapped()
-            } content: {
-                Text("Login")
-                    .bold()
-                    .foregroundColor(.white)
-            }
-            
+        HStack(spacing: 20) {
             Button {
+                focusedField = nil
+                viewModel.cleanFields()
                 viewModel.skipButtonTapped()
             } label: {
                 Text("Skip")
                     .padding()
             }
+            AsyncButton(state: $viewModel.loginButtonState, backgroundColor: .green) {
+                focusedField = nil
+                checkFields()
+            } content: {
+                Text("Login")
+                    .bold()
+                    .foregroundColor(.white)
+            }
+            .frame(minWidth: 100)
         }
     }
     
@@ -100,24 +143,64 @@ struct LoginView: View {
         HStack {
             Text("Don't have an account?")
             Button {
+                focusedField = nil
+                viewModel.cleanFields()
                 viewModel.signUpButtonTapped()
             } label: {
-                Text("Sign Up")
-                    .bold()
+                ColoredCapsule(background: .blue) {
+                    Text("Sign Up")
+                        .bold()
+                        .foregroundColor(.white)
+                }
             }
         }
+        .animation(.spring(), value: focusedField)
+        .scaleEffect(y: focusedField == nil ? 1 : 0, anchor: .bottom)
+        
     }
     
     private var errorView: some View {
         Text(viewModel.error)
             .font(.callout.bold())
+            .frame(maxWidth: .infinity, minHeight: 50, alignment: .center)
             .foregroundColor(AppColors.red)
-            .frame(height: 50)
+        
+    }
+    
+    // MARK: - Private Functions
+    
+    private func focusNextField() {
+        switch focusedField {
+        case .email:
+            if viewModel.password.isEmpty {
+                focusedField = .password
+            } else {
+                focusedField = nil
+            }
+        case .password:
+            if viewModel.email.isEmpty {
+                focusedField = .email
+            } else {
+                focusedField = nil
+            }
+        case .none:
+            break
+        }
+    }
+    
+    private func checkFields() {
+        if viewModel.email.isEmpty {
+            focusedField = .email
+        } else if viewModel.password.isEmpty {
+            focusedField = .password
+        } else {
+            viewModel.loginButtonTapped()
+        }
     }
 }
 
-//struct LoginView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        LoginView(viewModel: LoginViewModel(networkManager: AuthNetworkManager(networkMonitor: NetworkMonitor(), api: ApiProperties()), authManager: AuthManager(), userDataManager: UserDataManager(manager: CoreDataManager()), entryRouter: .constant(.loginView)))
-//    }
-//}
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginView(viewModel: LoginViewModel(entryRouter: .constant(.loginView), isUserLogin: .constant(false), userDataManager: UserDataManager(manager: CoreDataManager(), networkManager: UserDataNetworkManager()), networkManager: AuthNetworkManager(), authManager: AuthManager()))
+    }
+}

@@ -14,6 +14,7 @@ final class LoginViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var error = ""
+    @Published var isPasswordSecured = true
     @Published var loginButtonState: LoadState = .normal
     @Published var invalidLoginAttempts = 0
     @Published var invalidPasswordAttempts = 0
@@ -66,6 +67,14 @@ extension LoginViewModel {
         withAnimation(.spring()) {
             self.isSignUpViewOpen = true
         }
+    }
+    
+    func cleanFields() {
+        error = ""
+        email = ""
+        password = ""
+        invalidLoginAttempts = 0
+        invalidPasswordAttempts = 0
     }
     
     // MARK: - Private Functions
@@ -140,10 +149,10 @@ extension LoginViewModel {
     }
     
     private func returnToNormalState() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        self.allViewsDisabled = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             withAnimation(.easeInOut(duration: 0.5)) {
                 self.loginButtonState = .normal
-                self.allViewsDisabled = false
             }
         }
     }
