@@ -23,28 +23,53 @@ struct AsyncButton<Content>: View where Content: View {
     // MARK: - View
     
     var body: some View {
+        
+        switch state {
+        case .normal:
             Button {
                 action()
             } label: {
-                ColoredCapsule(background: AppColors.red) {
-                    switch state {
-                    case .normal:
-                        content()
-                    case .loading:
-                        ProgressView()
-                    case .success:
-                        Image(systemName: "checkmark")
-                            .font(.title3)
-                            .bold()
-                            .foregroundColor(.green)
-                    case .failure:
-                        Image(systemName: "xmark")
-                            .font(.title3)
-                            .bold()
-                            .foregroundColor(.white)
-                    }
+                ColoredCapsule(background: backgroundColor) {
+                    content()
                 }
             }
             .disabled(state == .loading || state == .success || state == .failure)
+        case .loading:
+            ProgressView()
+        case .success:
+            Image(systemName: "checkmark")
+                .font(.title2)
+                .bold()
+                .foregroundColor(.green)
+        case .failure:
+            Image(systemName: "xmark")
+                .font(.title2)
+                .bold()
+                .foregroundColor(.red)
+        }
+//
+//            Button {
+//                action()
+//            } label: {
+//                ColoredCapsule(background: backgroundColor) {
+//                    switch state {
+//                    case .normal:
+//                        content()
+//                    case .loading:
+//                        ProgressView()
+//                    case .success:
+//                        Image(systemName: "checkmark")
+//                            .font(.title3)
+//                            .bold()
+//                            .foregroundColor(.white)
+//                    case .failure:
+//                        Image(systemName: "xmark")
+//                            .font(.title3)
+//                            .bold()
+//                            .foregroundColor(.white)
+//                    }
+//                }
+//            }
+            //.disabled(state == .loading || state == .success || state == .failure)
         }
 }
