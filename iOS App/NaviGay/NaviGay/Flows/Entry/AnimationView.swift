@@ -9,20 +9,21 @@ import SwiftUI
 
 struct AnimationView: View {
     
+    // MARK: - Properties
+    
     @Binding var animationStarted: Bool
     @Binding var animationFinished: Bool
     
     @State private var logoUpAnimated: Bool = false
-    
     @State private var upAnimate1: Bool = false
     @State private var upAnimate2: Bool = false
     @State private var upAnimate3: Bool = false
     @State private var upAnimate4: Bool = false
     @State private var upAnimate5: Bool = false
     @State private var upAnimate6: Bool = false
-    
     @State private var isAnimatingUp: Bool = false
     
+    // MARK: - Body
     
     var body: some View {
         GeometryReader { geometry in
@@ -46,7 +47,9 @@ struct AnimationView: View {
                     Color.purple
                         .offset(y: upAnimate6 ? 0 : (isAnimatingUp ? -geometry.size.height - 100 : geometry.size.height + 100))
                         .animation(.spring(), value: upAnimate6)
-                }.ignoresSafeArea()
+                }
+                .ignoresSafeArea()
+                
                 Image("full-logo")
                     .resizable()
                     .scaledToFit()
@@ -61,6 +64,8 @@ struct AnimationView: View {
             })
         }
     }
+    
+    // MARK: - Private Functions
     
     private func animate() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -110,9 +115,9 @@ struct AnimationView: View {
         }
     }
 }
-
-struct AnimationView_Previews: PreviewProvider {
-    static var previews: some View {
-        AnimationView(animationStarted: .constant(false), animationFinished: .constant(false))
-    }
-}
+//
+//struct AnimationView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AnimationView(animationStarted: .constant(false), animationFinished: .constant(false))
+//    }
+//}
