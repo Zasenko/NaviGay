@@ -81,18 +81,27 @@ extension SignUpViewModel {
                 self?.loginButtonState = .failure
                 self?.returnToNormalState()
                 switch error {
-                case .wrongEmail, .emptyEmail:
+                case .emptyEmail:
+                    self?.error = "empty email"
+                    self?.shakeLogin()
+                case .wrongEmail:
                     self?.error = "Incorrect email"
                     self?.shakeLogin()
-                    return
-                case .emptyPassword, .noDigit, .noLowercase, .noMinCharacters:
-                    self?.error = "Wrong password"
+                case .emptyPassword:
+                    self?.error = "emptyPassword"
                     self?.shakePassword()
-                    return
+                case .noLowercase:
+                    self?.error = "Wrong password noLowercase"
+                    self?.shakePassword()
+                case .noMinCharacters:
+                    self?.error = "Wrong password noMinCharacters"
+                    self?.shakePassword()
+                case .noDigit:
+                    self?.error = "Wrong password noDigit"
+                    self?.shakePassword()
                 default:
                     self?.error = "Wrong email or password"
                     self?.shakePassword()
-                    return
                 }
             }
         }

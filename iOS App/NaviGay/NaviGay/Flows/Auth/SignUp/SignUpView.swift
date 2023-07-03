@@ -32,6 +32,7 @@ struct SignUpView: View {
             .disabled(viewModel.allViewsDisabled)
         }
         .frame(maxWidth: .infinity)
+        .background(.yellow)
         .onTapGesture {
             withAnimation {
               //  focusedField = nil

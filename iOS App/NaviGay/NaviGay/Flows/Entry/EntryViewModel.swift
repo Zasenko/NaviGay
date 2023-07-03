@@ -8,7 +8,6 @@
 import SwiftUI
 
 enum EntryViewRouter {
-    case logoView
     case tabView
     case loginView
 }
@@ -17,7 +16,11 @@ final class EntryViewModel: ObservableObject {
     
     // MARK: - Properties
     
-    @Published var router: EntryViewRouter = .logoView
+    @Published var router: EntryViewRouter = .loginView
+    
+    @Published var animationStarted: Bool = false
+    @Published var animationFinished: Bool = false
+    
     @Published var isUserLogin: Bool = false
     
     let userDataManager: UserDataManagerProtocol
@@ -46,6 +49,7 @@ extension EntryViewModel {
         Task {
             let result = await userDataManager.checkIsUserLogin()
             await MainActor.run {
+                self.animationStarted = true
                 switch result {
                 case .success(let bool):
                     if bool {

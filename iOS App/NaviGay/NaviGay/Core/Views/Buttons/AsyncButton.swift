@@ -47,29 +47,5 @@ struct AsyncButton<Content>: View where Content: View {
                 .bold()
                 .foregroundColor(.red)
         }
-//
-//            Button {
-//                action()
-//            } label: {
-//                ColoredCapsule(background: backgroundColor) {
-//                    switch state {
-//                    case .normal:
-//                        content()
-//                    case .loading:
-//                        ProgressView()
-//                    case .success:
-//                        Image(systemName: "checkmark")
-//                            .font(.title3)
-//                            .bold()
-//                            .foregroundColor(.white)
-//                    case .failure:
-//                        Image(systemName: "xmark")
-//                            .font(.title3)
-//                            .bold()
-//                            .foregroundColor(.white)
-//                    }
-//                }
-//            }
-            //.disabled(state == .loading || state == .success || state == .failure)
         }
 }

@@ -18,24 +18,23 @@ struct EntryView: View {
     
     var body: some View {
         VStack {
-            switch viewModel.router {
-            case .logoView:
-                Image("full-logo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 50)
-            case .loginView:
-                LoginView(viewModel: LoginViewModel(entryRouter: $viewModel.router,
-                                                    isUserLogin: $viewModel.isUserLogin,
-                                                    userDataManager: viewModel.userDataManager,
-                                                    networkManager: AuthNetworkManager(),
-                                                    authManager: AuthManager()))
-            case .tabView:
-                TabBarView(viewModel: TabBarViewModel(isUserLogin: $viewModel.isUserLogin,
-                                                      dataManager: viewModel.dataManager,
-                                                      locationManager: LocationManager(),
-                                                      userDataManager: viewModel.userDataManager,
-                                                      entryRouter: $viewModel.router))
+            if viewModel.animationFinished {
+                switch viewModel.router {
+                case .loginView:
+                    LoginView(viewModel: LoginViewModel(entryRouter: $viewModel.router,
+                                                        isUserLogin: $viewModel.isUserLogin,
+                                                        userDataManager: viewModel.userDataManager,
+                                                        networkManager: AuthNetworkManager(),
+                                                        authManager: AuthManager()))
+                case .tabView:
+                    TabBarView(viewModel: TabBarViewModel(isUserLogin: $viewModel.isUserLogin,
+                                                          dataManager: viewModel.dataManager,
+                                                          locationManager: LocationManager(),
+                                                          userDataManager: viewModel.userDataManager,
+                                                          entryRouter: $viewModel.router))
+                }
+            } else {
+                AnimationView(animationStarted: $viewModel.animationStarted, animationFinished: $viewModel.animationFinished)
             }
         }
     }

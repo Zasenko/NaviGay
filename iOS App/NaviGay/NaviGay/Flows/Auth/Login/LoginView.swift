@@ -28,11 +28,12 @@ struct LoginView: View {
                     Spacer()
                     Text("Login")
                         .font(.largeTitle.bold())
-                    
                     loginTextField
                     passwordTextField
-                        .padding(.bottom)
+                        .padding(.bottom, 20)
                     loginButtonView
+                        .padding(.bottom, 20)
+                    forgetPasswordButton
                         .padding(.bottom)
                     errorView
                     Spacer()
@@ -127,6 +128,9 @@ struct LoginView: View {
                 Text("Skip")
                     .padding()
             }
+            .padding(.horizontal)
+            .padding(.horizontal)
+            
             AsyncButton(state: $viewModel.loginButtonState, backgroundColor: .green) {
                 focusedField = nil
                 checkFields()
@@ -161,7 +165,7 @@ struct LoginView: View {
     
     private var errorView: some View {
         Text(viewModel.error)
-            .font(.callout.bold())
+            .font(.headline)
             .frame(maxWidth: .infinity, minHeight: 50, alignment: .center)
             .foregroundColor(AppColors.red)
         
