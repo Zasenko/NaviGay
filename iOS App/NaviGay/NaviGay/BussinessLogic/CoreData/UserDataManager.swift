@@ -116,9 +116,11 @@ extension UserDataManager {
             }
     }
     
-    private func reloadLikedPlases(ids: [Int]) {
+    private func reloadLikedPlases(ids: [Int]?) {
         Task(priority: .background) {
-            var emptyPlacesIds: [Int] = []
+            guard let ids = ids else { return }
+            
+            var noPlacesIds: [Int] = []
             
             for id in ids {
                 switch await findPlace(id: id) {
@@ -128,18 +130,18 @@ extension UserDataManager {
                         dataManager.saveData { _ in
                         }
                     } else {
-                        emptyPlacesIds.append(id)
+                        noPlacesIds.append(id)
                     }
                 case .failure(let error):
                     print("UserDataManager ERROR switch PLACE - reloadLikedPlases(plasesId: [Int]): ", error)
                 }
             }
-            guard !emptyPlacesIds.isEmpty else {
+            guard !noPlacesIds.isEmpty else {
                 return
             }
             
             do {
-                let result = try await networkManager.fetchPlaces(ids: emptyPlacesIds)
+                let result = try await networkManager.fetchPlaces(ids: noPlacesIds)
                 
                 if let error = result.error {
                     //TODO

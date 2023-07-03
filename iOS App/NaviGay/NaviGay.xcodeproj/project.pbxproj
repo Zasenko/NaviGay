@@ -107,6 +107,7 @@
 		0FF483242A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483232A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift */; };
 		0FF483262A44651500D209AA /* ClusterAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483252A44651500D209AA /* ClusterAnnotationView.swift */; };
 		0FF483282A447C1600D209AA /* AroundNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF483272A447C1600D209AA /* AroundNetworkManager.swift */; };
+		0FFD34342A530164003B92CB /* AnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFD34332A530164003B92CB /* AnimationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -211,6 +212,7 @@
 		0FF483232A44568900D209AA /* CLLocationCoordinate2DExtention.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2DExtention.swift.swift; sourceTree = "<group>"; };
 		0FF483252A44651500D209AA /* ClusterAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterAnnotationView.swift; sourceTree = "<group>"; };
 		0FF483272A447C1600D209AA /* AroundNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AroundNetworkManager.swift; sourceTree = "<group>"; };
+		0FFD34332A530164003B92CB /* AnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -407,6 +409,7 @@
 			children = (
 				0FD8A75529FA859A004EA3F0 /* EntryViewModel.swift */,
 				0F5B8BE929F83CD90083B81B /* EntryView.swift */,
+				0FFD34332A530164003B92CB /* AnimationView.swift */,
 			);
 			path = Entry;
 			sourceTree = "<group>";
@@ -568,7 +571,6 @@
 			isa = PBXGroup;
 			children = (
 				0FD8A77029FAC292004EA3F0 /* Buttons */,
-				0F8014862A4995BB007530D0 /* ColoredCapsule.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -660,6 +662,7 @@
 		0FD8A77029FAC292004EA3F0 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				0F8014862A4995BB007530D0 /* ColoredCapsule.swift */,
 				0FD8A77129FAC2A8004EA3F0 /* AsyncButton.swift */,
 			);
 			path = Buttons;
@@ -829,6 +832,7 @@
 				0FD2F85E2A1F54D200F3A8C8 /* EventView.swift in Sources */,
 				0FE44CC42A1D2E8D00E6BB3C /* City+CoreDataProperties.swift in Sources */,
 				0F37F02E2A03D48600679932 /* DictionaryExtension.swift in Sources */,
+				0FFD34342A530164003B92CB /* AnimationView.swift in Sources */,
 				0F6C168029FC0D2400F6D104 /* AuthNetworkManager.swift in Sources */,
 				0FE44CC02A1D2E8D00E6BB3C /* Region+CoreDataProperties.swift in Sources */,
 				0F8014872A4995BB007530D0 /* ColoredCapsule.swift in Sources */,
@@ -998,7 +1002,7 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1031,7 +1035,7 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
