@@ -14,7 +14,6 @@ final class LoginViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var error = ""
-    @Published var isPasswordSecured = true
     @Published var loginButtonState: LoadState = .normal
     @Published var invalidLoginAttempts = 0
     @Published var invalidPasswordAttempts = 0
@@ -88,6 +87,7 @@ extension LoginViewModel {
                 self?.login()
             case .failure(let error):
                 self?.changeLoginButtonState(state: .failure)
+                self?.returnToNormalState()
                 switch error {
                 case .wrongEmail, .emptyEmail:
                     self?.error = "Incorrect email"
@@ -99,7 +99,6 @@ extension LoginViewModel {
                     self?.error = "Wrong email or password"
                     self?.shakePassword()
                 }
-                self?.returnToNormalState()
             }
         }
     }
@@ -150,7 +149,7 @@ extension LoginViewModel {
     
     private func returnToNormalState() {
         self.allViewsDisabled = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             withAnimation(.easeInOut(duration: 0.5)) {
                 self.loginButtonState = .normal
             }

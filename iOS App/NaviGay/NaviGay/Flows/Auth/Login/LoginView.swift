@@ -21,29 +21,27 @@ struct LoginView: View {
     // MARK: - Body
     
     var body: some View {
-        VStack {
-            ZStack {
-                AppColors.background
-                VStack {
-                    Spacer()
-                    Text("Login")
-                        .font(.largeTitle.bold())
-                    loginTextField
-                    passwordTextField
-                        .padding(.bottom, 20)
-                    loginButtonView
-                        .padding(.bottom, 20)
-                    forgetPasswordButton
-                        .padding(.bottom)
-                    errorView
-                    Spacer()
-                    signUpView
-                }
-                .padding()
-                .frame(maxWidth: 400)
-                .disabled(viewModel.allViewsDisabled)
-                .onSubmit(focusNextField)
+        ZStack {
+            AppColors.background
+            VStack {
+                Spacer()
+                Text("Login")
+                    .font(.largeTitle.bold())
+                loginTextField
+                passwordTextField
+                    .padding(.bottom, 20)
+                loginButtonView
+                    .padding(.bottom, 20)
+                forgetPasswordButton
+                    .padding(.bottom)
+                errorView
+                Spacer()
+                signUpView
             }
+            .padding()
+            .frame(maxWidth: 400)
+            .disabled(viewModel.allViewsDisabled)
+            .onSubmit(focusNextField)
         }
         .frame(maxWidth: .infinity)
         .onTapGesture {
@@ -158,9 +156,9 @@ struct LoginView: View {
                 }
             }
         }
-        .animation(.spring(), value: focusedField)
         .scaleEffect(y: focusedField == nil ? 1 : 0, anchor: .bottom)
-        
+        .opacity(focusedField == nil ? 1 : 0)
+        .animation(.spring(), value: focusedField)
     }
     
     private var errorView: some View {
@@ -201,6 +199,7 @@ struct LoginView: View {
             viewModel.loginButtonTapped()
         }
     }
+    
 }
 
 struct LoginView_Previews: PreviewProvider {

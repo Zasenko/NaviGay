@@ -14,7 +14,7 @@ final class SignUpViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var error = ""
-    @Published var loginButtonState: LoadState = .normal
+    @Published var singUpButtonState: LoadState = .normal
     @Published var invalidLoginAttempts = 0
     @Published var invalidPasswordAttempts = 0
     @Published var allViewsDisabled = false
@@ -73,12 +73,11 @@ extension SignUpViewModel {
         authManager.checkEmailPassword(email: email, password: password) { [weak self] result in
             switch result {
             case .success(_):
-                withAnimation(.easeInOut(duration: 0.5)) {
-                    self?.loginButtonState = .loading
-                }
+                self?.changeLoginButtonState(state: .loading)
+
                 self?.registration()
             case .failure(let error):
-                self?.loginButtonState = .failure
+                self?.changeLoginButtonState(state: .failure)
                 self?.returnToNormalState()
                 switch error {
                 case .emptyEmail:
@@ -115,22 +114,28 @@ extension SignUpViewModel {
      
                 if let error = result.errorDescription {
                     self.error = error
-                    loginButtonState = .failure
+                    self.changeLoginButtonState(state: .failure)
                     returnToNormalState()
                 }
                 if let user = result.user {
-                    loginButtonState = .success
+                    singUpButtonState = .success
                     await userDataManager.saveNewUser(decodedUser: user)
                     isUserLogin = true
                     toTabView()
                 } else {
-                    self.loginButtonState = .failure
+                    self.changeLoginButtonState(state: .failure)
                     returnToNormalState()
                 }
             } catch {
-                self.loginButtonState = .failure
+                self.changeLoginButtonState(state: .failure)
                 self.returnToNormalState()
             }
+        }
+    }
+    
+    private func changeLoginButtonState(state: LoadState) {
+        withAnimation(.spring()) {
+            self.singUpButtonState = state
         }
     }
     
@@ -147,9 +152,9 @@ extension SignUpViewModel {
     }
     
     private func returnToNormalState() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             withAnimation(.easeInOut(duration: 0.5)) {
-                self.loginButtonState = .normal
+                self.singUpButtonState = .normal
                 self.allViewsDisabled = false
             }
         }
