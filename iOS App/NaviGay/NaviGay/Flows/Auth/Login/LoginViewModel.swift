@@ -21,24 +21,33 @@ final class LoginViewModel: ObservableObject {
     @Published var isSignUpViewOpen = false
     
     @Binding var entryRouter: EntryViewRouter
-    @Binding var isUserLogin: Bool
+    @Binding var isUserLoggedIn: Bool
+    @Binding var lastLoginnedUserId: Int
+    @Binding var user: User?
     
     let userDataManager: UserDataManagerProtocol
     let networkManager: AuthNetworkManagerProtocol
     let authManager: AuthManagerProtocol
+    let keychinWrapper: KeychainWrapperProtocol
         
     // MARK: - Inits
     
     init(entryRouter: Binding<EntryViewRouter>,
-         isUserLogin: Binding<Bool>,
+         isUserLoggedIn: Binding<Bool>,
+         lastLoginnedUserId: Binding<Int>,
+         user: Binding<User?>,
          userDataManager: UserDataManagerProtocol,
          networkManager: AuthNetworkManagerProtocol,
-         authManager: AuthManagerProtocol) {
+         authManager: AuthManagerProtocol,
+         keychinWrapper: KeychainWrapperProtocol) {
         self.userDataManager = userDataManager
         self.networkManager = networkManager
         self.authManager = authManager
+        self.keychinWrapper = keychinWrapper
         _entryRouter = entryRouter
-        _isUserLogin = isUserLogin
+        _isUserLoggedIn = isUserLoggedIn
+        _lastLoginnedUserId = lastLoginnedUserId
+        _user = user
     }
 }
 
@@ -107,26 +116,39 @@ extension LoginViewModel {
     private func login() {
         Task {
             do {
-                let result = try await self.networkManager.login(email: email, password: password)
+                let result = try await networkManager.login(email: email, password: password)
                 if let error = result.errorDescription {
                     self.error = error
-                    self.changeLoginButtonState(state: .failure)
-                    self.returnToNormalState()
+                    changeLoginButtonState(state: .failure)
+                    returnToNormalState()
+                    return
                 }
-                if let user = result.user {
-                    loginButtonState = .success
-                    await userDataManager.saveNewUser(decodedUser: user)
-                    isUserLogin = true
-                    toTabView()
-                } else {
-                    self.changeLoginButtonState(state: .failure)
-                    self.returnToNormalState()
+                guard let user = result.user, user.email != nil else {
+                    changeLoginButtonState(state: .failure)
+                    returnToNormalState()
+                    return
                 }
+                
+                //TODO!!! найти пароль из базы/// если нет - сохранить, если есть - обновить
+                
+                try keychinWrapper.storeGenericPasswordFor(account: email, service: "User login", password: password)
+                let newUser = try await userDataManager.saveNewUser(decodedUser: user)
+                self.user = newUser
+                
+                
+                loginButtonState = .success
+                isUserLoggedIn = true
+                lastLoginnedUserId = user.id
+                toTabView()
             } catch {
                 self.changeLoginButtonState(state: .failure)
                 self.returnToNormalState()
             }
         }
+    }
+    
+    private func saveInKeychin() {
+        
     }
     
     private func changeLoginButtonState(state: LoadState) {

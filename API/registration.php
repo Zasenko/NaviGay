@@ -99,6 +99,7 @@ while ($row = $result->fetch_assoc()) {
         $user = array(
             'id' => $row['id'],
             'name' => $row["name"],
+            'email' => $row['email'],
             'status' => $row['status'],
         );
     } else {

@@ -11,8 +11,14 @@ protocol CoreDataManagerProtocol {
     var context: NSManagedObjectContext { get }
     
     func saveData(complition: @escaping( (Bool) -> Void ))
+    func save() async throws
     func getObject<T: NSManagedObject>(id: NSManagedObjectID, entityName: String) async -> T?
     func createObject<T: NSManagedObject>() async -> T
+}
+
+enum CoreDataManagerError: Error {
+    case contextDontHasChanges
+    case didntSaveData
 }
 
 final class CoreDataManager: CoreDataManagerProtocol {
@@ -45,13 +51,28 @@ extension CoreDataManager {
 
     func saveData(complition: @escaping( (Bool) -> Void )) {
         DispatchQueue.main.async {
-            do {
-                try self.context.save()
+
+            if self.context.hasChanges {
+                do {
+                    try self.context.save()
                     complition(true)
-            } catch let error {
-                debugPrint("CoreDataManager saveData() Error: ", error.localizedDescription)
-                complition(false)
+                } catch let error {
+                    debugPrint("CoreDataManager saveData() Error: ", error.localizedDescription)
+                    complition(false)
+                }
             }
+
+        }
+    }
+    
+    func save() async throws {
+        guard context.hasChanges else {
+            throw CoreDataManagerError.contextDontHasChanges
+        }
+        do {
+            try self.context.save()
+        } catch {
+            throw error
         }
     }
     

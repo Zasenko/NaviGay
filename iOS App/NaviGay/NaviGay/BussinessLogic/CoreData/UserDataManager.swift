@@ -8,17 +8,19 @@
 import CoreData
 
 protocol UserDataManagerProtocol {
-    var user: User? { get }
-    func checkIsUserLogin() async -> Result<Bool, Error>
-    func saveNewUser(decodedUser: DecodedUser) async
-    func deleteUser(complition: @escaping( (Bool) -> Void ))
+ //   var user: User? { get }
+    func findUser(id: Int) async -> User?
+ //   func getUser() async -> User?
+    func updateUser(user: User, decodedUser: DecodedUser) async -> Bool
+    func saveNewUser(decodedUser: DecodedUser) async throws -> User
+    func deleteUser(user: User) async -> Bool
 }
 
 final class UserDataManager {
     
     // MARK: - Properties
     
-    var user: User? = nil
+ //   var user: User? = nil
     
     // MARK: - Private Properties
 
@@ -36,62 +38,79 @@ final class UserDataManager {
 // MARK: - UserDataManagerProtocol
 extension UserDataManager: UserDataManagerProtocol {
     
-    func checkIsUserLogin() async -> Result<Bool, Error> {
-        let request = User.fetchRequest()
+    func updateUser(user: User, decodedUser: DecodedUser) async -> Bool {
+        user.updateUser(decodedUser: decodedUser)
         do {
-            let users = try self.dataManager.context.fetch(request)
-            if users.isEmpty {
-                return .success(false)
-            } else {
-                user = users.first
-                return .success(true)
-            }
-        } catch let error {
-            return.failure(error)
+            try await dataManager.save()
+        } catch {
+            print("---ERROR UserDataManager updateUser(decodedUser: DecodedUser): ", error)
+            return false
         }
+        return true
     }
     
-    func saveNewUser(decodedUser: DecodedUser) async {
+    func findUser(id: Int) async -> User? {
+        let request = User.fetchRequest()
+        
+        do {
+            let user = try dataManager.context.fetch(request).first(where: { $0.id == Int64(id) })
+            return user
+        } catch {
+            print("--ERROR UserDataManager findUser(id: Int)", error)
+        }
+        return nil
+    }
+    
+//    func getUser() async -> User? {
+//        let request = User.fetchRequest()
+//        do {
+//            let users = try self.dataManager.context.fetch(request)
+//            if users.isEmpty {
+//                return nil
+//            } else if users.count > 1 {
+//                print("---!!!!!!!!!!!!!!!!  users.count > 1")
+//                user = users.first
+//                return user
+//            } else {
+//                user = users.first
+//                return user
+//            }
+//        } catch let error {
+//            debugPrint(error)
+//            return nil
+//        }
+//    }
+    
+    func saveNewUser(decodedUser: DecodedUser) async throws -> User {
         let newUser = User(context: dataManager.context)
         newUser.id = Int64(decodedUser.id)
         newUser.name = decodedUser.name
         newUser.photo = decodedUser.photo
         newUser.bio = decodedUser.bio
         newUser.status = decodedUser.status.rawValue
-        user = newUser
-        dataManager.saveData { _ in
-            
+        if let email = decodedUser.email {
+            newUser.email = email
         }
-        reloadLikedPlases(ids: decodedUser.likedPlacesId)
+      //  user = newUser
+        do {
+            try await dataManager.save()
+        } catch {
+            print("--- ERROR UserDataManager saveNewUser(): \(error) , error:", error.localizedDescription)
+        }
+        
+        return newUser
     }
     
-    func deleteUser(complition: @escaping( (Bool) -> Void )) {
-        let request = User.fetchRequest()
+    func deleteUser(user: User) async -> Bool {
         do {
-            let users = try self.dataManager.context.fetch(request)
-            users.forEach { self.dataManager.context.delete($0) }
-            dataManager.saveData { [weak self] result in
-                DispatchQueue.main.async {
-                    if result {
-                        self?.deleteLikesAfterLogOut { [weak self] result in
-                            if result {
-                                complition(true)
-                            } else {
-                                complition(false)
-                            }
-                        }
-                        
-                    } else {
-                        complition(false)
-                    }
-                }
-            }
-        } catch let error {
-            print("UserDataManager ERROR deleteUser(): ", error)
-            DispatchQueue.main.async {
-                complition(false)
-            }
+            dataManager.context.delete(user)
+            try await deleteLikesAfterLogOut()
+            try await dataManager.save()
+            return true
+        } catch {
+            print("--ERROR UserDataManager deleteUser: ", error)
         }
+        return false
     }
 }
 
@@ -99,23 +118,16 @@ extension UserDataManager {
     
     // MARK: - Private Functions
     
-    func deleteLikesAfterLogOut(complition: @escaping( (Bool) -> Void )) {
+    private func deleteLikesAfterLogOut() async throws {
             let request = Place.fetchRequest()
             do {
-                let likedPlaces = try self.dataManager.context.fetch(request).filter( { $0.isLiked == true } )
+                let likedPlaces = try dataManager.context.fetch(request).filter( { $0.isLiked == true } )
                 likedPlaces.forEach { $0.isLiked = false }
-                dataManager.saveData { [weak self] result in
-                    if result {
-                        complition(true)
-                    } else {
-                        complition(false)
-                    }
-                }
             } catch {
-                complition(false)
+                print("--ERROR UserDataManager deletePlaceLikesAfterLogOut", error)
             }
     }
-    
+
     private func reloadLikedPlases(ids: [Int]?) {
         Task(priority: .background) {
             guard let ids = ids else { return }
@@ -133,7 +145,7 @@ extension UserDataManager {
                         noPlacesIds.append(id)
                     }
                 case .failure(let error):
-                    print("UserDataManager ERROR switch PLACE - reloadLikedPlases(plasesId: [Int]): ", error)
+                    print("---UserDataManager ERROR switch PLACE - reloadLikedPlases(plasesId: [Int]): ", error)
                 }
             }
             guard !noPlacesIds.isEmpty else {
@@ -145,7 +157,7 @@ extension UserDataManager {
                 
                 if let error = result.error {
                     //TODO
-                    print("UserDataManager ERROR networkManager.fetchPlaces(ids: ids): ", error)
+                    print("--ERROR UserDataManager networkManager.fetchPlaces(ids: ids): ", error)
                     return
                 }
                 
@@ -165,12 +177,11 @@ extension UserDataManager {
                             case .failure(let error):
                                 print("UserDataManager ERROR switch TAG - reloadLikedPlases(plasesId: [Int]): ", error)
                             }
-                            
                         }
                     }
                 }
             } catch  {
-                print("UserDataManager ERROR reloadLikedPlases(ids: [Int]) ->>>>>>>>>>> \(error)")
+                print("--ERROR UserDataManager reloadLikedPlases(ids: [Int]) ->>>>>>>>>>> \(error)")
             }
         }
     }

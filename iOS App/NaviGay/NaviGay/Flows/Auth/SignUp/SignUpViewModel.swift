@@ -28,18 +28,20 @@ final class SignUpViewModel: ObservableObject {
     private let networkManager: AuthNetworkManagerProtocol
     private let authManager: AuthManagerProtocol
     private let userDataManager: UserDataManagerProtocol
-    
+    private let keychinWrapper: KeychainWrapperProtocol
     // MARK: - Inits
     
     init(networkManager: AuthNetworkManagerProtocol,
          authManager: AuthManagerProtocol,
          userDataManager: UserDataManagerProtocol,
+         keychinWrapper: KeychainWrapperProtocol,
          entryRouter: Binding<EntryViewRouter>,
          isUserLogin: Binding<Bool>,
          isSignUpViewOpen: Binding<Bool>) {
         self.networkManager = networkManager
         self.authManager = authManager
         self.userDataManager = userDataManager
+        self.keychinWrapper = keychinWrapper
         _entryRouter = entryRouter
         _isUserLogin = isUserLogin
         _isSignUpViewOpen = isSignUpViewOpen
@@ -110,25 +112,26 @@ extension SignUpViewModel {
     private func registration() {
         Task {
             do {
-                let result = try await self.networkManager.registration(email: email, password: password)
-     
+                let result = try await networkManager.registration(email: email, password: password)
                 if let error = result.errorDescription {
                     self.error = error
-                    self.changeLoginButtonState(state: .failure)
+                    changeLoginButtonState(state: .failure)
                     returnToNormalState()
+                    return
                 }
-                if let user = result.user {
-                    singUpButtonState = .success
-                    await userDataManager.saveNewUser(decodedUser: user)
-                    isUserLogin = true
-                    toTabView()
-                } else {
-                    self.changeLoginButtonState(state: .failure)
+                guard let user = result.user else {
+                    changeLoginButtonState(state: .failure)
                     returnToNormalState()
+                    return
                 }
+                try await userDataManager.saveNewUser(decodedUser: user)
+                try keychinWrapper.storeGenericPasswordFor(account: email, service: "User login", password: password)
+                singUpButtonState = .success
+                isUserLogin = true
+                toTabView()
             } catch {
-                self.changeLoginButtonState(state: .failure)
-                self.returnToNormalState()
+                changeLoginButtonState(state: .failure)
+                returnToNormalState()
             }
         }
     }

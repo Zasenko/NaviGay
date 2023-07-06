@@ -22,16 +22,20 @@ struct EntryView: View {
                 switch viewModel.router {
                 case .loginView:
                     LoginView(viewModel: LoginViewModel(entryRouter: $viewModel.router,
-                                                        isUserLogin: $viewModel.isUserLogin,
+                                                        isUserLoggedIn: $viewModel.isUserLoggedIn,
+                                                        lastLoginnedUserId: $viewModel.lastLoginnedUserId, user: $viewModel.user,
                                                         userDataManager: viewModel.userDataManager,
                                                         networkManager: AuthNetworkManager(),
-                                                        authManager: AuthManager()))
+                                                        authManager: AuthManager(),
+                                                        keychinWrapper: viewModel.keychinWrapper))
                 case .tabView:
-                    TabBarView(viewModel: TabBarViewModel(isUserLogin: $viewModel.isUserLogin,
+                    TabBarView(viewModel: TabBarViewModel(isUserLoggedIn: $viewModel.isUserLoggedIn,
+                                                          entryRouter: $viewModel.router,
+                                                          user: $viewModel.user,
                                                           dataManager: viewModel.dataManager,
                                                           locationManager: LocationManager(),
                                                           userDataManager: viewModel.userDataManager,
-                                                          entryRouter: $viewModel.router))
+                                                          keychinWrapper: viewModel.keychinWrapper))
                 }
             } else {
                 AnimationView(animationStarted: $viewModel.animationStarted, animationFinished: $viewModel.animationFinished)

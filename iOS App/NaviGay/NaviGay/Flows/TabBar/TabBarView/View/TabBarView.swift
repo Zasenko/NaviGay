@@ -34,8 +34,10 @@ struct TabBarView: View {
                                                             size: size))
                 case .user:
                     UserView(viewModel: UserViewModel(userDataManager: viewModel.userDataManager,
+                                                      keychinWrapper: viewModel.keychinWrapper,
                                                       entryRouter: $viewModel.entryRouter,
-                                                      isUserLogin: $viewModel.isUserLogin))
+                                                      isUserLoggedIn: $viewModel.isUserLoggedIn,
+                                                      user: $viewModel.user))
                 }
                 tabBar
             }

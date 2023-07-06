@@ -51,8 +51,9 @@ struct LoginView: View {
             SignUpView(viewModel: SignUpViewModel(networkManager: viewModel.networkManager,
                                                   authManager: viewModel.authManager,
                                                   userDataManager: viewModel.userDataManager,
+                                                  keychinWrapper: viewModel.keychinWrapper,
                                                   entryRouter: $viewModel.entryRouter,
-                                                  isUserLogin: $viewModel.isUserLogin,
+                                                  isUserLogin: $viewModel.isUserLoggedIn,
                                                   isSignUpViewOpen: $viewModel.isSignUpViewOpen))
         }
     }
@@ -202,8 +203,8 @@ struct LoginView: View {
     
 }
 
-struct LoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginView(viewModel: LoginViewModel(entryRouter: .constant(.loginView), isUserLogin: .constant(false), userDataManager: UserDataManager(manager: CoreDataManager(), networkManager: UserDataNetworkManager()), networkManager: AuthNetworkManager(), authManager: AuthManager()))
-    }
-}
+//struct LoginView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        LoginView(viewModel: LoginViewModel(entryRouter: .constant(.loginView), isUserLogin: .constant(false), userDataManager: UserDataManager(manager: CoreDataManager(), networkManager: UserDataNetworkManager()), networkManager: AuthNetworkManager(), authManager: AuthManager()))
+//    }
+//}

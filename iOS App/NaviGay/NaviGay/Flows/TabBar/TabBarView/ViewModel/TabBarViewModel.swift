@@ -19,20 +19,21 @@ final class TabBarViewModel: ObservableObject {
     
     // MARK: - Properties
     
+    @Binding var user: User?
+    @Binding var isUserLoggedIn: Bool
+    @Binding var entryRouter: EntryViewRouter
+    
     @Published var selectedPage: TabBarRouter = TabBarRouter.aroundMe
     @Published var aroundMeSelectedPage: AroundMeRouter = .map
-    
     @Published var showLocationAlert: Bool = false
     @Published var isLocationDenied: Bool = false
-    
-    @Binding var isUserLogin: Bool
-    @Binding var entryRouter: EntryViewRouter
     
     var safeArea: EdgeInsets?
     var size: CGSize?
     
     var locationManager: LocationManagerProtocol
     let userDataManager: UserDataManagerProtocol
+    let keychinWrapper: KeychainWrapperProtocol
     
     lazy var catalogNetworkManager: CatalogNetworkManagerProtocol = CatalogNetworkManager()
     lazy var catalogDataManager: CatalogDataManagerProtocol = CatalogDataManager(manager: dataManager)
@@ -46,18 +47,24 @@ final class TabBarViewModel: ObservableObject {
     
     // MARK: - Private Properties
     
-    private let dataManager: CoreDataManagerProtocol
-    
+    private let dataManager: CoreDataManagerProtocol //TODO ???? зачем это тут
     
     // MARK: - Inits
     
-    init(isUserLogin: Binding<Bool>,
-         dataManager: CoreDataManagerProtocol, locationManager: LocationManagerProtocol, userDataManager: UserDataManagerProtocol, entryRouter: Binding<EntryViewRouter>) {
-        _isUserLogin = isUserLogin
+    init(isUserLoggedIn: Binding<Bool>,
+         entryRouter: Binding<EntryViewRouter>,
+         user: Binding<User?>,
+         dataManager: CoreDataManagerProtocol,
+         locationManager: LocationManagerProtocol,
+         userDataManager: UserDataManagerProtocol,
+         keychinWrapper: KeychainWrapperProtocol) {
+        _isUserLoggedIn = isUserLoggedIn
         _entryRouter = entryRouter
+        _user = user
         self.dataManager = dataManager
         self.locationManager = locationManager
         self.userDataManager = userDataManager
+        self.keychinWrapper = keychinWrapper
         
         self.locationManager.authorizationStatus = { [weak self] result in
             switch result {

@@ -19,9 +19,10 @@ enum UserStatus: String, Codable {
 struct DecodedUser: Codable, Identifiable {
     let id: Int
     let name: String
+    let status: UserStatus
+    let email: String?
     let bio: String?
     let photo: String?
     let instagram: String?
-    let status: UserStatus
     let likedPlacesId: [Int]?
 }

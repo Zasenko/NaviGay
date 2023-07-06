@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.swift
 //  NaviGay
 //
-//  Created by Dmitry Zasenko on 24.05.23.
+//  Created by Dmitry Zasenko on 05.07.23.
 //
 //
 
@@ -21,6 +21,7 @@ extension User {
     @NSManaged public var name: String?
     @NSManaged public var photo: String?
     @NSManaged public var status: String?
+    @NSManaged public var email: String?
 
 }
 
