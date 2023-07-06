@@ -18,7 +18,7 @@ struct UserView: View {
     var body: some View {
         VStack {
             Spacer()
-            if viewModel.isUserLogin {
+            if viewModel.user != nil {
                 userLoginView
             } else {
                 userLogOutView
@@ -46,8 +46,7 @@ struct UserView: View {
     var userLoginView: some View {
         
         VStack {
-            
-            CachedImageView(viewModel: CachedImageViewModel(url: viewModel.userDataManager.user?.photo)) {
+            CachedImageView(viewModel: CachedImageViewModel(url: viewModel.user?.photo)) {
                 AppImages.iconPerson
                     .resizable()
                     .scaledToFit()
@@ -57,9 +56,9 @@ struct UserView: View {
             .background(AppColors.lightGray5)
             .clipShape(Circle())
 //
-            Text(viewModel.userDataManager.user?.name ?? "")
+            Text(viewModel.user?.name ?? "")
                 .font(.title)
-            Text(viewModel.userDataManager.user?.bio ?? "add information about you")
+            Text(viewModel.user?.bio ?? "add information about you")
             Spacer()
             Button {
                 viewModel.logOutButtonTapped()
@@ -74,8 +73,8 @@ struct UserView: View {
     
 }
 
-struct UserView_Previews: PreviewProvider {
-    static var previews: some View {
-        UserView(viewModel: UserViewModel(userDataManager: UserDataManager(manager: CoreDataManager(), networkManager: UserDataNetworkManager()), entryRouter: .constant(.tabView), isUserLogin: .constant(true)))
-    }
-}
+//struct UserView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        UserView(viewModel: UserViewModel(userDataManager: UserDataManager(manager: CoreDataManager(), networkManager: UserDataNetworkManager()), entryRouter: .constant(.tabView), isUserLogin: .constant(true)))
+//    }
+//}

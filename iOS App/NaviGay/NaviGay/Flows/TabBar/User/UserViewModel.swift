@@ -10,19 +10,31 @@ import SwiftUI
 final class UserViewModel: ObservableObject {
     
     // MARK: - Properties
+    
     @Binding var entryRouter: EntryViewRouter
-    @Binding var isUserLogin: Bool
+    @Binding var isUserLoggedIn: Bool
+    @Binding var user: User?
     
     @Published var userImage: Image = AppImages.logoFull
     
-    let userDataManager: UserDataManagerProtocol
+    // MARK: - Private Properties
+    
+    private let userDataManager: UserDataManagerProtocol
+    private let keychinWrapper: KeychainWrapperProtocol
     
     // MARK: - Inits
     
-    init(userDataManager: UserDataManagerProtocol, entryRouter: Binding<EntryViewRouter>, isUserLogin: Binding<Bool>) {
+    init(userDataManager: UserDataManagerProtocol,
+         keychinWrapper: KeychainWrapperProtocol,
+         entryRouter: Binding<EntryViewRouter>,
+         isUserLoggedIn: Binding<Bool>,
+         user: Binding<User?>) {
         self.userDataManager = userDataManager
+        self.keychinWrapper = keychinWrapper
         _entryRouter = entryRouter
-        _isUserLogin = isUserLogin
+        _isUserLoggedIn = isUserLoggedIn
+        _user = user
+        
     }
 }
 
@@ -31,14 +43,22 @@ extension UserViewModel {
     // MARK: - Functions
     
     func logOutButtonTapped() {
-        userDataManager.deleteUser { [weak self] result in
-            if result {
-                withAnimation(.spring()) {
-                    self?.isUserLogin = false
+        Task {
+            guard let user = user, let email = user.email else { return }
+            if await userDataManager.deleteUser(user: user) {
+                do {
+                    try keychinWrapper.deleteGenericPasswordFor(account: email, service: "User login")
+                    await MainActor.run(body: {
+                        withAnimation(.spring()) {
+                            self.user = nil
+                            self.isUserLoggedIn = false
+                        }
+                    })
+                } catch {
+                    print("--ERROR UserViewModel logOutButtonTapped:", error)
                 }
             }
         }
-        
     }
     
     func loginButtonTapped() {

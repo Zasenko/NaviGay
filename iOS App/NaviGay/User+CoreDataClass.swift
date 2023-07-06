@@ -11,5 +11,11 @@ import CoreData
 
 
 public class User: NSManagedObject {
-
+    func updateUser(decodedUser: DecodedUser) {
+        self.bio = decodedUser.bio
+        self.name = decodedUser.name
+        self.photo = decodedUser.photo
+        self.status = decodedUser.status.rawValue
+        self.email = decodedUser.email
+    }
 }

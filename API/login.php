@@ -56,6 +56,7 @@ while ($row = $result->fetch_assoc()) {
         $user = array(
             'id' => $row['id'],
             'name' => $row["name"],
+            'email' => $row['email'],
             'bio' => $row["bio"],
             'photo' => $row['photo'],
             'instagram' => $row['instagram'],

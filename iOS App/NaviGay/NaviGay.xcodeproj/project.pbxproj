@@ -13,6 +13,8 @@
 		0F17FCA62A20D44E00527735 /* EventDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F17FCA52A20D44E00527735 /* EventDataManager.swift */; };
 		0F217B332A1BC84F0009B3F9 /* CityPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F217B322A1BC84F0009B3F9 /* CityPlaceView.swift */; };
 		0F217B352A1BC8680009B3F9 /* CityPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F217B342A1BC8680009B3F9 /* CityPlaceViewModel.swift */; };
+		0F2EFF302A5421FE00A51200 /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2EFF2F2A5421FE00A51200 /* KeychainWrapper.swift */; };
+		0F2EFF322A5422F300A51200 /* KeychainWrapperError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2EFF312A5422F300A51200 /* KeychainWrapperError.swift */; };
 		0F37F02E2A03D48600679932 /* DictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F37F02D2A03D48600679932 /* DictionaryExtension.swift */; };
 		0F37F0302A03F33200679932 /* CatalogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F37F02F2A03F33200679932 /* CatalogView.swift */; };
 		0F37F0322A03F34000679932 /* CatalogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F37F0312A03F34000679932 /* CatalogViewModel.swift */; };
@@ -117,6 +119,8 @@
 		0F17FCA52A20D44E00527735 /* EventDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDataManager.swift; sourceTree = "<group>"; };
 		0F217B322A1BC84F0009B3F9 /* CityPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityPlaceView.swift; sourceTree = "<group>"; };
 		0F217B342A1BC8680009B3F9 /* CityPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityPlaceViewModel.swift; sourceTree = "<group>"; };
+		0F2EFF2F2A5421FE00A51200 /* KeychainWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
+		0F2EFF312A5422F300A51200 /* KeychainWrapperError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWrapperError.swift; sourceTree = "<group>"; };
 		0F37F02D2A03D48600679932 /* DictionaryExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryExtension.swift; sourceTree = "<group>"; };
 		0F37F02F2A03F33200679932 /* CatalogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogView.swift; sourceTree = "<group>"; };
 		0F37F0312A03F34000679932 /* CatalogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewModel.swift; sourceTree = "<group>"; };
@@ -312,6 +316,15 @@
 				0FD8A75A29FA898F004EA3F0 /* TabBarViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		0F2EFF2E2A5421C300A51200 /* Keychain */ = {
+			isa = PBXGroup;
+			children = (
+				0F2EFF2F2A5421FE00A51200 /* KeychainWrapper.swift */,
+				0F2EFF312A5422F300A51200 /* KeychainWrapperError.swift */,
+			);
+			path = Keychain;
 			sourceTree = "<group>";
 		};
 		0F37F02C2A03D44600679932 /* Extensions */ = {
@@ -641,6 +654,7 @@
 		0FD8A76829FAB390004EA3F0 /* BussinessLogic */ = {
 			isa = PBXGroup;
 			children = (
+				0F2EFF2E2A5421C300A51200 /* Keychain */,
 				0FB280FF2A0154D100E79982 /* AuthManager */,
 				0F6C167A29FC07F900F6D104 /* Network */,
 				0F5B8C2C29F9770E0083B81B /* CoreData */,
@@ -801,6 +815,7 @@
 				0FBD1F892A16263B00B11CCE /* MapView.swift in Sources */,
 				0FD8A76129FAA755004EA3F0 /* LoginView.swift in Sources */,
 				0F217B332A1BC84F0009B3F9 /* CityPlaceView.swift in Sources */,
+				0F2EFF302A5421FE00A51200 /* KeychainWrapper.swift in Sources */,
 				0F80148D2A49D4F0007530D0 /* UserDataNetworkManager.swift in Sources */,
 				0F37F0342A03F41B00679932 /* CountryCell.swift in Sources */,
 				0FBB1E702A3B56C200FAEEA4 /* PlaceAnnotation.swift in Sources */,
@@ -828,6 +843,7 @@
 				0FE44CBC2A1D2E8D00E6BB3C /* WorkingTime+CoreDataProperties.swift in Sources */,
 				0FE5B4B52A1E00400018E9E0 /* CityEventViewModel.swift in Sources */,
 				0FE5B4BF2A1E2F860018E9E0 /* PlaceView.swift in Sources */,
+				0F2EFF322A5422F300A51200 /* KeychainWrapperError.swift in Sources */,
 				0FD8A76C29FAB45D004EA3F0 /* AppImages.swift in Sources */,
 				0FD2F85E2A1F54D200F3A8C8 /* EventView.swift in Sources */,
 				0FE44CC42A1D2E8D00E6BB3C /* City+CoreDataProperties.swift in Sources */,
