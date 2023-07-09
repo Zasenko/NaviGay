@@ -17,15 +17,11 @@ final class UserDataNetworkManager {}
 extension UserDataNetworkManager: UserDataNetworkManagerProtocol {
     
     func fetchPlaces(ids: [Int]) async throws -> PlacesResult {
-        
         guard let url = await ApiProperties.shared.getPlacesUrl(ids: ids) else {
             throw NetworkErrors.bedUrl
         }
-        print("url ->>>>>>> ", url)
-        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
             throw NetworkErrors.invalidData

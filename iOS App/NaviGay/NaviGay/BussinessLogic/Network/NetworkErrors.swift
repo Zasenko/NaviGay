@@ -13,4 +13,6 @@ enum NetworkErrors: Error {
     case bedUrl
     case invalidData
     case apiError
+    case noUser
+    case apiErrorWithMassage(String)
 }

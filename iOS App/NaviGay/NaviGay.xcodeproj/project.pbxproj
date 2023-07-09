@@ -394,13 +394,8 @@
 		0F5B8C2C29F9770E0083B81B /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				0F609FCE2A596A9A00D65C1E /* Managers */,
 				0F1E95F12A1CB74000136DFE /* Models */,
-				0F5B8BFA29F857750083B81B /* CoreDataManager.swift */,
-				0FD8A75E29FA9018004EA3F0 /* UserDataManager.swift */,
-				0F37F0352A03F53D00679932 /* CatalogDataManager.swift */,
-				0FE5B4C22A1E31690018E9E0 /* PlaceDataManager.swift */,
-				0F17FCA52A20D44E00527735 /* EventDataManager.swift */,
-				0FBB1E712A3B59E700FAEEA4 /* MapDataManager.swift */,
 				0F5B8C2D29F977CE0083B81B /* NaviGay.xcdatamodeld */,
 			);
 			path = CoreData;
@@ -535,6 +530,19 @@
 			children = (
 			);
 			path = Home;
+			sourceTree = "<group>";
+		};
+		0F609FCE2A596A9A00D65C1E /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				0F5B8BFA29F857750083B81B /* CoreDataManager.swift */,
+				0FD8A75E29FA9018004EA3F0 /* UserDataManager.swift */,
+				0F37F0352A03F53D00679932 /* CatalogDataManager.swift */,
+				0FE5B4C22A1E31690018E9E0 /* PlaceDataManager.swift */,
+				0F17FCA52A20D44E00527735 /* EventDataManager.swift */,
+				0FBB1E712A3B59E700FAEEA4 /* MapDataManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		0F6C167A29FC07F900F6D104 /* Network */ = {

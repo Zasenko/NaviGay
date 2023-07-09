@@ -21,7 +21,10 @@ final class SignUpViewModel: ObservableObject {
     
     @Binding var isSignUpViewOpen: Bool
     @Binding var entryRouter: EntryViewRouter
-    @Binding var isUserLogin: Bool
+    
+    @Binding var isUserLoggedIn: Bool
+    @Binding var lastLoginnedUserId: Int
+    @Binding var user: User?
     
     // MARK: - Private Properties
     
@@ -36,15 +39,19 @@ final class SignUpViewModel: ObservableObject {
          userDataManager: UserDataManagerProtocol,
          keychinWrapper: KeychainWrapperProtocol,
          entryRouter: Binding<EntryViewRouter>,
-         isUserLogin: Binding<Bool>,
-         isSignUpViewOpen: Binding<Bool>) {
+         lastLoginnedUserId: Binding<Int>,
+         isSignUpViewOpen: Binding<Bool>,
+         user: Binding<User?>,
+         isUserLoggedIn: Binding<Bool>) {
         self.networkManager = networkManager
         self.authManager = authManager
         self.userDataManager = userDataManager
         self.keychinWrapper = keychinWrapper
         _entryRouter = entryRouter
-        _isUserLogin = isUserLogin
+        _isUserLoggedIn = isUserLoggedIn
         _isSignUpViewOpen = isSignUpViewOpen
+        _lastLoginnedUserId = lastLoginnedUserId
+        _user = user
     }
 }
 
@@ -70,70 +77,87 @@ extension SignUpViewModel {
     
     // MARK: - Private Functions
     
+    //ok
     @MainActor
     private func checkEmailPassword() async {
-        authManager.checkEmailPassword(email: email, password: password) { [weak self] result in
-            switch result {
-            case .success(_):
-                self?.changeLoginButtonState(state: .loading)
-
-                self?.registration()
-            case .failure(let error):
-                self?.changeLoginButtonState(state: .failure)
-                self?.returnToNormalState()
-                switch error {
-                case .emptyEmail:
-                    self?.error = "empty email"
-                    self?.shakeLogin()
-                case .wrongEmail:
-                    self?.error = "Incorrect email"
-                    self?.shakeLogin()
-                case .emptyPassword:
-                    self?.error = "emptyPassword"
-                    self?.shakePassword()
-                case .noLowercase:
-                    self?.error = "Wrong password noLowercase"
-                    self?.shakePassword()
-                case .noMinCharacters:
-                    self?.error = "Wrong password noMinCharacters"
-                    self?.shakePassword()
-                case .noDigit:
-                    self?.error = "Wrong password noDigit"
-                    self?.shakePassword()
-                default:
-                    self?.error = "Wrong email or password"
-                    self?.shakePassword()
-                }
-            }
+        do {
+            try await authManager.checkEmailAndPassword(email: email, password: password)
+            try await registration()
+            singUpButtonState = .success
+            toTabView()
+        } catch AuthManagerErrors.emptyEmail {
+            self.error = "Empty email."
+            changeLoginButtonState(state: .failure)
+            returnToNormalState()
+        } catch AuthManagerErrors.wrongEmail {
+            self.error = "Wrong email."
+            changeLoginButtonState(state: .failure)
+            returnToNormalState()
+        } catch AuthManagerErrors.emptyPassword {
+            self.error = "Wrong password - emptyPassword."
+            changeLoginButtonState(state: .failure)
+            returnToNormalState()
+        } catch AuthManagerErrors.noDigit {
+            self.error = "Wrong password - noDigit."
+            changeLoginButtonState(state: .failure)
+            returnToNormalState()
+        } catch AuthManagerErrors.noLowercase {
+            self.error = "Wrong password - noLowercase."
+            changeLoginButtonState(state: .failure)
+            returnToNormalState()
+        } catch AuthManagerErrors.noMinCharacters {
+            self.error = "Wrong password - noMinCharacters."
+            changeLoginButtonState(state: .failure)
+            returnToNormalState()
+        } catch AuthManagerErrors.noUppercase {
+            self.error = "Wrong password - noUppercase."
+            changeLoginButtonState(state: .failure)
+            returnToNormalState()
+        }
+            // TODO!!!! NetworkErrors. нет подключения к интернету
+            // TODO!!!! NetworkErrors.apiErrorWithMassage(errorDescription)
+        
+//        catch NetworkErrors.apiErrorWithMassage {
+//            self.error = error.
+//            changeLoginButtonState(state: .failure)
+//            returnToNormalState()
+//        }
+        catch {
+            self.error = "--- ERROR --- : \(error)"
+            changeLoginButtonState(state: .failure)
+            returnToNormalState()
         }
     }
     
-    @MainActor
-    private func registration() {
-        Task {
+    //ok
+    private func registration() async throws {
             do {
-                let result = try await networkManager.registration(email: email, password: password)
-                if let error = result.errorDescription {
-                    self.error = error
-                    changeLoginButtonState(state: .failure)
-                    returnToNormalState()
-                    return
+                let result = try await networkManager.login(email: email, password: password)
+                if result.error != nil {
+                    if let errorDescription = result.errorDescription {
+                        throw NetworkErrors.apiErrorWithMassage(errorDescription)
+                    } else {
+                        throw NetworkErrors.apiError
+                    }
                 }
-                guard let user = result.user else {
-                    changeLoginButtonState(state: .failure)
-                    returnToNormalState()
-                    return
+                guard let decodedUser = result.user, decodedUser.email != nil else {
+                    throw NetworkErrors.noUser
                 }
-                try await userDataManager.saveNewUser(decodedUser: user)
-                try keychinWrapper.storeGenericPasswordFor(account: email, service: "User login", password: password)
-                singUpButtonState = .success
-                isUserLogin = true
-                toTabView()
+                let newUser = await userDataManager.createEmptyUser(decodedUser: decodedUser)
+                try await userDataManager.save()
+                try keychinWrapper.storeGenericPasswordFor(account: email,
+                                                               service: "User login",
+                                                               password: password)
+                await MainActor.run(body: {
+                    self.user = newUser
+                    self.isUserLoggedIn = true
+                    self.lastLoginnedUserId = decodedUser.id
+                })
             } catch {
                 changeLoginButtonState(state: .failure)
                 returnToNormalState()
             }
-        }
+        
     }
     
     private func changeLoginButtonState(state: LoadState) {

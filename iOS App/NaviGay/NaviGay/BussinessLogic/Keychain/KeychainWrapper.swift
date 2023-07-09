@@ -14,6 +14,13 @@ protocol KeychainWrapperProtocol {
     func deleteGenericPasswordFor(account: String, service: String) throws
 }
 
+enum KeychainError: Error {
+    case badData
+    case servicesError(String)
+    case itemNotFound
+    case unableToConvertToString
+}
+
 final class KeychainWrapper {}
 
 //MARK: - KeychainWrapperProtocol
@@ -24,8 +31,7 @@ extension KeychainWrapper: KeychainWrapperProtocol {
                                  service: String,
                                  password: String) throws {
         guard let passwordData = password.data(using: .utf8) else {
-            print("Error converting value to data.")
-            throw KeychainWrapperError(type: .badData)
+            throw KeychainError.badData
         }
         let query: [ String : Any ] = [kSecClass as  String : kSecClassGenericPassword,///общай пароль
                                        kSecAttrAccount as  String : account,///имя пользователя
@@ -39,8 +45,11 @@ extension KeychainWrapper: KeychainWrapperProtocol {
                                          service: service,
                                          password: password)
         default:
-            throw KeychainWrapperError(status: status,
-                                       type: .servicesError)
+            if let errorMessage = SecCopyErrorMessageString(status, nil) {
+                throw KeychainError.servicesError(String(errorMessage))
+            } else {
+                throw KeychainError.servicesError("Status Code: \(status)")
+            }
         }
     }
     
@@ -60,16 +69,20 @@ extension KeychainWrapper: KeychainWrapperProtocol {
         var item: CFTypeRef?
         let status = SecItemCopyMatching(query as CFDictionary, &item)
         guard status != errSecItemNotFound else {
-            throw KeychainWrapperError(type: .itemNotFound)
+            throw KeychainError.itemNotFound
         }
         guard status == errSecSuccess else {
-            throw KeychainWrapperError(status: status, type: .servicesError)
+            if let errorMessage = SecCopyErrorMessageString(status, nil) {
+                throw KeychainError.servicesError(String(errorMessage))
+            } else {
+                throw KeychainError.servicesError("Status Code: \(status)")
+            }
         }
         guard let existingItem = item as? [String: Any],
               let valueData = existingItem[kSecValueData as String] as? Data,
               let value = String(data: valueData, encoding: .utf8)
         else {
-            throw KeychainWrapperError(type: .unableToConvertToString)
+            throw KeychainError.unableToConvertToString
         }
         return value
     }
@@ -92,10 +105,14 @@ extension KeychainWrapper: KeychainWrapperProtocol {
         ]
         let status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
         guard status != errSecItemNotFound else {
-            throw KeychainWrapperError(message: "Matching Item Not Found", type: .itemNotFound)
+            throw KeychainError.itemNotFound
         }
         guard status == errSecSuccess else {
-            throw KeychainWrapperError(status: status, type: .servicesError)
+            if let errorMessage = SecCopyErrorMessageString(status, nil) {
+                throw KeychainError.servicesError(String(errorMessage))
+            } else {
+                throw KeychainError.servicesError("Status Code: \(status)")
+            }
         }
     }
     
@@ -109,7 +126,11 @@ extension KeychainWrapper: KeychainWrapperProtocol {
         
         let status = SecItemDelete(query as CFDictionary)
         guard status == errSecSuccess || status == errSecItemNotFound else {
-            throw KeychainWrapperError(status: status, type: .servicesError)
+            if let errorMessage = SecCopyErrorMessageString(status, nil) {
+                throw KeychainError.servicesError(String(errorMessage))
+            } else {
+                throw KeychainError.servicesError("Status Code: \(status)")
+            }
         }
     }
 }

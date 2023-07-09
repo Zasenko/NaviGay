@@ -10,7 +10,9 @@ import CoreData
 protocol CoreDataManagerProtocol {
     var context: NSManagedObjectContext { get }
     
+    // TODO!!! убрать этот метод
     func saveData(complition: @escaping( (Bool) -> Void ))
+    
     func save() async throws
     func getObject<T: NSManagedObject>(id: NSManagedObjectID, entityName: String) async -> T?
     func createObject<T: NSManagedObject>() async -> T
@@ -19,6 +21,8 @@ protocol CoreDataManagerProtocol {
 enum CoreDataManagerError: Error {
     case contextDontHasChanges
     case didntSaveData
+    case cantCreateUser
+    case userDidntHasEmail
 }
 
 final class CoreDataManager: CoreDataManagerProtocol {
@@ -49,6 +53,7 @@ extension CoreDataManager {
     
     //MARK: - Functions
 
+    // TODO!!! убрать этот метод
     func saveData(complition: @escaping( (Bool) -> Void )) {
         DispatchQueue.main.async {
 

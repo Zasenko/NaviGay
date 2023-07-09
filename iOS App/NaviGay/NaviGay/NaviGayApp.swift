@@ -34,10 +34,10 @@ struct NaviGayApp: App {
         WindowGroup {
             EntryView(viewModel: EntryViewModel(userDataManager: userDataManager, dataManager: dataManager, networkManager: authNetworkManager, keychinWrapper: keychinWrapper))
         }
-        .onChange(of: scenePhase) { _ in
-            Task {
-                try? await dataManager.save()
-            }
-        }
+//        .onChange(of: scenePhase) { _ in
+//            Task {
+//                try? await dataManager.save()
+//            }
+//        }
     }
 }
