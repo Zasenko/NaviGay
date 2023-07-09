@@ -16,7 +16,6 @@ final class EntryViewModel: ObservableObject {
     
     // MARK: - Properties
     
-    
     @Published var router: EntryViewRouter = .loginView
     @Published var animationStarted: Bool = false
     @Published var animationFinished: Bool = false
@@ -24,7 +23,7 @@ final class EntryViewModel: ObservableObject {
     
     @AppStorage("isUserLoggedIn") var isUserLoggedIn: Bool = false
     @AppStorage("lastLoginnedUserId") var lastLoginnedUserId: Int = 0
-        
+    
     let userDataManager: UserDataManagerProtocol
     let dataManager: CoreDataManagerProtocol
     let keychinWrapper: KeychainWrapperProtocol
@@ -52,95 +51,72 @@ extension EntryViewModel {
     
     // MARK: - Private Functions
     
+    //ok
     private func checkUser() {
         Task {
-            if isUserLoggedIn {
-                
-                guard lastLoginnedUserId != 0 else {
-                    // lastLoginnedUserId nil
-                    await MainActor.run {
-                        print("--ERROR EntryViewModel checkUser() lastLoginnedUserId != 0 - false ")
-                        withAnimation(routerAnimation) {
-                            animationStarted = true
-                            router = .loginView
-                        }
-                    }
-                    return
-                }
-                
-                guard let user = await userDataManager.findUser(id: lastLoginnedUserId) else {
-                    // lastLoginnedUserId
-                    await MainActor.run {
-                        
-                        withAnimation(routerAnimation) {
-                            animationStarted = true
-                            router = .loginView
-                        }
-                    }
-                    return
-                }
-                
-                let result = await login(user: user)
-                if result {
-                    await MainActor.run {
-                        self.user = user
-                        withAnimation(routerAnimation) {
-                            animationStarted = true
-                            router = .tabView
-                        }
-                    }
+            guard isUserLoggedIn == true else {
+                await goToView(router: .loginView)
+                return
+            }
+            guard lastLoginnedUserId != 0 else {
+                await goToView(router: .loginView)
+                return
+            }
+            
+            do {
+                let user = try await userDataManager.findUser(id: lastLoginnedUserId)
+                if let user = user {
+                    try await login(user: user)
+                    await goToView(router: .tabView)
                 } else {
-                    await MainActor.run {
-                        withAnimation(routerAnimation) {
-                            animationStarted = true
-                            router = .loginView
-                        }
-                    }
+                    await goToView(router: .loginView)
                 }
-                
-    
-            } else {
-                // lastLoginnedUserId
-                await MainActor.run {
-                    
-                    withAnimation(routerAnimation) {
-                        animationStarted = true
-                        router = .loginView
-                    }
-                }
+            } catch {
+                debugPrint("---ERROR--- EntryViewModel checkUser: ", error)
+                await goToView(router: .loginView)
             }
         }
     }
     
-    private func login(user: User) async -> Bool {
+    //ok
+    private func login(user: User) async throws {
         guard let email = user.email else {
-            return false
+            throw CoreDataManagerError.userDidntHasEmail
         }
         do {
             let password = try keychinWrapper.getGenericPasswordFor(account: email, service: "User login")
-            
-            //смотря какой результат - если ошибка входа - сообщение об ошибке и логин вью, если нет сети - сообщить юзеру об этом и выполнить без входа
             let result = try await networkManager.login(email: email, password: password)
             
-            if let error = result.errorDescription {
-                debugPrint("EntryViewModel login(user: User) networkManager error: ", error)
-                return false
+            if result.error != nil {
+                if let errorDescription = result.errorDescription {
+                    throw NetworkErrors.apiErrorWithMassage(errorDescription)
+                } else {
+                    throw NetworkErrors.apiError
+                }
             }
-            
             guard let decodedUser = result.user else {
-                return false
+                throw NetworkErrors.noUser
             }
+            try await userDataManager.updateUser(user: user, decodedUser: decodedUser)
+            try await userDataManager.save()
             
-            if await userDataManager.updateUser(user: user, decodedUser: decodedUser) {
-                return true
-            } else {
-                return false
-            }
-
+            await MainActor.run(body: {
+                self.user = user
+            })
         } catch {
-            //смотря какой результат - если ошибка входа - сообщение об ошибке и переход на логин вью, если нет сети - сообщить юзеру об этом и выполнить без входа
-            debugPrint("---ERROR EntryViewModel login(user: User): ", error)
+            throw error
         }
-        return false
+    }
+    
+    private func goToView(router: EntryViewRouter) async {
+        await MainActor.run {
+            withAnimation(routerAnimation) {
+                if router == .loginView {
+                    isUserLoggedIn = false
+                }
+                animationStarted = true
+                self.router = router
+            }
+        }
     }
 }

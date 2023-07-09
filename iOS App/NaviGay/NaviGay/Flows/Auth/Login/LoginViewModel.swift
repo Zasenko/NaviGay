@@ -29,7 +29,7 @@ final class LoginViewModel: ObservableObject {
     let networkManager: AuthNetworkManagerProtocol
     let authManager: AuthManagerProtocol
     let keychinWrapper: KeychainWrapperProtocol
-        
+    
     // MARK: - Inits
     
     init(entryRouter: Binding<EntryViewRouter>,
@@ -48,6 +48,7 @@ final class LoginViewModel: ObservableObject {
         _isUserLoggedIn = isUserLoggedIn
         _lastLoginnedUserId = lastLoginnedUserId
         _user = user
+        findlastLoginnedUserEmail()
     }
 }
 
@@ -87,68 +88,93 @@ extension LoginViewModel {
     
     // MARK: - Private Functions
     
+    //ok
     @MainActor
     private func checkEmailPassword() async {
-        authManager.checkEmailPassword(email: email, password: password) { [weak self] result in
-            switch result {
-            case .success(_):
-                self?.changeLoginButtonState(state: .loading)
-                self?.login()
-            case .failure(let error):
-                self?.changeLoginButtonState(state: .failure)
-                self?.returnToNormalState()
-                switch error {
-                case .wrongEmail, .emptyEmail:
-                    self?.error = "Incorrect email"
-                    self?.shakeLogin()
-                case .emptyPassword, .noDigit, .noLowercase, .noMinCharacters:
-                    self?.error = "Wrong password"
-                    self?.shakePassword()
-                default:
-                    self?.error = "Wrong email or password"
-                    self?.shakePassword()
-                }
-            }
+        do {
+            try await authManager.checkEmailAndPassword(email: email, password: password)
+            try await login()
+            loginButtonState = .success
+            toTabView()
+        } catch AuthManagerErrors.emptyEmail, AuthManagerErrors.wrongEmail {
+            self.error = "Incorrect email."
+            changeLoginButtonState(state: .failure)
+            returnToNormalState()
+        } catch AuthManagerErrors.emptyPassword, AuthManagerErrors.noDigit, AuthManagerErrors.noLowercase, AuthManagerErrors.noMinCharacters, AuthManagerErrors.noUppercase {
+            self.error = "Wrong password."
+            changeLoginButtonState(state: .failure)
+            returnToNormalState()
         }
-    }
-    
-    @MainActor
-    private func login() {
-        Task {
-            do {
-                let result = try await networkManager.login(email: email, password: password)
-                if let error = result.errorDescription {
-                    self.error = error
-                    changeLoginButtonState(state: .failure)
-                    returnToNormalState()
-                    return
-                }
-                guard let user = result.user, user.email != nil else {
-                    changeLoginButtonState(state: .failure)
-                    returnToNormalState()
-                    return
-                }
-                
-                //TODO!!! найти пароль из базы/// если нет - сохранить, если есть - обновить
-                
-                try keychinWrapper.storeGenericPasswordFor(account: email, service: "User login", password: password)
-                let newUser = try await userDataManager.saveNewUser(decodedUser: user)
-                self.user = newUser
-                
-                
-                loginButtonState = .success
-                isUserLoggedIn = true
-                lastLoginnedUserId = user.id
-                toTabView()
-            } catch {
-                self.changeLoginButtonState(state: .failure)
-                self.returnToNormalState()
-            }
-        }
-    }
-    
-    private func saveInKeychin() {
+        // TODO!!!! NetworkErrors. нет подключения к интернету
+        // TODO!!!! NetworkErrors.apiErrorWithMassage(errorDescription)
         
+        //        catch NetworkErrors.apiErrorWithMassage {
+        //            self.error = error.
+        //            changeLoginButtonState(state: .failure)
+        //            returnToNormalState()
+        //        }
+        catch {
+            self.error = "--- ERROR --- : \(error)"
+            changeLoginButtonState(state: .failure)
+            returnToNormalState()
+        }
+    }
+    
+    //ok
+    private func login() async throws {
+        do {
+            let result = try await networkManager.login(email: email, password: password)
+            if result.error != nil {
+                if let errorDescription = result.errorDescription {
+                    throw NetworkErrors.apiErrorWithMassage(errorDescription)
+                } else {
+                    throw NetworkErrors.apiError
+                }
+            }
+            guard let decodedUser = result.user, decodedUser.email != nil else {
+                throw NetworkErrors.noUser
+            }
+            var user: User? = try await userDataManager.findUser(id: decodedUser.id)
+            if let user = user {
+                user.updateUser(decodedUser: decodedUser)
+            } else {
+                user = await userDataManager.createEmptyUser(decodedUser: decodedUser)
+            }
+            guard let user = user else {
+                throw CoreDataManagerError.cantCreateUser
+            }
+            try await userDataManager.save()
+            try keychinWrapper.storeGenericPasswordFor(account: email,
+                                                       service: "User login",
+                                                       password: password)
+            await MainActor.run(body: {
+                self.user = user
+                self.isUserLoggedIn = true
+                self.lastLoginnedUserId = decodedUser.id
+            })
+        } catch {
+            throw error
+        }
+    }
+    
+    
+    //ok
+    private func findlastLoginnedUserEmail() {
+        Task {
+            if lastLoginnedUserId != 0 {
+                do {
+                    guard let user = try await userDataManager.findUser(id: lastLoginnedUserId),
+                          let email = user.email else {
+                        return
+                    }
+                    await MainActor.run(body: {
+                        self.email = email
+                    })
+                } catch {
+                    debugPrint("---ERROR--- LoginViewModel findlastLoginnedUserEmail: ", error)
+                }
+            }
+        }
     }
     
     private func changeLoginButtonState(state: LoadState) {

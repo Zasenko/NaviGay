@@ -24,7 +24,7 @@ final class TabBarViewModel: ObservableObject {
     @Binding var entryRouter: EntryViewRouter
     
     @Published var selectedPage: TabBarRouter = TabBarRouter.aroundMe
-    @Published var aroundMeSelectedPage: AroundMeRouter = .map
+    @Published var aroundMeSelectedPage: AroundMeRouter = .home
     @Published var showLocationAlert: Bool = false
     @Published var isLocationDenied: Bool = false
     

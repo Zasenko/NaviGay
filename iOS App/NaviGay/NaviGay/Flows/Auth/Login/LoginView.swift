@@ -53,8 +53,10 @@ struct LoginView: View {
                                                   userDataManager: viewModel.userDataManager,
                                                   keychinWrapper: viewModel.keychinWrapper,
                                                   entryRouter: $viewModel.entryRouter,
-                                                  isUserLogin: $viewModel.isUserLoggedIn,
-                                                  isSignUpViewOpen: $viewModel.isSignUpViewOpen))
+                                                  lastLoginnedUserId: $viewModel.lastLoginnedUserId,
+                                                  isSignUpViewOpen: $viewModel.isSignUpViewOpen,
+                                                  user: $viewModel.user,
+                                                  isUserLoggedIn: $viewModel.isUserLoggedIn))
         }
     }
     
