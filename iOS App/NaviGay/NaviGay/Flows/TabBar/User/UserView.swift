@@ -17,13 +17,11 @@ struct UserView: View {
     
     var body: some View {
         VStack {
-            Spacer()
-            if viewModel.user != nil {
+            if viewModel.isUserLoggedIn {
                 userLoginView
             } else {
                 userLogOutView
             }
-            Spacer()
         }
         .frame(maxWidth: .infinity)
     }
@@ -31,20 +29,23 @@ struct UserView: View {
     // MARK: - Views
     
     var userLogOutView: some View {
-        Button {
-            viewModel.loginButtonTapped()
-        } label: {
-            ColoredCapsule(background: AppColors.red) {
-                VStack {
-                    Text("Login")
-                    Text("Registration")
+        VStack {
+            Spacer()
+            Button {
+                viewModel.loginButtonTapped()
+            } label: {
+                ColoredCapsule(background: AppColors.red) {
+                    VStack {
+                        Text("Login")
+                        Text("Registration")
+                    }
                 }
             }
+            Spacer()
         }
     }
     
     var userLoginView: some View {
-        
         VStack {
             CachedImageView(viewModel: CachedImageViewModel(url: viewModel.user?.photo)) {
                 AppImages.iconPerson
@@ -55,7 +56,7 @@ struct UserView: View {
             .frame(width: 200, height: 200)
             .background(AppColors.lightGray5)
             .clipShape(Circle())
-//
+            //
             Text(viewModel.user?.name ?? "")
                 .font(.title)
             Text(viewModel.user?.bio ?? "add information about you")

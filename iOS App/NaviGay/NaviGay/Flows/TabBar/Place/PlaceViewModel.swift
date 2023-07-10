@@ -68,6 +68,7 @@ extension PlaceViewModel {
                 }
                 
                 guard let decodedPlace = result.place else { return }
+                print(decodedPlace)
                 place.about = decodedPlace.about
                 place.address = decodedPlace.address
                 place.fb = decodedPlace.fb

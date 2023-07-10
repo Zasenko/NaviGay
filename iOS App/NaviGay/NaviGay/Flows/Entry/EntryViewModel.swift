@@ -51,7 +51,6 @@ extension EntryViewModel {
     
     // MARK: - Private Functions
     
-    //ok
     private func checkUser() {
         Task {
             guard isUserLoggedIn == true else {
@@ -78,7 +77,6 @@ extension EntryViewModel {
         }
     }
     
-    //ok
     private func login(user: User) async throws {
         guard let email = user.email else {
             throw CoreDataManagerError.userDidntHasEmail

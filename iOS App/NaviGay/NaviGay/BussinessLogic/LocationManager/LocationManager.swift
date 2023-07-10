@@ -59,11 +59,7 @@ extension LocationManager: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        //TODO
-        print(" ---ERROR TabBarViewModel - locationManager didFailWithError () ---")
-        print(error.localizedDescription)
-        print(error)
-        print("---")
+        debugPrint("---ERROR--- TabBarViewModel locationManager didFailWithError" , error)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

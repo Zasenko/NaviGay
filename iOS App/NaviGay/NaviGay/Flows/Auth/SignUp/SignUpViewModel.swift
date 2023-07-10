@@ -11,6 +11,13 @@ final class SignUpViewModel: ObservableObject {
     
     // MARK: - Properties
     
+    @Binding var isSignUpViewOpen: Bool
+    @Binding var entryRouter: EntryViewRouter
+    
+    @Binding var isUserLoggedIn: Bool
+    @Binding var lastLoginnedUserId: Int
+    @Binding var user: User?
+    
     @Published var email = ""
     @Published var password = ""
     @Published var error = ""
@@ -19,19 +26,13 @@ final class SignUpViewModel: ObservableObject {
     @Published var invalidPasswordAttempts = 0
     @Published var allViewsDisabled = false
     
-    @Binding var isSignUpViewOpen: Bool
-    @Binding var entryRouter: EntryViewRouter
-    
-    @Binding var isUserLoggedIn: Bool
-    @Binding var lastLoginnedUserId: Int
-    @Binding var user: User?
-    
     // MARK: - Private Properties
     
     private let networkManager: AuthNetworkManagerProtocol
     private let authManager: AuthManagerProtocol
     private let userDataManager: UserDataManagerProtocol
     private let keychinWrapper: KeychainWrapperProtocol
+    
     // MARK: - Inits
     
     init(networkManager: AuthNetworkManagerProtocol,
@@ -132,7 +133,7 @@ extension SignUpViewModel {
     //ok
     private func registration() async throws {
             do {
-                let result = try await networkManager.login(email: email, password: password)
+                let result = try await networkManager.registration(email: email, password: password)
                 if result.error != nil {
                     if let errorDescription = result.errorDescription {
                         throw NetworkErrors.apiErrorWithMassage(errorDescription)
@@ -154,8 +155,7 @@ extension SignUpViewModel {
                     self.lastLoginnedUserId = decodedUser.id
                 })
             } catch {
-                changeLoginButtonState(state: .failure)
-                returnToNormalState()
+                throw error
             }
         
     }

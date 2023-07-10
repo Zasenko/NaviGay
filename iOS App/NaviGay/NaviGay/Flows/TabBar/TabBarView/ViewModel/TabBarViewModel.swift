@@ -27,13 +27,13 @@ final class TabBarViewModel: ObservableObject {
     @Published var aroundMeSelectedPage: AroundMeRouter = .home
     @Published var showLocationAlert: Bool = false
     @Published var isLocationDenied: Bool = false
-    
-    var safeArea: EdgeInsets?
-    var size: CGSize?
-    
+        
     var locationManager: LocationManagerProtocol
     let userDataManager: UserDataManagerProtocol
     let keychinWrapper: KeychainWrapperProtocol
+    
+    
+    private let aroundNetworkManager: AroundNetworkManagerProtocol = AroundNetworkManager()
     
     lazy var catalogNetworkManager: CatalogNetworkManagerProtocol = CatalogNetworkManager()
     lazy var catalogDataManager: CatalogDataManagerProtocol = CatalogDataManager(manager: dataManager)
@@ -43,7 +43,6 @@ final class TabBarViewModel: ObservableObject {
     
     let aroundMeButton = TabBarButton(title: "Around Me", img: AppImages.iconCalendar, page: .aroundMe)
     let catalogButton = TabBarButton(title: "Catalog", img: AppImages.iconSearch, page: .search)
-    let userButton = TabBarButton(title: "User", img: AppImages.iconPerson, page: .user)
     
     // MARK: - Private Properties
     
@@ -87,9 +86,12 @@ extension TabBarViewModel {
     // MARK: - Functions
     
     func settingsButtonTapped() {
-        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
         isLocationDenied = true
         selectedPage = .search
+        guard let url = URL(string: UIApplication.openSettingsURLString) else {
+            return
+        }
+        UIApplication.shared.open(url)
     }
     
     func cancleButtonTapped() {
@@ -100,6 +102,10 @@ extension TabBarViewModel {
     // MARK: - Private Functions
     
     private func fetchLocationsAroundMe(userLocation: CLLocation) {
-        // запрос локаций из сети!!! и обновление Care DATA
+        Task {
+            let result = try? await aroundNetworkManager.fetchLocationsAround(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
+            // запрос локаций из сети!!! и обновление Core DATA
+            print(result)
+        }
     }
 }

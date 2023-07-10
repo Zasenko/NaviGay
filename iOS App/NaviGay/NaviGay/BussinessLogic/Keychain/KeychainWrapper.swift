@@ -44,6 +44,8 @@ extension KeychainWrapper: KeychainWrapperProtocol {
             try updateGenericPasswordFor(account: account,
                                          service: service,
                                          password: password)
+        case errSecSuccess:
+            return
         default:
             if let errorMessage = SecCopyErrorMessageString(status, nil) {
                 throw KeychainError.servicesError(String(errorMessage))

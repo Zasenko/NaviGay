@@ -43,7 +43,7 @@ struct TabBarView: View {
             }
             .alert(isPresented: $viewModel.showLocationAlert) {
                 //TODO!!!! текст
-                Alert(title: Text("Camera access required to take photos"),
+                Alert(title: Text("Locarion access"),
                       message: Text("Go to Settings?"),
                       primaryButton: .default(Text("Settings"),
                                               action: { viewModel.settingsButtonTapped() }),
@@ -51,19 +51,6 @@ struct TabBarView: View {
                                                 action: { viewModel.cancleButtonTapped() }))
             }
         }
-    }
-    
-    private var tabBar: some View {
-        HStack {
-            if !viewModel.isLocationDenied {
-                TabBarAroundMeButtonView(tabBarButton: viewModel.aroundMeButton, selectedPage: $viewModel.selectedPage, aroundMeSelectedPage: $viewModel.aroundMeSelectedPage)
-                
-            }
-            TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.catalogButton)
-            TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.userButton)
-        }
-        .padding(.top, 12)
-        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
     
     @ViewBuilder private var aroundMeView: some View {
@@ -74,5 +61,46 @@ struct TabBarView: View {
             MapView(viewModel: MapViewModel(locationManager: viewModel.locationManager,
                                             dataManager: viewModel.mapDataManager))
         }
+    }
+    
+    private var tabBar: some View {
+        HStack {
+            if !viewModel.isLocationDenied {
+                TabBarAroundMeButtonView(tabBarButton: viewModel.aroundMeButton, selectedPage: $viewModel.selectedPage, aroundMeSelectedPage: $viewModel.aroundMeSelectedPage)
+                
+            }
+            TabBarButtonView(selectedPage: $viewModel.selectedPage, button: viewModel.catalogButton)
+            userButton
+        }
+        .background(Color.green)
+        .ignoresSafeArea(.keyboard, edges: .bottom)
+    }
+    
+    private var userButton: some View {
+        Button {
+            viewModel.selectedPage = .user
+        } label: {
+            if viewModel.isUserLoggedIn {
+                CachedImageView(viewModel: CachedImageViewModel(url: viewModel.user?.photo)) {
+                    AppImages.iconPerson
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(viewModel.selectedPage == .user ? AppColors.red : AppColors.lightGray5)
+                }
+                .frame(width: 30, height: 30)
+                .mask(Circle())
+                
+            } else {
+                AppImages.iconPerson
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(viewModel.selectedPage == .user ? AppColors.red : AppColors.lightGray5)
+                    
+            }
+        }
+        .padding(12)
+        .bold()
     }
 }
