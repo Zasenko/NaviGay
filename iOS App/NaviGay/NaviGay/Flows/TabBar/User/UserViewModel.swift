@@ -43,22 +43,10 @@ extension UserViewModel {
     // MARK: - Functions
     
     func logOutButtonTapped() {
-   //     Task {
-        //    guard let user = user, let email = user.email else { return }
-            
-       //     do {
-               // try await userDataManager.deleteUser(user: user)
-               // try keychinWrapper.deleteGenericPasswordFor(account: email, service: "User login")
-           //     await MainActor.run(body: {
-                    withAnimation(.spring()) {
-                        self.user = nil
-                        self.isUserLoggedIn = false
-                    }
-           //     })
-          //  } catch {
-         //       print("--ERROR UserViewModel logOutButtonTapped:", error)
-         //   }
-        //}
+        withAnimation(.spring()) {
+            user = nil
+            isUserLoggedIn = false
+        }
     }
     
     func loginButtonTapped() {

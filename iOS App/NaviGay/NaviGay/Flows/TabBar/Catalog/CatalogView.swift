@@ -52,6 +52,7 @@ struct CatalogView: View {
                 }
             }
         }
+        .ignoresSafeArea(.container, edges: .bottom)
         //УБРАТЬ!!!!!
         .searchable(text: $searchText, prompt: "Look for something")
         //----------------

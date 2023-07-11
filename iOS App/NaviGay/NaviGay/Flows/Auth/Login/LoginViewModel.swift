@@ -114,6 +114,7 @@ extension LoginViewModel {
         //            returnToNormalState()
         //        }
         catch {
+            //TODO "--- ERROR --- : \(error)"
             self.error = "--- ERROR --- : \(error)"
             changeLoginButtonState(state: .failure)
             returnToNormalState()
@@ -162,7 +163,8 @@ extension LoginViewModel {
     private func findlastLoginnedUserEmail() {
         Task {
             if lastLoginnedUserId != 0 {
-                do {
+                
+               do {
                     guard let user = try await userDataManager.findUser(id: lastLoginnedUserId),
                           let email = user.email else {
                         return

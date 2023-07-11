@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 struct LoginResult: Codable {
     var error: Int?
     var errorDescription: String?

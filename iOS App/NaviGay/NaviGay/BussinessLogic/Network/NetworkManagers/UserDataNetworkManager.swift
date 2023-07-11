@@ -29,7 +29,6 @@ extension UserDataNetworkManager: UserDataNetworkManagerProtocol {
         guard let decodedResult = try? JSONDecoder().decode(PlacesResult.self, from: data) else {
             throw NetworkErrors.decoderError
         }
-        print("PlacesResult ->>>>>>>> ", decodedResult)
         return decodedResult
     }
 }
