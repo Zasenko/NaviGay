@@ -1,80 +1,109 @@
 <?php
 
-require_once('languages.php');
+// Проверка существования параметров GET
+if (!isset($_GET['user_latitude']) || !isset($_GET['user_longitude'])) {
+    $json = array('error' => 400, 'errorDescription' => 'Missing latitude or longitude parameter');
+    echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
-$lang = isset($_GET['lang']) && in_array($_GET['lang'], $languages) ? $_GET['lang'] : 'en';
+// Получение и проверка параметров GET
+$userLatitude = floatval($_GET['user_latitude']);
+$userLongitude = floatval($_GET['user_longitude']);
 
-$latitude = $_GET["latitude"];
-$longitude = $_GET["longitude"];
-
-
-$json = array('latitude' => $latitude, 'longitude' => $longitude, 'lang' => $lang);
-echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
-exit;
+// Проверка валидности параметров
+if (!is_numeric($userLatitude) || !is_numeric($userLongitude)) {
+    $json = array('error' => 400, 'errorDescription' => 'Invalid latitude or longitude value');
+    echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
 require_once('dbconfig.php');
 
-$sql = "SELECT Place.id, Place.name, PlaceType.name as type, Place.photo, Place.address, Place.latitude, Place.longitude, Place.is_active, Place.is_checked, (6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(latitude)))) AS distance FROM Place INNER JOIN PlaceType ON PlaceType.id = Place.type_id HAVING distance <= 10 ORDER BY distance";
+$places = array();
+$events = array();
 
+// Подготовка SQL запроса для получения мест
+$placeSql = "SELECT Place.id, Place.name, PlaceType.name as type, Place.photo, Place.address, Place.latitude, Place.longitude, Place.is_active, Place.is_checked
+             FROM Place
+             INNER JOIN PlaceType ON PlaceType.id = Place.type_id
+             WHERE SQRT(POW(latitude - $userLatitude, 2) + POW(longitude - $userLongitude, 2)) <= 10
+             AND Place.is_active = 1";
 
-if ($result = $conn->query($sql)) {
-    $places = array();
-    while ($row = $places_result->fetch_assoc()) {
-        $place = array(
-            'id' => $row['id'],
-            'name' => $row["name"],
-            'type' => $row['type'],
-            'photo' => $row['photo'],
-            'address' => $row['address'],
-            'latitude' => $row['latitude'],
-            'longitude' => $row['longitude'],
-            'isActive' => $row['is_active'],
-            'isChecked' => $row['is_checked'],
-            'distance' => $row['distance'],
-        );
-        $sql = "SELECT Tag.name as name FROM PlaceTag INNER JOIN Tag ON Tag.id = PlaceTag.tag_id WHERE PlaceTag.place_id = $id";
+// Выполнение запроса для получения мест
+$placeResult = $conn->query($placeSql);
+
+// Обработка результатов запроса для мест
+if ($placeResult) {
+    while ($placeRow = $placeResult->fetch_assoc()) {
+        $id = $placeRow['id'];
+
+        // Подготовка SQL запроса для получения тегов места
+        $tagsSql = "SELECT Tag.name as name FROM PlaceTag INNER JOIN Tag ON Tag.id = PlaceTag.tag_id WHERE PlaceTag.place_id = $id";
+        $tagsResult = $conn->query($tagsSql);
+
         $tags = array();
-        if ($tags_result = mysqli_query($conn, $sql)) {
-            while ($row = $tags_result->fetch_assoc()) {
-                array_push($tags, $row['name']);
+        if ($tagsResult) {
+            while ($tagRow = $tagsResult->fetch_assoc()) {
+                $tags[] = $tagRow['name'];
             }
         } else {
-            $conn->close();
-            $json = array('error' => 44, 'errorDescription' => 'mysqli_query city_result error');
-            echo json_encode($json, JSON_NUMERIC_CHECK);
+            $json = array('error' => 500, 'errorDescription' => 'Failed to fetch place tags');
+            echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
             exit;
         }
-        $place += ['tags' => $tags];
-        array_push($places, $place);
+
+        $placeRow['tags'] = $tags;
+        $places[] = $placeRow;
     }
+} else {
+    $json = array('error' => 500, 'errorDescription' => 'Failed to fetch places');
+    echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+    exit;
 }
 
-$sql = "SELECT Event.id, Event.name, EventType.name as type, Event.cover, Event.address, Event.latitude, Event.longitude, Event.start_time, Event.close_time, Event.is_active, Event.is_checked, (6371 * acos(cos(radians($latitude)) * cos(radians(latitude)) * cos(radians(longitude) - radians($longitude)) + sin(radians($latitude)) * sin(radians(latitude)))) AS distance FROM Event INNER JOIN EventType ON EventType.id = Event.type_id WHERE DATE(Event.close_time) >= now() HAVING distance <= 10";
+// Подготовка SQL запроса для получения событий
+$eventSql = "SELECT Event.id, Event.name, EventType.name as type, Event.cover, Event.address, Event.latitude, Event.longitude, Event.start_time, Event.close_time, Event.is_active, Event.is_checked
+             FROM Event
+             INNER JOIN EventType ON EventType.id = Event.type_id
+             WHERE SQRT(POW(latitude - $userLatitude, 2) + POW(longitude - $userLongitude, 2)) <= 10
+             AND Event.close_time >= NOW()
+             AND Event.is_active = 1";
 
-if ($result = $conn->query($sql)) {
-    $events = array();
-    while ($row = $result->fetch_assoc()) {
-        $event = array(
-            'id' => $row['id'],
-            'name' => $row["name"],
-            'type' => $row['type'],
-            'cover' => $row['cover'],
-            'address' => $row['address'],
-            'latitude' => $row['latitude'],
-            'longitude' => $row['longitude'],
+// Выполнение запроса для получения событий
+$eventResult = $conn->query($eventSql);
 
-            'startTime' => $row['start_time'],
-            'finishTime' => $row['close_time'],
+// Обработка результатов запроса для событий
+if ($eventResult) {
+    while ($eventRow = $eventResult->fetch_assoc()) {
+        $eventId = $eventRow['id'];
 
-            'isActive' => $row['is_active'],
-            'isChecked' => $row['is_checked'],
-            'distance' => $row['distance'],
-        );
-        array_push($events, $event);
+        // Подготовка SQL запроса для получения тегов события
+        $eventTagsSql = "SELECT Tag.name as name FROM EventTag INNER JOIN Tag ON Tag.id = EventTag.tag_id WHERE EventTag.event_id = $eventId";
+        $eventTagsResult = $conn->query($eventTagsSql);
+
+        $eventTags = array();
+        if ($eventTagsResult) {
+            while ($eventTagRow = $eventTagsResult->fetch_assoc()) {
+                $eventTags[] = $eventTagRow['name'];
+            }
+        } else {
+            $json = array('error' => 500, 'errorDescription' => 'Failed to fetch event tags');
+            echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
+        $eventRow['tags'] = $eventTags;
+        $events[] = $eventRow;
     }
+} else {
+    $json = array('error' => 500, 'errorDescription' => 'Failed to fetch events');
+    echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
+    exit;
 }
+
+$conn->close();
 
 $json = array('places' => $places, 'events' => $events);
 echo json_encode($json, JSON_NUMERIC_CHECK | JSON_UNESCAPED_UNICODE);
-
-$conn->close();
+exit;
